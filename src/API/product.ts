@@ -1,0 +1,83 @@
+import { ProdectScema } from "@/schemas/product";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import z from "zod";
+import api from "./axios";
+
+
+type productFormData = z.infer<typeof ProdectScema>
+type storeResponseType = {
+  data: productFormData[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    totalItems: number;
+    itemsPerPage: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+};
+const queryKey = ["product"]
+
+export const useGetProducts = (sortBy = "", sortOrder = "", page = 1) => {
+  return useQuery<storeResponseType>({
+    queryKey: [...queryKey, sortBy, sortOrder, page],
+
+    queryFn: async () => {
+      const res = await api.get(
+        `api/collection/product?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}`
+      );
+
+      return res.data;
+    },
+  });
+};
+
+export const useAddProduct = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (data: productFormData) => {
+            const res = await api.post("/api/collection/product", data)
+            return res.data.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey,
+            });
+        },
+    })
+}
+
+export const useGetProduct = (id: number) => {
+    return useQuery({
+        queryKey: [queryKey, id],
+        queryFn: async () => {
+            const res = await api.get<productFormData>(`/api/collection/product/${id}`);
+            return res.data;
+        }
+    });
+};
+
+export const useUpdateProduct = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ id, data }: { id: number; data: productFormData }) => {
+            return api.put(`/api/collection/product/${id}`, data);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey });
+        },
+    });
+};
+
+export const useDeleteProduct = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ id }: { id: number }) => {
+            return api.delete(`/api/collection/product/${id}`);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey });
+        },
+    });
+};
