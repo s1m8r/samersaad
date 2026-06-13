@@ -12,7 +12,7 @@ const EditStore = () => {
     const { mutate, isPending } = useUpdateStore()
     const { data:getStore, isLoading } = useGetStore(id)
     type storeFormData = z.infer<typeof storeScema>
-    const {register ,control,setValue,handleSubmit,formState:{errors},reset } = useForm({
+    const {register ,control,setValue,handleSubmit,formState:{errors,isDirty},reset } = useForm({
         resolver:zodResolver(storeScema)
     })
     const onsubmit = (data: storeFormData) => {
@@ -38,6 +38,7 @@ const EditStore = () => {
             errors={errors}
             isPending={isPending}
             isLoading={isLoading}
+            isDirty={isDirty}
         />
     </div> );
 }

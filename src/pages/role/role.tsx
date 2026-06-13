@@ -3,7 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import DeleteRole from "./DeleteRolw";
-import { useGetRole } from "@/API/role";
+import { useGetRole, useGetRolesSerch } from "@/API/role";
 
 interface ids {
   id: number;
@@ -17,7 +17,10 @@ const Role = () => {
 
   const editForm = useForm<ids>();
   const deleteForm = useForm<ids>();
-
+  const [searchEdit ,setSearchEdit]=useState("")
+  const { data:editRole } = useGetRolesSerch(searchEdit)
+  const [searchDel ,setSearchDel]=useState("")
+  const { data:delRole } = useGetRolesSerch(searchDel)
   const gotoAdd = () => {
     navigate({
       to: "/role/addrole",
@@ -25,13 +28,14 @@ const Role = () => {
   };
 
   const onSubmit = (data: ids) => {
-    navigate({
-      to: "/role/edit/$id",
-      params: {
-        id: String(data.id),
-      },
-    });
-  };
+    if (data.id) {
+      navigate({
+        to: "/role/edit/$id",
+        params: {
+          id: data.id,
+        },
+      });
+    } };
 
   const onSubmitdel = (data: ids) => {
     setId(data.id);
@@ -48,6 +52,7 @@ const Role = () => {
           title="Add Role"
           description="Add a new Role"
           onClick={gotoAdd}
+          variant="add"
         >
           Add Role
         </Card>
@@ -61,7 +66,11 @@ const Role = () => {
           register={editForm.register}
           handleSubmit={editForm.handleSubmit}
           placeholder="Enter Role ID"
-          hasAction="inputNumber"
+          hasAction="combobox"
+          dataComboboxOne={editRole?.data}
+          setValue={editForm.setValue}
+          setSearch={setSearchEdit}
+          variant="add"
         >
           Edit Role
         </Card>
@@ -75,8 +84,11 @@ const Role = () => {
           register={deleteForm.register}
           handleSubmit={deleteForm.handleSubmit}
           placeholder="Enter User ID"
-          hasAction="inputNumber"
+          hasAction="combobox"
           variant="delete"
+          setValue={deleteForm.setValue}
+          setSearch={setSearchDel}
+          dataComboboxOne={delRole?.data}
         >
           Delete Role
         </Card>

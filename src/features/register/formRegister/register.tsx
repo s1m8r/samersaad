@@ -7,11 +7,12 @@ import type {
 
 import { registerSchema } from "@/schemas/user";
 import ErrorMessage from "@/components/forms/errors";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 
 import { useRoles } from "@/API/role";
+import ButtonPending from "@/components/layout/buttonPending";
+import InputForm from "@/components/forms/input";
+import { Lock, Mail, UserRound } from "lucide-react";
 
 type registerFormData = z.infer<typeof registerSchema>;
 
@@ -30,6 +31,7 @@ type Props = {
   chlidrenButton: string;
   hasPassword?: boolean;
   isLoading?: boolean;
+  isDirty?: boolean;
   active?: "add" | "edit";
 };
 
@@ -43,6 +45,7 @@ export default function RegisterForm({
   chlidrenButton,
   hasPassword = true,
   isLoading,
+  isDirty,
   active = "add",
 }: Props) {
   const { data: roles } = useRoles();
@@ -51,102 +54,67 @@ export default function RegisterForm({
     <div className="w-full max-w-xl mx-auto">
       <div className="rounded-xl border bg-white dark:bg-gray-900 dark:border-gray-800 shadow-sm p-5">
 
-        {/* TITLE */}
         <h1 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
           {title}
         </h1>
 
-        {/* LOADING */}
         {isLoading && (
           <div className="flex justify-center py-6">
             <Spinner />
           </div>
         )}
 
-        {/* FORM */}
         {!isLoading && (
           <form onSubmit={handleSubmit(onsubmit)} className="space-y-4">
 
-            {/* FIRST NAME */}
             <div className="space-y-1">
-              <label className="text-sm text-gray-600 dark:text-gray-300">
-                First Name
-              </label>
-              <Input
-                placeholder="First Name"
-                {...register("firstName")}
-                aria-invalid={!!errors.firstName}
-              />
+              <InputForm register={register}
+                icon={<UserRound size={22} />}
+                name="firstName" placeholder="First Name" label="First Name" />
               {errors.firstName && (
                 <ErrorMessage>{errors.firstName.message}</ErrorMessage>
               )}
             </div>
 
-            {/* LAST NAME */}
             <div className="space-y-1">
-              <label className="text-sm text-gray-600 dark:text-gray-300">
-                Last Name
-              </label>
-              <Input
-                placeholder="Last Name"
-                {...register("lastName")}
-                aria-invalid={!!errors.lastName}
-              />
+                          <InputForm register={register} 
+                icon={<UserRound size={22} />}
+                name="lastName" placeholder="Last Name" label="Last Name" />
               {errors.lastName && (
                 <ErrorMessage>{errors.lastName.message}</ErrorMessage>
               )}
             </div>
 
-            {/* EMAIL */}
             <div className="space-y-1">
-              <label className="text-sm text-gray-600 dark:text-gray-300">
-                Email
-              </label>
-              <Input
-                placeholder="Email"
-                {...register("email")}
-                aria-invalid={!!errors.email}
-              />
+              <InputForm register={register} 
+                icon={<Mail size={22} />}
+                name="email" placeholder="Email" label="Email" />
               {errors.email && (
                 <ErrorMessage>{errors.email.message}</ErrorMessage>
               )}
             </div>
 
-            {/* PASSWORD */}
             {hasPassword && (
               <div className="space-y-1">
-                <label className="text-sm text-gray-600 dark:text-gray-300">
-                  Password
-                </label>
-                <Input
-                  type="password"
-                  placeholder="Password"
-                  {...register("password")}
-                  aria-invalid={!!errors.password}
-                />
+                <InputForm register={register} 
+                icon={<Lock size={22} />}
+                name="password" placeholder="Password" label="Password" />
                 {errors.password && (
                   <ErrorMessage>{errors.password.message}</ErrorMessage>
                 )}
               </div>
             )}
 
-            {/* AGE */}
             <div className="space-y-1">
-              <label className="text-sm text-gray-600 dark:text-gray-300">
-                Age
-              </label>
-              <Input
-                type="number"
-                placeholder="Age"
-                {...register("age", { valueAsNumber: true })}
-                aria-invalid={!!errors.age}
-              />
+              <InputForm register={register} 
+                icon={<Lock size={22} />}
+                name="age" placeholder="Age" label="Age" type="number"
+                options={{ valueAsNumber: true }} />
               {errors.age && (
                 <ErrorMessage>{errors.age.message}</ErrorMessage>
               )}
             </div>
 
-            {/* ROLE (EDIT ONLY) */}
             {active === "edit" && (
               <div className="space-y-1">
                 <label className="text-sm text-gray-600 dark:text-gray-300">
@@ -166,17 +134,7 @@ export default function RegisterForm({
               </div>
             )}
 
-            {/* BUTTON */}
-            <Button className="w-full" disabled={isPending}>
-              {isPending ? (
-                <div className="flex items-center gap-2">
-                  <Spinner className="h-4 w-4" />
-                  {chlidrenButton}
-                </div>
-              ) : (
-                chlidrenButton
-              )}
-            </Button>
+            <ButtonPending variant="primary" disabled={isPending || (active==="edit" && !isDirty)} children={chlidrenButton} isPending={isPending} />
           </form>
         )}
       </div>

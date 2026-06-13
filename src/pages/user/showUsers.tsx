@@ -7,6 +7,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import DeleteUser from "./deleteUser";
+import Button from "@/components/layout/button";
+import { ArrowDownUp } from "lucide-react";
 type registerFormData = z.infer<typeof registerSchema>
 const ShowUser = () => {
     const navigate = useNavigate();
@@ -33,22 +35,21 @@ const ShowUser = () => {
         {
             accessorKey: "id",
             header: () => (
-            <span
-                    onClick={() => {
-                        order("id")
-                }}
-            >
-                ID
-            </span>
-        ),
+                <span
+                    className="group flex items-center gap-1 cursor-pointer"
+                    onClick={() => order("id")}>
+                    <ArrowDownUp
+                        size={12}
+                        className="opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                    />
+                    <span>id</span>
+                </span>
+            ),
         },
         {
             accessorKey: "firstName",
             header: () => (
             <span
-                    onClick={() => {
-                        order("firstName")
-                }}
             >
                 First Name
             </span>
@@ -58,9 +59,6 @@ const ShowUser = () => {
             accessorKey: "lastName",
             header: () => (
             <span
-                    onClick={() => {
-                        order("lastName")
-                }}
             >
                 Last Name
             </span>
@@ -78,9 +76,6 @@ const ShowUser = () => {
             accessorKey: "age",
             header: () => (
             <span
-                    onClick={() => {
-                        order("age")
-                }}
             >
                Age
             </span>
@@ -115,10 +110,7 @@ const ShowUser = () => {
         {
             accessorKey:"role",
             header: () => (
-                <span
-                onClick={() => {
-                        order("role")
-                }}>
+                <span>
                 Role
             </span>
             ),
@@ -126,10 +118,7 @@ const ShowUser = () => {
         {
             accessorKey:"isActive",
             header: () => (
-                <span
-                onClick={() => {
-                        order("isActive")
-                }}>
+                <span>
                 Active
             </span>
             ),
@@ -143,12 +132,17 @@ const ShowUser = () => {
             ),
             cell: ({ row }) => {
                 const id = row.original.id
-                return <button onClick={()=>navigate({
+                return <Button
+                    onClick={()=>navigate({
             to: "/users/edit/$id",
             params: {
                 id: id,
             },
-                })}>Edit</button>
+                    })}
+                    variant="editTable"
+                    type="table"
+                
+                >Edit</Button>
             }
         },
         {
@@ -161,11 +155,16 @@ const ShowUser = () => {
             cell: ({ row }) => {
                 const id = row.original.id
                 const name = row.original.firstName
-                return <div><button onClick={() => {
+                return <Button onClick={() => {
                     setShowDel(true)
                     setUserId(id)
                     setUserName(name)
-                }}>Delete</button></div>
+                }}
+                    variant="delete"
+                    type="table"
+                >
+                Delete
+                </Button>
             }
         },
   
@@ -174,17 +173,17 @@ const ShowUser = () => {
         <div>
   <h1 className="text-2xl font-bold">Users</h1>
 </div>
- {pagination && (
-  <Table
-    columns={columns}
-    data={users ?? []}
-    pagination={pagination}
-    page={page}
-    setPage={setPage}
-  />
+        {pagination && (
+            <Table
+                columns={columns}
+                data={users ?? []}
+                pagination={pagination}
+                page={page}
+                setPage={setPage}
+            />
 )}
 
-       {showDel &&userId&& (
+        {showDel && userId && (
             <DeleteUser
                 userId={userId}
                 userName={userName}

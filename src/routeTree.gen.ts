@@ -19,11 +19,11 @@ import { Route as StoreAddstoreRouteImport } from './routes/store/addstore'
 import { Route as RoleRoleRouteImport } from './routes/role/role'
 import { Route as RoleAddroleRouteImport } from './routes/role/addrole'
 import { Route as ProductProductsRouteImport } from './routes/product/products'
+import { Route as ProductAddRouteImport } from './routes/product/add'
 import { Route as UsersEditIdRouteImport } from './routes/users/edit/$id'
 import { Route as StoreEditIdRouteImport } from './routes/store/edit/$id'
 import { Route as RoleEditIdRouteImport } from './routes/role/edit/$id'
 import { Route as ProductEditIdRouteImport } from './routes/product/edit/$id'
-import { Route as ProductAddproductIdRouteImport } from './routes/product/addproduct/$id'
 
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
@@ -75,6 +75,11 @@ const ProductProductsRoute = ProductProductsRouteImport.update({
   path: '/product/products',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProductAddRoute = ProductAddRouteImport.update({
+  id: '/product/add',
+  path: '/product/add',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UsersEditIdRoute = UsersEditIdRouteImport.update({
   id: '/users/edit/$id',
   path: '/users/edit/$id',
@@ -95,16 +100,12 @@ const ProductEditIdRoute = ProductEditIdRouteImport.update({
   path: '/product/edit/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProductAddproductIdRoute = ProductAddproductIdRouteImport.update({
-  id: '/product/addproduct/$id',
-  path: '/product/addproduct/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/product/add': typeof ProductAddRoute
   '/product/products': typeof ProductProductsRoute
   '/role/addrole': typeof RoleAddroleRoute
   '/role/role': typeof RoleRoleRoute
@@ -112,7 +113,6 @@ export interface FileRoutesByFullPath {
   '/store/stores': typeof StoreStoresRoute
   '/users/adduser': typeof UsersAdduserRoute
   '/users/users': typeof UsersUsersRoute
-  '/product/addproduct/$id': typeof ProductAddproductIdRoute
   '/product/edit/$id': typeof ProductEditIdRoute
   '/role/edit/$id': typeof RoleEditIdRoute
   '/store/edit/$id': typeof StoreEditIdRoute
@@ -122,6 +122,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/product/add': typeof ProductAddRoute
   '/product/products': typeof ProductProductsRoute
   '/role/addrole': typeof RoleAddroleRoute
   '/role/role': typeof RoleRoleRoute
@@ -129,7 +130,6 @@ export interface FileRoutesByTo {
   '/store/stores': typeof StoreStoresRoute
   '/users/adduser': typeof UsersAdduserRoute
   '/users/users': typeof UsersUsersRoute
-  '/product/addproduct/$id': typeof ProductAddproductIdRoute
   '/product/edit/$id': typeof ProductEditIdRoute
   '/role/edit/$id': typeof RoleEditIdRoute
   '/store/edit/$id': typeof StoreEditIdRoute
@@ -140,6 +140,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/product/add': typeof ProductAddRoute
   '/product/products': typeof ProductProductsRoute
   '/role/addrole': typeof RoleAddroleRoute
   '/role/role': typeof RoleRoleRoute
@@ -147,7 +148,6 @@ export interface FileRoutesById {
   '/store/stores': typeof StoreStoresRoute
   '/users/adduser': typeof UsersAdduserRoute
   '/users/users': typeof UsersUsersRoute
-  '/product/addproduct/$id': typeof ProductAddproductIdRoute
   '/product/edit/$id': typeof ProductEditIdRoute
   '/role/edit/$id': typeof RoleEditIdRoute
   '/store/edit/$id': typeof StoreEditIdRoute
@@ -159,6 +159,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/register'
+    | '/product/add'
     | '/product/products'
     | '/role/addrole'
     | '/role/role'
@@ -166,7 +167,6 @@ export interface FileRouteTypes {
     | '/store/stores'
     | '/users/adduser'
     | '/users/users'
-    | '/product/addproduct/$id'
     | '/product/edit/$id'
     | '/role/edit/$id'
     | '/store/edit/$id'
@@ -176,6 +176,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/register'
+    | '/product/add'
     | '/product/products'
     | '/role/addrole'
     | '/role/role'
@@ -183,7 +184,6 @@ export interface FileRouteTypes {
     | '/store/stores'
     | '/users/adduser'
     | '/users/users'
-    | '/product/addproduct/$id'
     | '/product/edit/$id'
     | '/role/edit/$id'
     | '/store/edit/$id'
@@ -193,6 +193,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/register'
+    | '/product/add'
     | '/product/products'
     | '/role/addrole'
     | '/role/role'
@@ -200,7 +201,6 @@ export interface FileRouteTypes {
     | '/store/stores'
     | '/users/adduser'
     | '/users/users'
-    | '/product/addproduct/$id'
     | '/product/edit/$id'
     | '/role/edit/$id'
     | '/store/edit/$id'
@@ -211,6 +211,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  ProductAddRoute: typeof ProductAddRoute
   ProductProductsRoute: typeof ProductProductsRoute
   RoleAddroleRoute: typeof RoleAddroleRoute
   RoleRoleRoute: typeof RoleRoleRoute
@@ -218,7 +219,6 @@ export interface RootRouteChildren {
   StoreStoresRoute: typeof StoreStoresRoute
   UsersAdduserRoute: typeof UsersAdduserRoute
   UsersUsersRoute: typeof UsersUsersRoute
-  ProductAddproductIdRoute: typeof ProductAddproductIdRoute
   ProductEditIdRoute: typeof ProductEditIdRoute
   RoleEditIdRoute: typeof RoleEditIdRoute
   StoreEditIdRoute: typeof StoreEditIdRoute
@@ -297,6 +297,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/product/add': {
+      id: '/product/add'
+      path: '/product/add'
+      fullPath: '/product/add'
+      preLoaderRoute: typeof ProductAddRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/users/edit/$id': {
       id: '/users/edit/$id'
       path: '/users/edit/$id'
@@ -325,13 +332,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductEditIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/product/addproduct/$id': {
-      id: '/product/addproduct/$id'
-      path: '/product/addproduct/$id'
-      fullPath: '/product/addproduct/$id'
-      preLoaderRoute: typeof ProductAddproductIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -339,6 +339,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  ProductAddRoute: ProductAddRoute,
   ProductProductsRoute: ProductProductsRoute,
   RoleAddroleRoute: RoleAddroleRoute,
   RoleRoleRoute: RoleRoleRoute,
@@ -346,7 +347,6 @@ const rootRouteChildren: RootRouteChildren = {
   StoreStoresRoute: StoreStoresRoute,
   UsersAdduserRoute: UsersAdduserRoute,
   UsersUsersRoute: UsersUsersRoute,
-  ProductAddproductIdRoute: ProductAddproductIdRoute,
   ProductEditIdRoute: ProductEditIdRoute,
   RoleEditIdRoute: RoleEditIdRoute,
   StoreEditIdRoute: StoreEditIdRoute,

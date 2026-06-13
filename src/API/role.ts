@@ -16,6 +16,19 @@ type roleResponseType = {
   };
 };
 
+export const useGetRolesSerch = (search = "") => {
+  return useQuery<roleResponseType>({
+    queryKey: [...queryKey, search],
+
+    queryFn: async () => {
+      const res = await api.get(
+        `/api/roles?search=${search}`
+      );
+
+      return res.data;
+    },
+  });
+};
 export const useGetRoles = (sortBy = "", sortOrder = "", page = 1) => {
   return useQuery<roleResponseType>({
     queryKey: [...queryKey, sortBy, sortOrder, page],

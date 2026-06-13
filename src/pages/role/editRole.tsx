@@ -12,11 +12,11 @@ const EditRole = () => {
         const { id } = Route.useParams();
     const { data:getRole } = useGetRole(id)
 
-        const { register, handleSubmit,reset, formState: { errors } } = useForm({
+        const { register, handleSubmit,reset, formState: { errors,isDirty } } = useForm({
             resolver: zodResolver(roleScema),
         });
         const {mutate ,isPending}=useUpdateRole()
-        const onsubmit = (data: roleFormData) => {
+    const onsubmit = (data: roleFormData) => {
             const formatData = {
                 ...data,
                 permissionIds: data.permissionIds.map((per) => Number(per)) ,
@@ -41,7 +41,8 @@ const EditRole = () => {
                     register={register}
                     onsubmit={onsubmit}
                     chlidrenButton="Edit Role"
-                    isPending={isPending}
+            isPending={isPending}
+            isDirty={isDirty}
                 />
     </div> );
 }

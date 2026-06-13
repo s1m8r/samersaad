@@ -31,6 +31,19 @@ export const useGetProducts = (sortBy = "", sortOrder = "", page = 1) => {
     },
   });
 };
+export const useGetProductsSearch = (search = "") => {
+  return useQuery<storeResponseType>({
+    queryKey: [...queryKey, search],
+
+    queryFn: async () => {
+      const res = await api.get(
+        `api/collection/product?search=${search}`
+      );
+
+      return res.data;
+    },
+  });
+};
 
 export const useAddProduct = () => {
     const queryClient = useQueryClient();
@@ -47,13 +60,14 @@ export const useAddProduct = () => {
     })
 }
 
-export const useGetProduct = (id: number) => {
+export const useGetProduct = (id?: number) => {
     return useQuery({
         queryKey: [queryKey, id],
         queryFn: async () => {
             const res = await api.get<productFormData>(`/api/collection/product/${id}`);
             return res.data;
-        }
+        },
+        enabled: !!id,
     });
 };
 

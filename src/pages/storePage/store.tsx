@@ -3,7 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import DeleteStore from "./deleteStore";
-import { useGetStore } from "@/API/store";
+import { useGetStore, useGetStoresSearch } from "@/API/store";
 
 interface ids {
   id: number;
@@ -17,6 +17,10 @@ const Store = () => {
 
   const editForm = useForm<ids>();
   const deleteForm = useForm<ids>();
+  const [searchEdit,setSearchEdit]=useState("")
+  const { data: editData } = useGetStoresSearch(searchEdit)
+  const [searchDel,setSearchDel]=useState("")
+  const { data: delData } = useGetStoresSearch(searchDel)
 
   const gotoAdd = () => {
     navigate({
@@ -28,7 +32,7 @@ const Store = () => {
     navigate({
       to: "/store/edit/$id",
       params: {
-        id: String(data.id),
+        id: Number(data.id),
       },
     });
   };
@@ -43,17 +47,18 @@ const Store = () => {
   return (
     <div className="flex gap-4 p-4 flex-wrap">
 
-      <div className="flex-1 min-w-[250px]">
+      <div className="flex-1">
         <Card
           title="Add Store"
           description="Add a new Store"
           onClick={gotoAdd}
+          variant="add"
         >
           Add Store
         </Card>
       </div>
 
-      <div className="flex-1 min-w-[250px]">
+      <div className="flex-1">
         <Card
           title="Edit Store"
           description="Edit Store"
@@ -61,13 +66,17 @@ const Store = () => {
           register={editForm.register}
           handleSubmit={editForm.handleSubmit}
           placeholder="Enter Store ID"
-          hasAction="inputNumber"
+          hasAction="combobox"
+          dataComboboxOne={editData?.data}
+          setValue={editForm.setValue}
+          setSearch={setSearchEdit}
+          variant="add"
         >
           Edit Store
         </Card>
       </div>
 
-      <div className="flex-1 min-w-[250px]">
+      <div className="flex-1">
         <Card
           title="Delete Store"
           description="Delete existing Store"
@@ -75,8 +84,11 @@ const Store = () => {
           register={deleteForm.register}
           handleSubmit={deleteForm.handleSubmit}
           placeholder="Enter User ID"
-          hasAction="inputNumber"
+          hasAction="combobox"
           variant="delete"
+          dataComboboxOne={delData?.data}
+          setValue={deleteForm.setValue}
+          setSearch={setSearchDel}
         >
           Delete Store
         </Card>

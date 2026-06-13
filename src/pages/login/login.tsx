@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -6,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useLogin } from "@/API/user";
 import { userScema } from "@/schemas/user";
 import ErrorMessage from "@/components/forms/errors";
-import { Spinner } from "@/components/ui/spinner";
+import ButtonPending from "@/components/layout/buttonPending";
 
 const Login = () => {
   type loginSchemaType = z.infer<typeof userScema>;
@@ -68,18 +67,7 @@ const Login = () => {
               <ErrorMessage>{errors.password.message}</ErrorMessage>
             )}
           </div>
-
-          {/* BUTTON */}
-          <Button className="w-full" disabled={isPending}>
-            {isPending ? (
-              <div className="flex items-center gap-2">
-                <Spinner className="h-4 w-4" />
-                Logging in...
-              </div>
-            ) : (
-              "Login"
-            )}
-          </Button>
+          <ButtonPending variant="primary" disabled={isPending} children="Login" isPending={isPending} />
         </form>
       </div>
     </div>

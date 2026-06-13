@@ -30,6 +30,9 @@ const User = () => {
       params: {
         id: String(data.id),
       },
+      search: {
+    from: "/",
+      },
     });
   };
 
@@ -48,6 +51,7 @@ const User = () => {
           title="Add User"
           description="Add a new user"
           onClick={gotoAdd}
+          variant="add"
         >
           Add User
         </Card>
@@ -62,6 +66,7 @@ const User = () => {
           handleSubmit={editForm.handleSubmit}
           placeholder="Enter User ID"
           hasAction="inputNumber"
+          variant="add"
         >
           Edit User
         </Card>

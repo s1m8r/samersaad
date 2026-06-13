@@ -8,9 +8,11 @@ import type {
 
 import { usePermissions } from "@/API/permissions";
 import { Input } from "@/components/ui/input";
-import Button from "@/components/layout/button";
 import ErrorMessage from "@/components/forms/errors";
 import { Spinner } from "@/components/ui/spinner";
+import ButtonPending from "@/components/layout/buttonPending";
+import InputForm from "@/components/forms/input";
+import { UserKey } from "lucide-react";
 
 type roleFormData = z.infer<typeof roleScema>;
 
@@ -21,6 +23,7 @@ interface Props {
   errors: FieldErrors<roleFormData>;
   register: UseFormRegister<roleFormData>;
   isPending?: boolean;
+  isDirty?: boolean;
   chlidrenButton: string;
 }
 
@@ -32,6 +35,7 @@ export default function Role({
   register,
   isPending,
   chlidrenButton,
+  isDirty,
 }: Props) {
   const { data: permissions, isLoading } = usePermissions();
 
@@ -39,12 +43,10 @@ export default function Role({
     <div className="w-full max-w-2xl mx-auto">
       <div className="rounded-xl border bg-white dark:bg-gray-900 dark:border-gray-800 shadow-sm p-5">
 
-        {/* TITLE */}
         <h1 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
           {title}
         </h1>
 
-        {/* LOADING */}
         {isLoading && (
           <div className="flex justify-center py-6">
             <Spinner />
@@ -54,19 +56,15 @@ export default function Role({
         {!isLoading && (
           <form onSubmit={handleSubmit(onsubmit)} className="space-y-4">
 
-            {/* NAME */}
             <div className="space-y-1">
-              <Input
-                placeholder="Role name"
-                {...register("name")}
-                aria-invalid={!!errors.name}
-              />
+              <InputForm register={register}
+                icon={<UserKey size={22} />}
+                name="name" placeholder="Role name" label="Role name" />
               {errors.name && (
                 <ErrorMessage>{errors.name.message}</ErrorMessage>
               )}
             </div>
 
-            {/* DESCRIPTION */}
             <div className="space-y-1">
               <Input
                 placeholder="Description"
@@ -78,7 +76,6 @@ export default function Role({
               )}
             </div>
 
-            {/* PERMISSIONS */}
             <div className="space-y-2">
               <p className="text-sm text-gray-600 dark:text-gray-300">
                 Permissions
@@ -103,17 +100,7 @@ export default function Role({
                 ))}
               </div>
             </div>
-
-            <Button disabled={isPending}>
-              {isPending ? (
-                <div className="flex items-center gap-2">
-                  <Spinner className="h-4 w-4" />
-                  {chlidrenButton}
-                </div>
-              ) : (
-                chlidrenButton
-              )}
-            </Button>
+            <ButtonPending variant="primary" disabled={isPending || !isDirty} isPending={isPending} children={chlidrenButton} />
           </form>
         )}
       </div>

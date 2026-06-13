@@ -9,11 +9,7 @@ type Props = {
 };
 
 const DeleteStore = ({ storeId, storeName, setShowDel }: Props) => {
-    console.log(storeId);
-    console.log(storeName);
-
     const { mutate, isPending } = useDeleteStore();
-
     const del = () => {
         mutate(
             { id: storeId },

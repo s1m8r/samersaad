@@ -39,7 +39,7 @@ const AddUser = () => {
             onsubmit={handleRegister}
             errors={errors}
             register={register}
-            chlidrenButton="Register"
+            chlidrenButton="Add User"
             isPending={isPending}
         />
     </div>);

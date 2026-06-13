@@ -13,7 +13,7 @@ const EditUser = () => {
     const { id } = Route.useParams();
     const { data: getUser, isLoading } = useGetUser(id);
     const { mutate, isPending } = useUpdateUser();
-    const { register, handleSubmit, reset, formState: { errors } } = useForm(
+    const { register, handleSubmit, reset, formState: { errors ,isDirty} } = useForm(
         {
             resolver: zodResolver(registerSchema),
         }
@@ -42,7 +42,6 @@ const EditUser = () => {
             id: id,
             data: formatData,
         })
-        console.log(data)
     }
     return (<div>
         <RegisterForm title="Edit User"
@@ -55,6 +54,7 @@ const EditUser = () => {
             isLoading={isLoading}
             hasPassword={false}
             active="edit"
+            isDirty={isDirty}
         />
     </div>);
 }

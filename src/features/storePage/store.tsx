@@ -1,4 +1,5 @@
 import ErrorMessage from "@/components/forms/errors";
+import ButtonPending from "@/components/layout/buttonPending";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
@@ -27,6 +28,7 @@ interface Props {
   register: UseFormRegister<storeFormData>;
   isPending?: boolean;
   isLoading?: boolean;
+  isDirty?: boolean;
 }
 
 export default function Store({
@@ -40,6 +42,7 @@ export default function Store({
   register,
   isPending,
   isLoading,
+  isDirty
 }: Props) {
   const [valueInput, setValueInput] = useState("");
 
@@ -67,7 +70,6 @@ export default function Store({
     <div className="w-full max-w-3xl mx-auto">
       <div className="rounded-xl border bg-white dark:bg-gray-900 dark:border-gray-800 shadow-sm p-5">
 
-        {/* TITLE */}
         <h1 className="text-lg font-semibold text-gray-900 dark:text-white mb-5">
           {title}
         </h1>
@@ -81,7 +83,6 @@ export default function Store({
         {!isLoading && (
           <form onSubmit={handleSubmit(onsubmit)} className="space-y-6">
 
-            {/* BASIC INFO */}
             <div className="space-y-4">
               <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
                 Basic Information
@@ -105,7 +106,6 @@ export default function Store({
               </div>
             </div>
 
-            {/* CATEGORIES */}
             <div className="space-y-2">
               <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
                 Categories
@@ -126,16 +126,14 @@ export default function Store({
                 {categories.map((c, index) => (
                   <span
                     key={index}
-                    onClick={() => removeCateory(index)}
-                    className="px-3 py-1 text-sm rounded-full bg-gray-100 dark:bg-gray-800 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
+                    className="px-3 py-1 text-sm rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"
                   >
-                    {c}
+                    {c} <span className=" text-red-900 font-bold cursor-pointer" onClick={() => removeCateory(index)}> X </span>
                   </span>
                 ))}
               </div>
             </div>
 
-            {/* ADDRESS */}
             <div className="space-y-4">
               <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
                 Address
@@ -150,7 +148,6 @@ export default function Store({
               </div>
             </div>
 
-            {/* OWNER INFO */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <Input placeholder="Owner" {...register("owner")} />
               <Input
@@ -160,7 +157,6 @@ export default function Store({
               />
             </div>
 
-            {/* OPENING HOURS */}
             <div className="space-y-4">
               <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
                 Opening Hours
@@ -177,7 +173,6 @@ export default function Store({
               </div>
             </div>
 
-            {/* STATS */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <Input
                 placeholder="Rating"
@@ -190,18 +185,7 @@ export default function Store({
                 {...register("reviews", { valueAsNumber: true })}
               />
             </div>
-
-            {/* BUTTON */}
-            <Button className="w-full" disabled={isPending}>
-              {isPending ? (
-                <div className="flex items-center gap-2">
-                  <Spinner className="h-4 w-4" />
-                  {chlidrenButton}
-                </div>
-              ) : (
-                chlidrenButton
-              )}
-            </Button>
+            <ButtonPending variant="primary" disabled={isPending || !isDirty} children={chlidrenButton} isPending={isPending} />
           </form>
         )}
       </div>

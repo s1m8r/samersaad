@@ -31,6 +31,19 @@ export const useGetStores = (sortBy = "", sortOrder = "", page = 1) => {
     },
   });
 };
+export const useGetStoresSearch = (search = "") => {
+  return useQuery<storeResponseType>({
+    queryKey: [...queryKey, search],
+
+    queryFn: async () => {
+      const res = await api.get(
+        `/api/stores?search=${search}`
+      );
+
+      return res.data;
+    },
+  });
+};
 
 export const useAddStores = () => {
     const queryClient = useQueryClient();

@@ -6,6 +6,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { ProdectScema } from "@/schemas/product";
 import { useGetProducts } from "@/API/product";
 import DeleteProduct from "./deleteProduct";
+import Button from "@/components/layout/button";
 
 type productFormData = z.infer<typeof ProdectScema>;
 
@@ -32,7 +33,9 @@ const ShowProduct = () => {
 
   const { data } = useGetProducts(sortBy, sortOrder, page);
 
-  const products = data?.data ?? [];
+  const dataTable = data;
+
+  const products = dataTable?.data ?? [];
   const pagination = data?.pagination;
 
   const columns: ColumnDef<productFormData>[] = [
@@ -41,7 +44,7 @@ const ShowProduct = () => {
       header: () => <span onClick={() => order("id")}>ID</span>,
     },
     {
-      accessorKey: "nameProdect",
+      accessorKey: "name",
       header: () => <span onClick={() => order("nameProdect")}>Name</span>,
     },
     {
@@ -67,18 +70,18 @@ const ShowProduct = () => {
         const id = row.original.id;
 
         return (
-          <button
-            onClick={() =>
-              navigate({
-                to: "/product/edit/$id",
-                params: {
-                  id,
-                },
-              })
-            }
-          >
-            Edit
-          </button>
+
+ <Button  onClick={() =>
+               navigate({
+                 to: "/product/edit/$id",
+                 params: {
+                   id,
+                 },
+               })
+             }
+            variant="editTable"
+            type="table"
+          > Edit</Button>
         );
       },
     },
@@ -87,18 +90,17 @@ const ShowProduct = () => {
       header: () => <span>Delete</span>,
       cell: ({ row }) => {
         const id = row.original.id;
-        const name = row.original.nameProdect;
+        const name = row.original.name;
 
         return (
-          <button
-            onClick={() => {
-              setShowDel(true);
-              setProductId(id);
-              setProductName(name);
-            }}
-          >
-            Delete
-          </button>
+          <Button onClick={() => {
+               setShowDel(true);
+               setProductId(id);
+               setProductName(name);
+             }}
+            variant="delete"
+            type="table"
+          > Delete</Button>
         );
       },
     },
