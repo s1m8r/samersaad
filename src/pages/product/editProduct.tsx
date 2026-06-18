@@ -1,6 +1,6 @@
 import { useGetProduct, useUpdateProduct } from "@/API/product";
 import Product from "@/features/product/product";
-import { Route } from "@/routes/product/edit/$id";
+import { Route } from "@/routes/_proteced/products/edit/$id";
 import { ProdectScema } from "@/schemas/product";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
@@ -40,6 +40,7 @@ const EditProduct = () => {
         control={control}
         defaultStoreName={getStore?.storeName} 
         isDirty={isDirty}
+        typeForm="edit"
       />}
     </div>
   );

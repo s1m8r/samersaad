@@ -6,6 +6,8 @@ import { useNavigate } from "@tanstack/react-router";
 import { roleScema } from "@/schemas/role";
 import { useGetRoles } from "@/API/role";
 import DeleteRole from "./DeleteRolw";
+import { ArrowDownUp } from "lucide-react";
+import Button from "@/components/layout/button";
 
 type roleFormData = z.infer<typeof roleScema>;
 
@@ -29,8 +31,18 @@ const ShowRole = () => {
       setSortOrder("asc");
     }
   };
+  const goToAdd = () => {
+    navigate({
+      to: "/roles/addrole",
+      search: {
+        from:"/roles"
+      }
+    })
+    
+  }
+  const [search,setSearch]=useState("")
 
-  const { data } = useGetRoles(sortBy, sortOrder, page);
+  const { data } = useGetRoles(sortBy, sortOrder, page ,search);
 
   const roles = data?.data ?? [];
   const pagination = data?.pagination;
@@ -38,22 +50,31 @@ const ShowRole = () => {
   const columns: ColumnDef<roleFormData>[] = [
     {
       accessorKey: "id",
+      size:5,
       header: () => (
-        <span onClick={() => order("id")}>
-          ID
+        <span
+          className="group flex items-center gap-1 cursor-pointer"
+          onClick={() => order("id")}>
+          <ArrowDownUp
+            size={12}
+            className="opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+          />
+          <span>id</span>
         </span>
       ),
     },
     {
       accessorKey: "name",
+      size:10,
       header: () => (
-        <span onClick={() => order("name")}>
+        <span>
           Name
         </span>
       ),
     },
     {
       accessorKey: "description",
+      size:10,
       header: () => (
         <span onClick={() => order("description")}>
           Description
@@ -62,6 +83,7 @@ const ShowRole = () => {
     },
     {
       accessorKey: "isActive",
+      minSize:2,
       header: () => (
         <span onClick={() => order("isActive")}>
           Active
@@ -70,35 +92,44 @@ const ShowRole = () => {
     },
     {
       accessorKey: "edit",
+      size:2,
       header: () => <span>Edit</span>,
       cell: ({ row }) => {
         const id = row.original.id;
 
         return (
-          <button
+          <Button
+            variant="editTable"
+            type="table"
             onClick={() =>
               navigate({
-                to: "/role/edit/$id",
+                to: "/roles/edit/$id",
                 params: {
                   id,
                 },
+                search: {
+                  from:"/roles"
+                }
               })
             }
           >
             Edit
-          </button>
+          </Button>
         );
       },
     },
     {
       accessorKey: "delete",
+      size:5,
       header: () => <span>Delete</span>,
       cell: ({ row }) => {
         const id = row.original.id;
         const name = row.original.name;
 
         return (
-          <button
+          <Button
+            variant="delete"
+            type="table"
             onClick={() => {
               setShowDel(true);
               setRoleId(id);
@@ -106,7 +137,7 @@ const ShowRole = () => {
             }}
           >
             Delete
-          </button>
+          </Button>
         );
       },
     },
@@ -114,9 +145,6 @@ const ShowRole = () => {
 
   return (
     <div>
-         <div>
-  <h1 className="text-2xl font-bold">Role</h1>
-</div>
       {pagination && (
         <Table
           columns={columns}
@@ -124,6 +152,10 @@ const ShowRole = () => {
           pagination={pagination}
           page={page}
           setPage={setPage}
+          title="roles"
+          textButton="add role"
+          onClick={goToAdd}
+          setSearch={setSearch}
         />
       )}
 

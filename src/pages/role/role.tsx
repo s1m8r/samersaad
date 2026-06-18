@@ -23,17 +23,20 @@ const Role = () => {
   const { data:delRole } = useGetRolesSerch(searchDel)
   const gotoAdd = () => {
     navigate({
-      to: "/role/addrole",
+      to: "/roles/addrole",
     });
   };
 
   const onSubmit = (data: ids) => {
     if (data.id) {
       navigate({
-        to: "/role/edit/$id",
+        to: "/roles/edit/$id",
         params: {
           id: data.id,
         },
+        search: {
+          from:"/"
+        }
       });
     } };
 

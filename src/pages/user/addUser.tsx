@@ -2,11 +2,15 @@ import { useRegister } from "@/API/user";
 import RegisterForm from "@/features/register/formRegister/register";
 import { registerSchema } from "@/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
+import { Route } from "@/routes/_proteced/users/adduser"
 import { z } from "zod";
 type registerFormData = z.infer<typeof registerSchema>
 
 const AddUser = () => {
+    const search = Route.useSearch();
+    const navigate = useNavigate();
     const { mutate, isPending } = useRegister()
     const {
         register,
@@ -31,7 +35,17 @@ const AddUser = () => {
             roleId: 3,
             isActive: true,
         }
-        mutate(dataFormat)
+        mutate(dataFormat
+             ,{
+    onSuccess: () => {
+      setTimeout(() => {
+        navigate({
+            to: search.from || "/",
+        });
+      }, 200);
+    },
+  }
+        )
     }
     return (<div>
         <RegisterForm title="Add User"

@@ -1,5 +1,5 @@
 import { ProdectScema } from "@/schemas/product";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import z from "zod";
 import api from "./axios";
 
@@ -18,17 +18,18 @@ type storeResponseType = {
 };
 const queryKey = ["product"]
 
-export const useGetProducts = (sortBy = "", sortOrder = "", page = 1) => {
+export const useGetProducts = (sortBy = "", sortOrder = "", page = 1 ,search="") => {
   return useQuery<storeResponseType>({
-    queryKey: [...queryKey, sortBy, sortOrder, page],
+    queryKey: [...queryKey, sortBy, sortOrder, page, search],
 
     queryFn: async () => {
       const res = await api.get(
-        `api/collection/product?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}`
+        `api/collection/product?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&search=${search}`
       );
 
       return res.data;
-    },
+      },
+    placeholderData: keepPreviousData,
   });
 };
 export const useGetProductsSearch = (search = "") => {

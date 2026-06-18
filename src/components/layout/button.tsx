@@ -28,7 +28,7 @@ export default function Button({
         primary: "bg-black text-white hover:bg-gray-850 text-sm",
     }
 
-    return <button onClick={onClick} className={`${base} ${style[variant]} ${select[type]} `} disabled={disabled}>
+    return <button onClick={onClick} className={`${base} ${style[variant]} ${select[type]}`} disabled={disabled}>
         {children}
     </button>
 }

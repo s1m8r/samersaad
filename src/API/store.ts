@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "./axios";
 import { storeScema } from "@/schemas/store";
 import z from "zod";
@@ -18,17 +18,18 @@ type storeResponseType = {
   };
 };
 
-export const useGetStores = (sortBy = "", sortOrder = "", page = 1) => {
+export const useGetStores = (sortBy = "", sortOrder = "", page = 1 ,search="") => {
   return useQuery<storeResponseType>({
-    queryKey: [...queryKey, sortBy, sortOrder, page],
+    queryKey: [...queryKey, sortBy, sortOrder, page ,search],
 
     queryFn: async () => {
       const res = await api.get(
-        `/api/stores?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}`
+        `/api/stores?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&search=${search}`
       );
 
       return res.data;
     },
+    placeholderData: keepPreviousData,
   });
 };
 export const useGetStoresSearch = (search = "") => {

@@ -41,6 +41,7 @@ const Register = () => {
             register={register}
             chlidrenButton="Register"
             isPending={isPending}
+            hasLogin="yes"
         />
     </div>);
 }

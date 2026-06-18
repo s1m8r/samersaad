@@ -21,7 +21,12 @@ api.interceptors.response.use(
     (response) => {
         return response
     },
-    (error) => Promise.reject(error)
+    (error) => {
+        if (error.response?.status === 401) {
+           useAuthStore((state) => state.logout)
+        }
+       return Promise.reject(error);
+    }
 )
 
 export default api;

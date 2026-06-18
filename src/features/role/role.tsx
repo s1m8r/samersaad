@@ -7,12 +7,11 @@ import type {
 } from "react-hook-form";
 
 import { usePermissions } from "@/API/permissions";
-import { Input } from "@/components/ui/input";
 import ErrorMessage from "@/components/forms/errors";
 import { Spinner } from "@/components/ui/spinner";
 import ButtonPending from "@/components/layout/buttonPending";
 import InputForm from "@/components/forms/input";
-import { UserKey } from "lucide-react";
+import { SquarePen, UserKey } from "lucide-react";
 
 type roleFormData = z.infer<typeof roleScema>;
 
@@ -25,6 +24,7 @@ interface Props {
   isPending?: boolean;
   isDirty?: boolean;
   chlidrenButton: string;
+  typeForm?:"add" | "edit"
 }
 
 export default function Role({
@@ -36,12 +36,16 @@ export default function Role({
   isPending,
   chlidrenButton,
   isDirty,
+  typeForm ="add"
 }: Props) {
   const { data: permissions, isLoading } = usePermissions();
 
   return (
     <div className="w-full max-w-2xl mx-auto">
-      <div className="rounded-xl border bg-white dark:bg-gray-900 dark:border-gray-800 shadow-sm p-5">
+      <div className="rounded-xl border bg-white dark:bg-gray-900 dark:border-gray-800 shadow-sm p-5
+      animate__animated animate__fadeIn
+      animate-duration
+      ">
 
         <h1 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
           {title}
@@ -59,18 +63,16 @@ export default function Role({
             <div className="space-y-1">
               <InputForm register={register}
                 icon={<UserKey size={22} />}
-                name="name" placeholder="Role name" label="Role name" />
+                name="name" placeholder="Role name" label="Role name" ariaInvalid={!!errors.name?.message} />
               {errors.name && (
                 <ErrorMessage>{errors.name.message}</ErrorMessage>
               )}
             </div>
 
             <div className="space-y-1">
-              <Input
-                placeholder="Description"
-                {...register("description")}
-                aria-invalid={!!errors.description}
-              />
+               <InputForm register={register}
+                icon={<SquarePen size={22} />}
+                name="description" placeholder="Description" label="Description" ariaInvalid={!!errors.description?.message} />
               {errors.description && (
                 <ErrorMessage>{errors.description.message}</ErrorMessage>
               )}
@@ -100,7 +102,7 @@ export default function Role({
                 ))}
               </div>
             </div>
-            <ButtonPending variant="primary" disabled={isPending || !isDirty} isPending={isPending} children={chlidrenButton} />
+            <ButtonPending variant="primary" disabled={isPending || (typeForm==="edit" && !isDirty)} isPending={isPending} children={chlidrenButton} />
           </form>
         )}
       </div>

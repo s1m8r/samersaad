@@ -1,16 +1,18 @@
 import { useGetUser, useUpdateUser } from "@/API/user";
 import RegisterForm from "@/features/register/formRegister/register";
-import { Route } from "@/routes/users/edit/$id";
+import { Route } from "@/routes/_proteced/users/edit/$id";
 import { registerSchema } from "@/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 type registerFormData = z.infer<typeof registerSchema>
 
-
 const EditUser = () => {
+    const search = Route.useSearch();
     const { id } = Route.useParams();
+    const navigate = useNavigate();  
     const { data: getUser, isLoading } = useGetUser(id);
     const { mutate, isPending } = useUpdateUser();
     const { register, handleSubmit, reset, formState: { errors ,isDirty} } = useForm(
@@ -23,7 +25,6 @@ const EditUser = () => {
     useEffect(() => {
         if (getUser) reset(getUser)
     }, [getUser, reset])
-
     const onsubmit = (data: registerFormData) => {
 
         const formatData = {
@@ -38,10 +39,22 @@ const EditUser = () => {
             phone: getUser?.phone,
             isActive: getUser?.isActive,
         }
-        mutate({
-            id: id,
-            data: formatData,
-        })
+        mutate(
+  {
+    id: id,
+    data: formatData,
+  },
+  {
+    onSuccess: () => {
+      setTimeout(() => {
+        navigate({
+          to: search.from || "/",
+        });
+      }, 200);
+    },
+  }
+);
+        
     }
     return (<div>
         <RegisterForm title="Edit User"

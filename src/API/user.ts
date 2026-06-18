@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "./axios";
 import { z } from "zod";
 import { registerSchema, userScema } from "@/schemas/user";
@@ -17,17 +17,18 @@ type GetUsersResponse = {
   };
 };
 const queryKey = ["users"]
-export const useGetUsers = (sortBy="",sortOrder="",page=1) => {
+export const useGetUsers = (sortBy="",sortOrder="",page=1 ,search="") => {
     return useQuery<GetUsersResponse>({
-        queryKey: [...queryKey, sortBy,sortOrder,page],
+        queryKey: [...queryKey, sortBy,sortOrder,page,search],
 
         queryFn: async () => {
             const res = await api.get(
-                `/api/users?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}`
+                `/api/users?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&search=${search}`
             );
 
             return res.data;
         },
+        placeholderData: keepPreviousData,
     });
 };
 
@@ -41,6 +42,7 @@ export const useLogin = () => {
         onSuccess: (res) => {
             useAuthStore.getState().setToken(res.token);
             useAuthStore.getState().setUser(res.user);
+            window.location.href = "/";
         }
     });
 }

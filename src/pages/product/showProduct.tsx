@@ -30,8 +30,19 @@ const ShowProduct = () => {
       setSortOrder("asc");
     }
   };
+  const goToAdd = () => {
+    navigate({
+      to: "/products/addproduct",
+      search: {
+        from: "/products",
+      },
+    }
+    )
+    
+  }
+  const [search,setSearch]=useState("")
 
-  const { data } = useGetProducts(sortBy, sortOrder, page);
+  const { data } = useGetProducts(sortBy, sortOrder, page ,search);
 
   const dataTable = data;
 
@@ -73,7 +84,7 @@ const ShowProduct = () => {
 
  <Button  onClick={() =>
                navigate({
-                 to: "/product/edit/$id",
+                 to: "/products/edit/$id",
                  params: {
                    id,
                  },
@@ -108,9 +119,6 @@ const ShowProduct = () => {
 
   return (
     <div>
-         <div>
-  <h1 className="text-2xl font-bold">Product</h1>
-</div>
       {pagination && (
         <Table
           columns={columns}
@@ -118,6 +126,10 @@ const ShowProduct = () => {
           pagination={pagination}
           page={page}
           setPage={setPage}
+          title="Product"
+          onClick={goToAdd}
+          textButton="Add product"
+          setSearch={setSearch}
         />
       )}
 

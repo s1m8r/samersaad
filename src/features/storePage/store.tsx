@@ -1,9 +1,11 @@
 import ErrorMessage from "@/components/forms/errors";
+import InputForm from "@/components/forms/input";
 import ButtonPending from "@/components/layout/buttonPending";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { storeScema } from "@/schemas/store";
+import { Image, Mail, Network, Phone, Star, StoreIcon, UserRound, UsersRound } from "lucide-react";
 import { useState } from "react";
 import {
   FieldErrors,
@@ -29,6 +31,7 @@ interface Props {
   isPending?: boolean;
   isLoading?: boolean;
   isDirty?: boolean;
+  typeForm?: "add" | "edit"
 }
 
 export default function Store({
@@ -42,7 +45,8 @@ export default function Store({
   register,
   isPending,
   isLoading,
-  isDirty
+  isDirty,
+  typeForm="add",
 }: Props) {
   const [valueInput, setValueInput] = useState("");
 
@@ -68,7 +72,10 @@ export default function Store({
 
   return (
     <div className="w-full max-w-3xl mx-auto">
-      <div className="rounded-xl border bg-white dark:bg-gray-900 dark:border-gray-800 shadow-sm p-5">
+      <div className="rounded-xl border bg-white dark:bg-gray-900 dark:border-gray-800 shadow-sm p-5
+      animate__animated animate__fadeIn
+      animate-duration
+      ">
 
         <h1 className="text-lg font-semibold text-gray-900 dark:text-white mb-5">
           {title}
@@ -89,19 +96,28 @@ export default function Store({
               </p>
 
               <div className="space-y-3">
-                <Input placeholder="Name" {...register("name")} />
+                <InputForm register={register}
+                  icon={<StoreIcon  size={22} />}
+                  name="name" placeholder="Name Store" label="Name Store" ariaInvalid={!!errors.name?.message} />
                 {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
 
-                <Input placeholder="Email" {...register("email")} />
+                  <InputForm register={register}
+                  icon={<Mail  size={22} />}
+                  name="email" placeholder="Email" label="Email" ariaInvalid={!!errors.email?.message} />
                 {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
 
-                <Input placeholder="Phone" {...register("phone")} />
+                  <InputForm register={register}
+                  icon={<Phone  size={22} />}
+                  name="phone" placeholder="Phone" label="Phone" ariaInvalid={!!errors.phone?.message} />
                 {errors.phone && <ErrorMessage>{errors.phone.message}</ErrorMessage>}
-
-                <Input placeholder="Website" {...register("website")} />
+                <InputForm register={register}
+                  icon={<Network size={22} />}
+                  name="website" placeholder="Website" label="Website" ariaInvalid={!!errors.website?.message} />
                 {errors.website && <ErrorMessage>{errors.website.message}</ErrorMessage>}
 
-                <Input placeholder="Image" {...register("image")} />
+                <InputForm register={register}
+                  icon={<Image size={22} />}
+                  name="image" placeholder="Image" label="Image" ariaInvalid={!!errors.image?.message} />
                 {errors.image && <ErrorMessage>{errors.image.message}</ErrorMessage>}
               </div>
             </div>
@@ -134,58 +150,150 @@ export default function Store({
               </div>
             </div>
 
-            <div className="space-y-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                Address
-              </p>
+           <div className="space-y-4">
+  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
+    Address
+  </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <Input placeholder="Country" {...register("address.country")} />
-                <Input placeholder="City" {...register("address.city")} />
-                <Input placeholder="State" {...register("address.state")} />
-                <Input placeholder="Street" {...register("address.street")} />
-                <Input placeholder="Zip Code" {...register("address.zipCode")} />
-              </div>
-            </div>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <InputForm
+      register={register}
+      name="address.country"
+      placeholder="Country"
+      label="Country"
+      ariaInvalid={!!errors.address?.country}
+    />
+
+    <InputForm
+      register={register}
+      name="address.city"
+      placeholder="City"
+      label="City"
+      ariaInvalid={!!errors.address?.city}
+    />
+
+    <InputForm
+      register={register}
+      name="address.state"
+      placeholder="State"
+      label="State"
+      ariaInvalid={!!errors.address?.state}
+    />
+
+    <InputForm
+      register={register}
+      name="address.street"
+      placeholder="Street"
+      label="Street"
+      ariaInvalid={!!errors.address?.street}
+    />
+
+    <InputForm
+      register={register}
+      name="address.zipCode"
+      placeholder="Zip Code"
+      label="Zip Code"
+      ariaInvalid={!!errors.address?.zipCode}
+    />
+  </div>
+</div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <Input placeholder="Owner" {...register("owner")} />
-              <Input
-                placeholder="Employees"
-                type="number"
-                {...register("employees", { valueAsNumber: true })}
+              <InputForm
+                register={register}
+                 icon={<UserRound size={22} />}
+      name="owner"
+      placeholder="Owner"
+      label="Owner"
+      ariaInvalid={!!errors.owner}
               />
+               <InputForm register={register} 
+                icon={<UsersRound size={22}  />}
+                name="employees" placeholder="Employees" label="Employees" type="number"
+                options={{ valueAsNumber: true }}
+                ariaInvalid={!!errors.employees?.message}
+                />
             </div>
 
             <div className="space-y-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                Opening Hours
-              </p>
+  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
+    Opening Hours
+  </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <Input placeholder="Sunday" {...register("openingHours.sunday")} />
-                <Input placeholder="Monday" {...register("openingHours.monday")} />
-                <Input placeholder="Tuesday" {...register("openingHours.tuesday")} />
-                <Input placeholder="Wednesday" {...register("openingHours.wednesday")} />
-                <Input placeholder="Thursday" {...register("openingHours.thursday")} />
-                <Input placeholder="Friday" {...register("openingHours.friday")} />
-                <Input placeholder="Saturday" {...register("openingHours.saturday")} />
-              </div>
-            </div>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <InputForm
+      register={register}
+      name="openingHours.sunday"
+      placeholder="Sunday"
+      label="Sunday"
+      ariaInvalid={!!errors.openingHours?.sunday}
+    />
+
+    <InputForm
+      register={register}
+      name="openingHours.monday"
+      placeholder="Monday"
+      label="Monday"
+      ariaInvalid={!!errors.openingHours?.monday}
+    />
+
+    <InputForm
+      register={register}
+      name="openingHours.tuesday"
+      placeholder="Tuesday"
+      label="Tuesday"
+      ariaInvalid={!!errors.openingHours?.tuesday}
+    />
+
+    <InputForm
+      register={register}
+      name="openingHours.wednesday"
+      placeholder="Wednesday"
+      label="Wednesday"
+      ariaInvalid={!!errors.openingHours?.wednesday}
+    />
+
+    <InputForm
+      register={register}
+      name="openingHours.thursday"
+      placeholder="Thursday"
+      label="Thursday"
+      ariaInvalid={!!errors.openingHours?.thursday}
+    />
+
+    <InputForm
+      register={register}
+      name="openingHours.friday"
+      placeholder="Friday"
+      label="Friday"
+      ariaInvalid={!!errors.openingHours?.friday}
+    />
+
+    <InputForm
+      register={register}
+      name="openingHours.saturday"
+      placeholder="Saturday"
+      label="Saturday"
+      ariaInvalid={!!errors.openingHours?.saturday}
+    />
+  </div>
+</div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <Input
-                placeholder="Rating"
-                type="number"
-                {...register("rating", { valueAsNumber: true })}
-              />
-              <Input
-                placeholder="Reviews"
-                type="number"
-                {...register("reviews", { valueAsNumber: true })}
-              />
+              <InputForm register={register} 
+                icon={<Star size={22}  />}
+                name="rating" placeholder="Rating" label="Rating" type="number"
+                options={{ valueAsNumber: true }}
+                ariaInvalid={!!errors.rating?.message}
+                />
+              <InputForm register={register} 
+                icon={<UsersRound size={22}  />}
+                name="reviews" placeholder="Reviews" label="Reviews" type="number"
+                options={{ valueAsNumber: true }}
+                ariaInvalid={!!errors.reviews?.message}
+                />
             </div>
-            <ButtonPending variant="primary" disabled={isPending || !isDirty} children={chlidrenButton} isPending={isPending} />
+            <ButtonPending variant="primary" disabled={isPending ||(typeForm==="edit" && !isDirty)} children={chlidrenButton} isPending={isPending} />
           </form>
         )}
       </div>

@@ -12,7 +12,8 @@ import { Spinner } from "@/components/ui/spinner";
 import { useRoles } from "@/API/role";
 import ButtonPending from "@/components/layout/buttonPending";
 import InputForm from "@/components/forms/input";
-import { Lock, Mail, UserRound } from "lucide-react";
+import { Calendar, Lock, Mail, UserRound } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 type registerFormData = z.infer<typeof registerSchema>;
 
@@ -33,6 +34,7 @@ type Props = {
   isLoading?: boolean;
   isDirty?: boolean;
   active?: "add" | "edit";
+  hasLogin?: "yes" | "no";
 };
 
 export default function RegisterForm({
@@ -47,12 +49,16 @@ export default function RegisterForm({
   isLoading,
   isDirty,
   active = "add",
+  hasLogin ="no"
 }: Props) {
   const { data: roles } = useRoles();
 
   return (
     <div className="w-full max-w-xl mx-auto">
-      <div className="rounded-xl border bg-white dark:bg-gray-900 dark:border-gray-800 shadow-sm p-5">
+      <div className="rounded-xl border bg-white dark:bg-gray-900 dark:border-gray-800 shadow-sm p-5
+      animate__animated animate__fadeIn
+      animate-duration
+      ">
 
         <h1 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
           {title}
@@ -70,16 +76,16 @@ export default function RegisterForm({
             <div className="space-y-1">
               <InputForm register={register}
                 icon={<UserRound size={22} />}
-                name="firstName" placeholder="First Name" label="First Name" />
-              {errors.firstName && (
+                name="firstName" placeholder="First Name" label="First Name" ariaInvalid={!!errors.firstName?.message} />
+              {errors.firstName && (<>
                 <ErrorMessage>{errors.firstName.message}</ErrorMessage>
-              )}
+             </> )}
             </div>
 
             <div className="space-y-1">
                           <InputForm register={register} 
                 icon={<UserRound size={22} />}
-                name="lastName" placeholder="Last Name" label="Last Name" />
+                name="lastName" placeholder="Last Name" label="Last Name" ariaInvalid={!!errors.lastName?.message} />
               {errors.lastName && (
                 <ErrorMessage>{errors.lastName.message}</ErrorMessage>
               )}
@@ -88,7 +94,7 @@ export default function RegisterForm({
             <div className="space-y-1">
               <InputForm register={register} 
                 icon={<Mail size={22} />}
-                name="email" placeholder="Email" label="Email" />
+                name="email" placeholder="Email" label="Email" ariaInvalid={!!errors.email?.message} />
               {errors.email && (
                 <ErrorMessage>{errors.email.message}</ErrorMessage>
               )}
@@ -98,7 +104,7 @@ export default function RegisterForm({
               <div className="space-y-1">
                 <InputForm register={register} 
                 icon={<Lock size={22} />}
-                name="password" placeholder="Password" label="Password" />
+                name="password" placeholder="Password" label="Password" type="password" ariaInvalid={!!errors.password?.message} />
                 {errors.password && (
                   <ErrorMessage>{errors.password.message}</ErrorMessage>
                 )}
@@ -107,9 +113,11 @@ export default function RegisterForm({
 
             <div className="space-y-1">
               <InputForm register={register} 
-                icon={<Lock size={22} />}
+                icon={<Calendar size={22} />}
                 name="age" placeholder="Age" label="Age" type="number"
-                options={{ valueAsNumber: true }} />
+                options={{ valueAsNumber: true }}
+                ariaInvalid={!!errors.age?.message}
+                />
               {errors.age && (
                 <ErrorMessage>{errors.age.message}</ErrorMessage>
               )}
@@ -136,7 +144,16 @@ export default function RegisterForm({
 
             <ButtonPending variant="primary" disabled={isPending || (active==="edit" && !isDirty)} children={chlidrenButton} isPending={isPending} />
           </form>
-        )}
+          
+        )
+        }
+        
+        {hasLogin==="yes" && <Link
+          to="/login"
+          className="text-sm text-gray-500 hover:text-black transition underline underline-offset-4 flex justify-center mb-2 mt-2"
+        >
+          I have account go to login
+        </Link>}
       </div>
     </div>
   );

@@ -1,28 +1,30 @@
 import { useAddProduct } from "@/API/product";
 import Product from "@/features/product/product";
+import { Route } from "@/routes/_proteced/products/addproduct";
 import { ProdectScema } from "@/schemas/product";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLocation, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import z from "zod";
 type productFormData = z.infer<typeof ProdectScema>
-type HistoryState = {
-  from?: string;
-};
 const AddProduct = () => {
     const navigate = useNavigate();
-    const location = useLocation();
+    const search = Route.useSearch();
     const { handleSubmit,formState:{errors},register ,setValue ,control} = useForm({
         resolver:zodResolver(ProdectScema)
     })
     const { mutate, isPending } = useAddProduct()
-    const from = (location.state as HistoryState)?.from || "/";
     const onsubmit = (data:productFormData) => {
-        mutate(data)
-         navigate({
-    to: from,
-  });
-        
+        mutate(data,
+             {onSuccess: () => {
+                setTimeout(() => {
+                    navigate({
+                        to: search.from || "/",
+                    });
+                }, 200);
+            },
+            }
+        )
     }
     return (<div>
         <Product

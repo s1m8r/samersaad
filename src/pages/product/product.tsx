@@ -21,14 +21,14 @@ const Product = () => {
     const { data: delDataProduct } = useGetProductsSearch(searchDelProduct)
     const gotoAdd = () => {
         navigate({
-            to: "/product/add",
+            to: "/products/addproduct",
         });
     };
 const location = useLocation();
 const onSubmit = (data: ids) => {
   if (data.id) {
     navigate({
-      to: "/product/edit/$id",
+      to: "/products/edit/$id",
       params: {
         id: Number(data.id),
       },

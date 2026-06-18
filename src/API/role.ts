@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "./axios";
 import { roleScema } from "@/schemas/role";
 import z from "zod";
@@ -29,17 +29,16 @@ export const useGetRolesSerch = (search = "") => {
     },
   });
 };
-export const useGetRoles = (sortBy = "", sortOrder = "", page = 1) => {
+export const useGetRoles = (sortBy = "", sortOrder = "", page = 1, search="") => {
   return useQuery<roleResponseType>({
-    queryKey: [...queryKey, sortBy, sortOrder, page],
-
+    queryKey: [...queryKey, sortBy, sortOrder, page, search],
     queryFn: async () => {
       const res = await api.get(
-        `/api/roles?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}`
+        `/api/roles?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&search=${search}`
       );
-
       return res.data;
     },
+    placeholderData: keepPreviousData,
   });
 };
 

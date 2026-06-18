@@ -6,6 +6,8 @@ import { useNavigate } from "@tanstack/react-router";
 import { storeScema } from "@/schemas/store"; 
 import { useGetStores } from "@/API/store";
 import DeleteStore from "./deleteStore";
+import { ArrowDownUp } from "lucide-react";
+import Button from "@/components/layout/button";
 
 type storeFormData = z.infer<typeof storeScema>;
 
@@ -29,8 +31,17 @@ const ShowStore = () => {
       setSortOrder("asc");
     }
   };
+  const goToAdd = () => {
+    navigate({
+      to: "/stores/addstore",
+      search: {
+        from: "/stores",
+      },
+    })
+  }
+  const [search ,setSearch]=useState("")
 
-  const { data } = useGetStores(sortBy, sortOrder, page);
+  const { data } = useGetStores(sortBy, sortOrder, page, search);
 
   const stores = data?.data ?? [];
   const pagination = data?.pagination;
@@ -38,63 +49,86 @@ const ShowStore = () => {
   const columns: ColumnDef<storeFormData>[] = [
     {
       accessorKey: "id",
-      header: () => <span onClick={() => order("id")}>ID</span>,
+      size:5,
+      header: () => (<span
+                    className="group flex items-center gap-1 cursor-pointer"
+                    onClick={() => order("id")}>
+                    <ArrowDownUp
+                        size={12}
+                        className="opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                    />
+                    <span>id</span>
+                </span>),
     },
     {
       accessorKey: "name",
-      header: () => <span onClick={() => order("name")}>Name</span>,
+      size:20,
+      header: () => <span>Name</span>,
     },
     {
       accessorKey: "email",
-      header: () => <span onClick={() => order("email")}>Email</span>,
+      size:20,
+      header: () => <span>Email</span>,
     },
     {
       accessorKey: "phone",
-      header: () => <span onClick={() => order("phone")}>Phone</span>,
+      size:20,
+      header: () => <span >Phone</span>,
     },
     {
       accessorKey: "owner",
-      header: () => <span onClick={() => order("owner")}>Owner</span>,
+      size:5,
+      header: () => <span >Owner</span>,
     },
     {
       accessorKey: "rating",
-      header: () => <span onClick={() => order("rating")}>Rating</span>,
+      size:5,
+      header: () => <span >Rating</span>,
     },
     {
       accessorKey: "isActive",
-      header: () => <span onClick={() => order("isActive")}>Active</span>,
+      size:5,
+      header: () => <span>Active</span>,
     },
     {
       accessorKey: "edit",
+      size:5,
       header: () => <span>Edit</span>,
       cell: ({ row }) => {
         const id = row.original.id;
-
         return (
-          <button
+          <Button
+            variant="editTable"
+            type="table"
             onClick={() =>
               navigate({
-                to: "/store/edit/$id",
+                to: "/stores/edit/$id",
                 params: {
                   id,
+                },
+                search: {
+                  from: "/stores",
                 },
               })
             }
           >
             Edit
-          </button>
+          </Button>
         );
       },
     },
     {
       accessorKey: "delete",
+      size:5,
       header: () => <span>Delete</span>,
       cell: ({ row }) => {
         const id = row.original.id;
         const name = row.original.name;
 
         return (
-          <button
+          <Button
+            variant="delete"
+            type="table"
             onClick={() => {
               setShowDel(true);
               setStoreId(id);
@@ -102,7 +136,7 @@ const ShowStore = () => {
             }}
           >
             Delete
-          </button>
+          </Button>
         );
       },
     },
@@ -110,9 +144,6 @@ const ShowStore = () => {
 
   return (
     <div>
-         <div>
-  <h1 className="text-2xl font-bold">ٍStore</h1>
-</div>
       {pagination && (
         <Table
           columns={columns}
@@ -120,6 +151,10 @@ const ShowStore = () => {
           pagination={pagination}
           page={page}
           setPage={setPage}
+          title="stores"
+          textButton="add store"
+          onClick={goToAdd}
+          setSearch={setSearch}
         />
       )}
 

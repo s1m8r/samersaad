@@ -20,12 +20,12 @@ import {
   UseFormSetValue,
 } from "react-hook-form";
 
-import { Input } from "@/components/ui/input";
 import ErrorMessage from "@/components/forms/errors";
 import { Spinner } from "@/components/ui/spinner";
 import { useGetStoresSearch } from "@/API/store";
-// import Button from "@/components/layout/button";
 import ButtonPending from "@/components/layout/buttonPending";
+import InputForm from "@/components/forms/input";
+import { Archive, CircleDollarSign, Image, ShelvingUnit, SquarePen } from "lucide-react";
 
 type productFormData = z.infer<typeof ProdectScema>;
 
@@ -42,6 +42,7 @@ interface Props {
   isPending?: boolean;
   isLoading?: boolean;
   isDirty?: boolean;
+  typeForm?: "add" | "edit"
 }
 
 export default function Product({
@@ -56,7 +57,8 @@ export default function Product({
   defaultStoreName = "",
   isPending,
   isLoading,
-  isDirty
+  isDirty,
+  typeForm="add"
 }: Props) {
   const [search, Setsearch] = useState("");
   const [inputValue, setInputValue] = useState(defaultStoreName);
@@ -67,7 +69,10 @@ export default function Product({
 
   return (
     <div className="w-full max-w-xl mx-auto">
-      <div className="rounded-xl border bg-white dark:bg-gray-900 dark:border-gray-800 p-5 shadow-sm">
+      <div className="rounded-xl border bg-white dark:bg-gray-900 dark:border-gray-800 p-5 shadow-sm
+      animate__animated animate__fadeIn
+      animate-duration
+      ">
 
         <h1 className="text-lg font-semibold mb-4">{title}</h1>
 
@@ -131,45 +136,53 @@ export default function Product({
             </div>
 
             <div className="space-y-1">
-              <label>Name Product</label>
-              <Input {...register("name")} />
+              <InputForm
+                    register={register}
+                    name="name"
+                    placeholder="Name"
+                    label="Name"
+                ariaInvalid={!!errors.name}
+                icon={<Archive size={22} />}
+                  />
               {errors.name && (
                 <ErrorMessage>{errors.name.message}</ErrorMessage>
               )}
             </div>
 
             <div className="space-y-1">
-              <label>Description</label>
-              <Input {...register("description")} />
+               <InputForm register={register}
+                icon={<SquarePen size={22} />}
+                name="description" placeholder="Description" label="Description" ariaInvalid={!!errors.description?.message} />
               {errors.description && (
                 <ErrorMessage>{errors.description.message}</ErrorMessage>
               )}
             </div>
 
             <div className="space-y-1">
-              <label>Price</label>
-              <Input type="number" {...register("price", { valueAsNumber: true })} />
+              <InputForm register={register}  
+              type="number"  
+                icon={<CircleDollarSign size={22} />}                
+                name="price" placeholder="Price" label="Price" ariaInvalid={!!errors.price?.message} options={{valueAsNumber:true}} />
               {errors.price && (
                 <ErrorMessage>{errors.price.message}</ErrorMessage>
               )}
             </div>
 
             <div className="space-y-1">
-              <label>Type</label>
-              <Input {...register("type")} />
+               <InputForm register={register}                
+                icon={<ShelvingUnit size={22} />}                
+                name="type" placeholder="Type" label="Type" ariaInvalid={!!errors.type?.message} />
               {errors.type && (
                 <ErrorMessage>{errors.type.message}</ErrorMessage>
               )}
             </div>
 
             <div className="space-y-1">
-              <label>Image</label>
-              <Input {...register("image")} />
-              {errors.image && (
-                <ErrorMessage>{errors.image.message}</ErrorMessage>
-              )}
+                <InputForm register={register}                
+                icon={<Image size={22} />}                
+                name="image" placeholder="Image" label="Image" ariaInvalid={!!errors.image?.message} />           
             </div>
-            <ButtonPending variant="primary" disabled={isPending || !isDirty}
+            <ButtonPending variant="primary" disabled={isPending || (typeForm==="edit" &&!isDirty)}
               children={chlidtenButton}
               isPending={isPending}
             />

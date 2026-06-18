@@ -31,7 +31,7 @@ const User = () => {
         id: String(data.id),
       },
       search: {
-    from: "/",
+        from: "/",
       },
     });
   };
@@ -42,7 +42,6 @@ const User = () => {
   };
 
   const { data: user } = useGetUser(id);
-
   return (
     <div className="flex gap-4 p-4">
 

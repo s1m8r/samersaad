@@ -24,13 +24,13 @@ const Store = () => {
 
   const gotoAdd = () => {
     navigate({
-      to: "/store/addstore",
+      to: "/stores/addstore",
     });
   };
 
   const onSubmit = (data: ids) => {
     navigate({
-      to: "/store/edit/$id",
+      to: "/stores/edit/$id",
       params: {
         id: Number(data.id),
       },

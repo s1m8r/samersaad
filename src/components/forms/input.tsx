@@ -14,7 +14,8 @@ type Props<T extends FieldValues> = {
     icon?: ReactNode;
     label: string;
     options?: RegisterOptions<T, Path<T>>;
-    type?: "number" | "text";
+  type?: "number" | "text" |"password";
+    ariaInvalid?:boolean
 };
 
 export default function InputForm<T extends FieldValues>({
@@ -24,7 +25,9 @@ export default function InputForm<T extends FieldValues>({
     icon,
     options,
     label,
-    type = "text",
+  type = "text",
+  ariaInvalid,
+    
 }: Props<T>) {
   return (
     <div className="space-y-1">
@@ -39,8 +42,10 @@ export default function InputForm<T extends FieldValues>({
           </div>
         )}
 
-              <Input
-              type={type}
+        <Input
+          aria-invalid={ariaInvalid}
+          type={type}
+          step="any"
           {...register(name, options)}
                   placeholder={placeholder}
           className={`

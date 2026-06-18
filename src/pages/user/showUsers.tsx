@@ -16,7 +16,6 @@ const ShowUser = () => {
     const [userId, setUserId] = useState<number>()
     const [userName, setUserName] = useState("")
     const [page, setPage] = useState(1);
-
     
     const [sortBy, setSortBy] = useState("id")
     const [sortOrder, setSortOrder] = useState("asc")
@@ -27,13 +26,23 @@ const ShowUser = () => {
         setSortBy(value);
         setSortOrder("asc");
     }
-};
-    const { data } = useGetUsers(sortBy ,sortOrder ,page)
+    };
+    const [search,setSearch]=useState("")
+    const { data } = useGetUsers(sortBy, sortOrder, page, search)
     const users = data?.data ?? [];
     const pagination = data?.pagination;
+    const goToAdd = () => {
+        navigate({
+            to: "/users/adduser",
+            search: {
+                from: "/users"
+            }
+        })
+    }
     const columns: ColumnDef<registerFormData>[] = [
         {
             accessorKey: "id",
+            size:5,
             header: () => (
                 <span
                     className="group flex items-center gap-1 cursor-pointer"
@@ -48,6 +57,7 @@ const ShowUser = () => {
         },
         {
             accessorKey: "firstName",
+            size:20,
             header: () => (
             <span
             >
@@ -57,6 +67,7 @@ const ShowUser = () => {
         },
         {
             accessorKey: "lastName",
+            size:20,
             header: () => (
             <span
             >
@@ -66,6 +77,7 @@ const ShowUser = () => {
         },
         {
             accessorKey: "phone",
+            size:10,
             header: () => (
             <span >
                 Phone
@@ -74,6 +86,7 @@ const ShowUser = () => {
         },
         {
             accessorKey: "age",
+            size:5,
             header: () => (
             <span
             >
@@ -83,6 +96,7 @@ const ShowUser = () => {
         },
         {
             accessorKey: "email",
+            size:25,
             header: () => (
             <span
                     onClick={() => {
@@ -94,7 +108,8 @@ const ShowUser = () => {
         ),
         },
         {
-            accessorKey:"address",
+            accessorKey: "address",
+            size:25,
             header: () => (
             <span>
                 Address
@@ -108,7 +123,8 @@ const ShowUser = () => {
             }
         },
         {
-            accessorKey:"role",
+            accessorKey: "role",
+            size:5,
             header: () => (
                 <span>
                 Role
@@ -116,7 +132,8 @@ const ShowUser = () => {
             ),
         },
         {
-            accessorKey:"isActive",
+            accessorKey: "isActive",
+            size:5,
             header: () => (
                 <span>
                 Active
@@ -124,7 +141,8 @@ const ShowUser = () => {
             ),
         },
         {
-            accessorKey:"x",
+            accessorKey: "x",
+            size:5,
             header: () => (
             <span>
                 Edit
@@ -137,7 +155,10 @@ const ShowUser = () => {
             to: "/users/edit/$id",
             params: {
                 id: id,
-            },
+                        },
+                        search: {
+                            from: "/users",
+                        },
                     })}
                     variant="editTable"
                     type="table"
@@ -146,7 +167,8 @@ const ShowUser = () => {
             }
         },
         {
-            accessorKey:"y",
+            accessorKey: "y",
+            size:5,
             header: () => (
             <span>
                 Delete
@@ -170,9 +192,6 @@ const ShowUser = () => {
   
     ]
     return (<div>
-        <div>
-  <h1 className="text-2xl font-bold">Users</h1>
-</div>
         {pagination && (
             <Table
                 columns={columns}
@@ -180,6 +199,10 @@ const ShowUser = () => {
                 pagination={pagination}
                 page={page}
                 setPage={setPage}
+                title="users"
+                textButton="Add User"
+                onClick={goToAdd}
+                setSearch={setSearch}
             />
 )}
 
