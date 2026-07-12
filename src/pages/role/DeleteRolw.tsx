@@ -1,39 +1,46 @@
-
 import { useDeleteRole } from "@/API/role";
+import ContainerDel from "@/components/layout/ContainerDel";
 import ConfirmDeleteModal from "@/components/layout/delete";
+import { toast } from "sonner";
 
 type Props = {
-    roleId: number;
-    roleName:string ;
-    setShowDel: React.Dispatch<React.SetStateAction<boolean>>;
+  roleId: number;
+  roleName: string;
+  setShowDel: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const DeleteRole = ({ roleId , roleName, setShowDel }: Props) => {
-    const { mutate, isPending } = useDeleteRole();
+const DeleteRole = ({ roleId, roleName, setShowDel }: Props) => {
+  const { mutate, isPending } = useDeleteRole();
 
-    const del = () => {
-        mutate(
-            { id: roleId },
-            {
-                onSuccess: () => setShowDel(false),
-            }
-        );
-    };
-
-    return (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-            <div className="bg-white w-full max-w-md rounded-2xl shadow-xl p-6">
-                <ConfirmDeleteModal
-                    title="Delete Role"
-                    message="Are you sure you want to delete:"
-                    itemName={roleName}
-                    isPending={isPending}
-                    onCancel={() => setShowDel(false)}
-                    onConfirm={del}
-                />
-            </div>
-        </div>
+  const del = () => {
+    mutate(
+      {
+        id: roleId,
+      },
+      {
+        onSuccess: () => (
+          setShowDel(false),
+          toast.success(`${roleName} updated successfully`)
+        ),
+        onError: (err) => {
+          toast.error(err.message);
+        },
+      },
     );
+  };
+
+  return (
+    <ContainerDel>
+      <ConfirmDeleteModal
+        title="Delete Role"
+        message="Are you sure you want to delete:"
+        itemName={roleName}
+        isPending={isPending}
+        onCancel={() => setShowDel(false)}
+        onConfirm={del}
+      />
+    </ContainerDel>
+  );
 };
 
 export default DeleteRole;

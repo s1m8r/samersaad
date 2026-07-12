@@ -1,43 +1,71 @@
 import { useAddProduct } from "@/API/product";
 import Product from "@/features/product/product";
-import { Route } from "@/routes/_proteced/products/addproduct";
+import { Route } from "@/routes/(proteced)/products/addproduct";
 import { ProdectScema } from "@/schemas/product";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
-type productFormData = z.infer<typeof ProdectScema>
+// import { useGetStore, useUpdateStore } from "@/API/store";
+// import { useEffect, useState } from "react";
+type productFormData = z.infer<typeof ProdectScema>;
 const AddProduct = () => {
-    const navigate = useNavigate();
-    const search = Route.useSearch();
-    const { handleSubmit,formState:{errors},register ,setValue ,control} = useForm({
-        resolver:zodResolver(ProdectScema)
-    })
-    const { mutate, isPending } = useAddProduct()
-    const onsubmit = (data:productFormData) => {
-        mutate(data,
-             {onSuccess: () => {
-                setTimeout(() => {
-                    navigate({
-                        to: search.from || "/",
-                    });
-                }, 200);
-            },
-            }
-        )
-    }
-    return (<div>
-        <Product
-            title="Add Product"
-            chlidtenButton="Add Product"
-            onsubmit={onsubmit}
-            handleSubmit={handleSubmit}
-            errors={errors}
-            register={register}
-            isPending={isPending}
-            setValue={setValue} 
-            control={control}
-        />
-    </div> );
-}
+  // const [getStoreId, setGetStoreId] = useState<number>();
+  // const { mutate: addItemStore } = useUpdateStore();
+  // const { data: getStore } = useGetStore(getStoreId);
+  // const updatedStore = async () => {
+  //   if (getStore) {
+  //     await addItemStore(getStore);
+  //   }
+  // };
+  // useEffect(() => {
+  //   if (getStore) {
+  //     addItemStore({ getStoreId, getStore });
+  //   }
+  // }, [getStore]);
+  const navigate = useNavigate();
+  const search = Route.useSearch();
+  const {
+    handleSubmit,
+    formState: { errors },
+    register,
+    setValue,
+    control,
+  } = useForm({
+    resolver: zodResolver(ProdectScema),
+  });
+  const { mutate, isPending } = useAddProduct();
+  const onsubmit = (data: productFormData) => {
+    mutate(data, {
+      onSuccess: () => {
+        // setGetStoreId(data?.storeId);
+        setTimeout(() => {
+          navigate({
+            to: search.from || "/",
+          });
+          toast.success(`${data.name} added to ${data.storeName} successfully`);
+        }, 200);
+        console.log(data.storeName);
+      },
+      onError: (err) => {
+        toast.error(err.message);
+      },
+    });
+  };
+
+  return (
+    <Product
+      title="Add Product"
+      chlidtenButton="Add Product"
+      onsubmit={onsubmit}
+      handleSubmit={handleSubmit}
+      errors={errors}
+      register={register}
+      isPending={isPending}
+      setValue={setValue}
+      control={control}
+    />
+  );
+};
 export default AddProduct;

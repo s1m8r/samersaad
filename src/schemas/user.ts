@@ -1,25 +1,32 @@
 import { z } from "zod";
 
 export const userScema = z.object({
-    email: z.string().email("this not email"),
-    password: z.string().min(6, "enter more at 6")
-})
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+export const addressSchema = z.object({
+  street: z.string().min(1, "Street is required").optional(),
+  city: z.string().min(1, "City is required").optional(),
+  state: z.string().min(1, "State is required").optional(),
+  zipCode: z.string().min(1, "ZIP code is required").optional(),
+  country: z.string().min(1, "Country is required").optional(),
+});
+
 export const registerSchema = z.object({
-    id: z.number().optional(),
-    firstName: z.string().min(1, "FirstName is required"),
-    lastName: z.string().min(1, "LastName is required"),
-    email: z.string().email("this not email"),
-    password: z.string().min(6, "enter more at 6").optional(),
-    age: z.number(),
-    address: z.object({
-        street: z.string().optional(),
-        city: z.string().optional(),
-        state: z.string().optional(),
-        zipCode: z.string().optional(),
-        country: z.string().optional(),
-    }).optional(),
-    phone: z.string().optional(),
-    role: z.string().optional(),
-    roleId: z.number().optional(),
-    isActive: z.boolean().optional(),
-})
+  id: z.number().optional(),
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.string().email("Please enter a valid email address"),
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .optional(),
+  age: z.number(),
+  address: addressSchema.optional(),
+  phone: z.string().optional(),
+  role: z.string().optional(),
+  roleId: z.number().optional(),
+  isActive: z.boolean().optional(),
+  createdAt: z.string().optional(),
+});

@@ -4,6 +4,8 @@ import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import DeleteUser from "./deleteUser";
+import { Can } from "@/components/functions/can";
+import { usepermissions } from "@/stores/usePermissions";
 
 interface ids {
   id: number;
@@ -44,47 +46,50 @@ const User = () => {
   const { data: user } = useGetUser(id);
   return (
     <div className="flex gap-4 p-4">
-
-      <div className="flex-1">
-        <Card
-          title="Add User"
-          description="Add a new user"
-          onClick={gotoAdd}
-          variant="add"
-        >
-          Add User
-        </Card>
-      </div>
-
-      <div className="flex-1">
-        <Card
-          title="Edit User"
-          description="Edit existing user"
-          onsubmit={onSubmit}
-          register={editForm.register}
-          handleSubmit={editForm.handleSubmit}
-          placeholder="Enter User ID"
-          hasAction="inputNumber"
-          variant="add"
-        >
-          Edit User
-        </Card>
-      </div>
-
-      <div className="flex-1">
-        <Card
-          title="Delete User"
-          description="Delete existing user"
-          onsubmit={onSubmitdel}
-          register={deleteForm.register}
-          handleSubmit={deleteForm.handleSubmit}
-          placeholder="Enter User ID"
-          hasAction="inputNumber"
-          variant="delete"
-        >
-          Delete User
-        </Card>
-      </div>
+      <Can permission={usepermissions.createUser}>
+        <div className="flex-1">
+          <Card
+            title="Add User"
+            description="Add a new user"
+            onClick={gotoAdd}
+            variant="add"
+          >
+            Add User
+          </Card>
+        </div>
+      </Can>
+      <Can permission={usepermissions.updateUser}>
+        <div className="flex-1">
+          <Card
+            title="Edit User"
+            description="Edit existing user"
+            onsubmit={onSubmit}
+            register={editForm.register}
+            handleSubmit={editForm.handleSubmit}
+            placeholder="Enter User ID"
+            hasAction="inputNumber"
+            variant="add"
+          >
+            Edit User
+          </Card>
+        </div>
+      </Can>
+      <Can permission={usepermissions.deleteUser}>
+        <div className="flex-1">
+          <Card
+            title="Delete User"
+            description="Delete existing user"
+            onsubmit={onSubmitdel}
+            register={deleteForm.register}
+            handleSubmit={deleteForm.handleSubmit}
+            placeholder="Enter User ID"
+            hasAction="inputNumber"
+            variant="delete"
+          >
+            Delete User
+          </Card>
+        </div>
+      </Can>
 
       {showDel && id !== undefined && (
         <DeleteUser

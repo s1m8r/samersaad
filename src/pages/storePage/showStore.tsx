@@ -3,11 +3,14 @@ import z from "zod";
 import { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { storeScema } from "@/schemas/store"; 
+import { storeScema } from "@/schemas/store";
 import { useGetStores } from "@/API/store";
 import DeleteStore from "./deleteStore";
 import { ArrowDownUp } from "lucide-react";
 import Button from "@/components/layout/button";
+import { usepermissions } from "@/stores/usePermissions";
+import { Can } from "@/components/functions/can";
+import Padding from "@/components/layout/padding";
 
 type storeFormData = z.infer<typeof storeScema>;
 
@@ -37,9 +40,9 @@ const ShowStore = () => {
       search: {
         from: "/stores",
       },
-    })
-  }
-  const [search ,setSearch]=useState("")
+    });
+  };
+  const [search, setSearch] = useState("");
 
   const { data } = useGetStores(sortBy, sortOrder, page, search);
 
@@ -49,60 +52,33 @@ const ShowStore = () => {
   const columns: ColumnDef<storeFormData>[] = [
     {
       accessorKey: "id",
-      size:5,
-      header: () => (<span
-                    className="group flex items-center gap-1 cursor-pointer"
-                    onClick={() => order("id")}>
-                    <ArrowDownUp
-                        size={12}
-                        className="opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-                    />
-                    <span>id</span>
-                </span>),
+      size: 5,
+      header: () => (
+        <span
+          className="group flex items-center gap-1 cursor-pointer"
+          onClick={() => order("id")}
+        >
+          <ArrowDownUp
+            size={12}
+            className="opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+          />
+          <span>id</span>
+        </span>
+      ),
     },
     {
       accessorKey: "name",
-      size:20,
+      size: 20,
       header: () => <span>Name</span>,
-    },
-    {
-      accessorKey: "email",
-      size:20,
-      header: () => <span>Email</span>,
-    },
-    {
-      accessorKey: "phone",
-      size:20,
-      header: () => <span >Phone</span>,
-    },
-    {
-      accessorKey: "owner",
-      size:5,
-      header: () => <span >Owner</span>,
-    },
-    {
-      accessorKey: "rating",
-      size:5,
-      header: () => <span >Rating</span>,
-    },
-    {
-      accessorKey: "isActive",
-      size:5,
-      header: () => <span>Active</span>,
-    },
-    {
-      accessorKey: "edit",
-      size:5,
-      header: () => <span>Edit</span>,
       cell: ({ row }) => {
         const id = row.original.id;
+        const name = row.original.name;
         return (
-          <Button
-            variant="editTable"
-            type="table"
+          <span
+            className=" cursor-pointer"
             onClick={() =>
               navigate({
-                to: "/stores/edit/$id",
+                to: "/stores/store/$id",
                 params: {
                   id,
                 },
@@ -112,38 +88,102 @@ const ShowStore = () => {
               })
             }
           >
-            Edit
-          </Button>
+            {name}
+          </span>
+        );
+      },
+    },
+    {
+      accessorKey: "email",
+      size: 20,
+      header: () => <span>Email</span>,
+    },
+    {
+      accessorKey: "phone",
+      size: 20,
+      header: () => <span>Phone</span>,
+    },
+    {
+      accessorKey: "owner",
+      size: 5,
+      header: () => <span>Owner</span>,
+    },
+    {
+      accessorKey: "rating",
+      size: 5,
+      header: () => <span>Rating</span>,
+    },
+    {
+      accessorKey: "isActive",
+      size: 5,
+      header: () => <span>Active</span>,
+    },
+    {
+      accessorKey: "edit",
+      size: 5,
+      header: () => (
+        <Can permission={usepermissions.updateStores}>
+          <span>Edit</span>
+        </Can>
+      ),
+      cell: ({ row }) => {
+        const id = row.original.id;
+        return (
+          <Can permission={usepermissions.updateStores}>
+            <Button
+              variant="add"
+              type="table"
+              onClick={() =>
+                navigate({
+                  to: "/stores/edit/$id",
+                  params: {
+                    id,
+                  },
+                  search: {
+                    from: "/stores",
+                  },
+                })
+              }
+            >
+              Edit
+            </Button>
+          </Can>
         );
       },
     },
     {
       accessorKey: "delete",
-      size:5,
-      header: () => <span>Delete</span>,
+      size: 5,
+      header: () => (
+        <Can permission={usepermissions.deleteStores}>
+          <span>Delete</span>
+        </Can>
+      ),
       cell: ({ row }) => {
         const id = row.original.id;
         const name = row.original.name;
 
         return (
-          <Button
-            variant="delete"
-            type="table"
-            onClick={() => {
-              setShowDel(true);
-              setStoreId(id);
-              setStoreName(name);
-            }}
-          >
-            Delete
-          </Button>
+          <Can permission={usepermissions.deleteStores}>
+            <Button
+              variant="delete"
+              type="table"
+              onClick={() => {
+                setShowDel(true);
+                setStoreId(id);
+                setStoreName(name);
+              }}
+            >
+              Delete
+            </Button>
+          </Can>
         );
       },
     },
   ];
 
   return (
-    <div>
+    <Padding>
       {pagination && (
         <Table
           columns={columns}
@@ -155,6 +195,7 @@ const ShowStore = () => {
           textButton="add store"
           onClick={goToAdd}
           setSearch={setSearch}
+          permissionAdd={usepermissions.createStores}
         />
       )}
 
@@ -165,7 +206,7 @@ const ShowStore = () => {
           setShowDel={setShowDel}
         />
       )}
-    </div>
+    </Padding>
   );
 };
 

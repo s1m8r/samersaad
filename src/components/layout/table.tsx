@@ -13,9 +13,17 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Dispatch, SetStateAction } from "react";
+import { Field } from "@/components/ui/field";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { SearchIcon } from "lucide-react";
+import useDebounce from "../functions/searchDelay";
+import { Can } from "../functions/can";
+import Button from "./button";
 
 type Props<T> = {
   data: T[];
@@ -23,7 +31,8 @@ type Props<T> = {
   title: string;
   onClick: () => void;
   textButton: string;
-  setSearch: Dispatch<SetStateAction<string>>
+  setSearch: Dispatch<SetStateAction<string>>;
+  permissionAdd: string;
   pagination: {
     currentPage: number;
     totalPages: number;
@@ -45,24 +54,59 @@ export default function Table<T>({
   onClick,
   textButton,
   setSearch,
+  permissionAdd,
 }: Props<T>) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+  const [query, setQuery] = useState("");
+  const debounceQuery = useDebounce(query, 400);
 
+  useEffect(() => {
+    setSearch(debounceQuery);
+  }, [debounceQuery, setSearch]);
   return (
     <div className="w-full space-y-4">
       <div>
-      <div className=" flex justify-between"><h1 className="text-2xl font-bold capitalize">{title}</h1>
-        <Button onClick={onClick} className="capitalize cursor-pointer"> {textButton}</Button>
+        <div className=" flex justify-between">
+          <h1 className="text-2xl font-bold capitalize">{title}</h1>
+          <Can permission={permissionAdd}>
+            <Button onClick={onClick} variant="add" width="w-fit">
+              {textButton}
+            </Button>
+          </Can>
         </div>
-        <Input className=" w-fit" placeholder="search" onChange={(e) => setSearch?.(e.target.value)} />
+        <Field className="w-fit">
+          <InputGroup>
+            <InputGroupInput
+              id="inline-end-input"
+              placeholder="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            <InputGroupAddon align="inline-start">
+              <SearchIcon />
+            </InputGroupAddon>
+            {query.length > 0 && (
+              <InputGroupAddon
+                align="inline-end"
+                className="cursor-pointer"
+                onClick={() => {
+                  setQuery("");
+                  setSearch("");
+                }}
+              >
+                ×
+              </InputGroupAddon>
+            )}
+          </InputGroup>
+        </Field>
       </div>
-      <div className="w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm">
-        <table className="w-full text-sm overflow-auto">
-          <thead className="bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-200 ">
+      <div className="w-full max-h-[500px] overflow-y-auto overflow-x-auto rounded-xl border border-gray-200  bg-white shadow-sm">
+        <table className="w-full text-sm overflow-auto animate__animated animate__fadeIn">
+          <thead className="bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-200 sticky top-0 z-10 ">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -73,7 +117,7 @@ export default function Table<T>({
                   >
                     {flexRender(
                       header.column.columnDef.header,
-                      header.getContext()
+                      header.getContext(),
                     )}
                   </th>
                 ))}
@@ -81,7 +125,7 @@ export default function Table<T>({
             ))}
           </thead>
 
-          <tbody className="divide-y divide-gray-100 dark:divide-gray-800 animate__animated animate__fadeInUp">
+          <tbody className="divide-y divide-gray-100 ">
             {table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
@@ -92,59 +136,27 @@ export default function Table<T>({
                     key={cell.id}
                     className="px-4 py-3 text-gray-700 dark:text-gray-200"
                   >
-                    {flexRender(
-                      cell.column.columnDef.cell,
-                      cell.getContext()
-                    )}
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
               </tr>
             ))}
+            {table.getRowModel().rows.length === 0 && (
+              <tr>
+                <td
+                  colSpan={columns.length}
+                  className="px-4 py-3 text-center text-gray-700 dark:text-gray-200"
+                >
+                  No search results found
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
 
       <div className="flex items-center justify-between px-2">
-         <Pagination>
-      <PaginationContent>
-        <PaginationItem>
-              <PaginationPrevious onClick={() => setPage(page - 1)}
-                className={
-                  !pagination?.hasPreviousPage
-                    ? "pointer-events-none opacity-40"
-                    : "cursor-pointer"
-                }
-              />
-            </PaginationItem>
-            {(!pagination?.hasNextPage && pagination.totalPages >2)&&<PaginationItem>
-              <PaginationLink onClick={() => setPage(page - 2)}>{pagination?.currentPage -2}</PaginationLink>
-            </PaginationItem>}
-            {pagination?.currentPage!==1 && <PaginationItem>
-              <PaginationLink onClick={() => setPage(page - 1)} >{pagination?.currentPage-1 }</PaginationLink>
-            </PaginationItem>}
-        <PaginationItem>
-          <PaginationLink href="#" isActive>{pagination?.currentPage }</PaginationLink>
-            </PaginationItem>
-            
-        <PaginationItem>
-              {pagination?.hasNextPage && <PaginationLink onClick={() => setPage(page + 1)} >
-                {pagination?.currentPage + 1}
-              </PaginationLink>}
-            </PaginationItem>
-             {(!pagination?.hasPreviousPage && pagination.totalPages >2)&&<PaginationItem>
-              <PaginationLink onClick={() => setPage(page + 2)}>{pagination?.currentPage +2}</PaginationLink>
-            </PaginationItem>}
-        <PaginationItem>
-          <PaginationNext onClick={() => setPage(page + 1)}
-                className={
-                  !pagination?.hasNextPage
-                    ? "pointer-events-none opacity-40"
-                    : "cursor-pointer"
-                } />
-        </PaginationItem>
-      </PaginationContent>
-    </Pagination>
-        {/* <Pagination>
+        <Pagination>
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious
@@ -156,13 +168,40 @@ export default function Table<T>({
                 }
               />
             </PaginationItem>
-
+            {!pagination?.hasNextPage && pagination.totalPages > 2 && (
+              <PaginationItem>
+                <PaginationLink onClick={() => setPage(page - 2)}>
+                  {pagination?.currentPage - 2}
+                </PaginationLink>
+              </PaginationItem>
+            )}
+            {pagination?.currentPage !== 1 && (
+              <PaginationItem>
+                <PaginationLink onClick={() => setPage(page - 1)}>
+                  {pagination?.currentPage - 1}
+                </PaginationLink>
+              </PaginationItem>
+            )}
             <PaginationItem>
-              <PaginationLink isActive className="font-medium">
+              <PaginationLink href="#" isActive>
                 {pagination?.currentPage}
               </PaginationLink>
             </PaginationItem>
 
+            <PaginationItem>
+              {pagination?.hasNextPage && (
+                <PaginationLink onClick={() => setPage(page + 1)}>
+                  {pagination?.currentPage + 1}
+                </PaginationLink>
+              )}
+            </PaginationItem>
+            {!pagination?.hasPreviousPage && pagination.totalPages > 2 && (
+              <PaginationItem>
+                <PaginationLink onClick={() => setPage(page + 2)}>
+                  {pagination?.currentPage + 2}
+                </PaginationLink>
+              </PaginationItem>
+            )}
             <PaginationItem>
               <PaginationNext
                 onClick={() => setPage(page + 1)}
@@ -174,7 +213,7 @@ export default function Table<T>({
               />
             </PaginationItem>
           </PaginationContent>
-        </Pagination> */}
+        </Pagination>
       </div>
     </div>
   );

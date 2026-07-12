@@ -7,6 +7,9 @@ import { ProdectScema } from "@/schemas/product";
 import { useGetProducts } from "@/API/product";
 import DeleteProduct from "./deleteProduct";
 import Button from "@/components/layout/button";
+import { usepermissions } from "@/stores/usePermissions";
+import { Can } from "@/components/functions/can";
+import Padding from "@/components/layout/padding";
 
 type productFormData = z.infer<typeof ProdectScema>;
 
@@ -36,17 +39,13 @@ const ShowProduct = () => {
       search: {
         from: "/products",
       },
-    }
-    )
-    
-  }
-  const [search,setSearch]=useState("")
+    });
+  };
+  const [search, setSearch] = useState("");
 
-  const { data } = useGetProducts(sortBy, sortOrder, page ,search);
+  const { data } = useGetProducts(sortBy, sortOrder, page, search);
 
-  const dataTable = data;
-
-  const products = dataTable?.data ?? [];
+  const products = data?.data ?? [];
   const pagination = data?.pagination;
 
   const columns: ColumnDef<productFormData>[] = [
@@ -56,15 +55,17 @@ const ShowProduct = () => {
     },
     {
       accessorKey: "name",
-      header: () => <span onClick={() => order("nameProdect")}>Name</span>,
+      header: () => <span>Name</span>,
     },
     {
       accessorKey: "storeName",
-      header: () => <span onClick={() => order("storeName")}>Store</span>,
+      header: () => <span>Store</span>,
     },
     {
       accessorKey: "description",
-      header: () => <span onClick={() => order("description")}>Description</span>,
+      header: () => (
+        <span onClick={() => order("description")}>Description</span>
+      ),
     },
     {
       accessorKey: "type",
@@ -75,50 +76,75 @@ const ShowProduct = () => {
       header: () => <span onClick={() => order("price")}>Price</span>,
     },
     {
+      accessorKey: "rating",
+      header: () => <span onClick={() => order("rating")}>Rating</span>,
+    },
+    {
+      accessorKey: "badge",
+      header: () => <span onClick={() => order("badge")}>Badge</span>,
+    },
+    {
       accessorKey: "edit",
-      header: () => <span>Edit</span>,
+      header: () => (
+        <Can permission={usepermissions.updateProducts}>
+          <span>Edit</span>
+        </Can>
+      ),
       cell: ({ row }) => {
         const id = row.original.id;
 
         return (
-
- <Button  onClick={() =>
-               navigate({
-                 to: "/products/edit/$id",
-                 params: {
-                   id,
-                 },
-               })
-             }
-            variant="editTable"
-            type="table"
-          > Edit</Button>
+          <Can permission={usepermissions.updateProducts}>
+            <Button
+              onClick={() =>
+                navigate({
+                  to: "/products/edit/$id",
+                  params: {
+                    id,
+                  },
+                })
+              }
+              variant="add"
+              type="table"
+            >
+              Edit
+            </Button>
+          </Can>
         );
       },
     },
     {
       accessorKey: "delete",
-      header: () => <span>Delete</span>,
+      header: () => (
+        <Can permission={usepermissions.deleteProducts}>
+          <span>Delete</span>
+        </Can>
+      ),
       cell: ({ row }) => {
         const id = row.original.id;
         const name = row.original.name;
 
         return (
-          <Button onClick={() => {
-               setShowDel(true);
-               setProductId(id);
-               setProductName(name);
-             }}
-            variant="delete"
-            type="table"
-          > Delete</Button>
+          <Can permission={usepermissions.deleteProducts}>
+            <Button
+              onClick={() => {
+                setShowDel(true);
+                setProductId(id);
+                setProductName(name);
+              }}
+              variant="delete"
+              type="table"
+            >
+              Delete
+            </Button>
+          </Can>
         );
       },
     },
   ];
 
   return (
-    <div>
+    <Padding>
       {pagination && (
         <Table
           columns={columns}
@@ -130,9 +156,9 @@ const ShowProduct = () => {
           onClick={goToAdd}
           textButton="Add product"
           setSearch={setSearch}
+          permissionAdd={usepermissions.createProducts}
         />
       )}
-
       {showDel && productId && (
         <DeleteProduct
           productId={productId}
@@ -140,7 +166,7 @@ const ShowProduct = () => {
           setShowDel={setShowDel}
         />
       )}
-    </div>
+    </Padding>
   );
 };
 

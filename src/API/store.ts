@@ -1,11 +1,15 @@
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import api from "./axios";
 import { storeScema } from "@/schemas/store";
 import z from "zod";
 
-
-const queryKey = ["stores"]
-type storeFormData = z.infer<typeof storeScema>
+const queryKey = ["stores"];
+type storeFormData = z.infer<typeof storeScema>;
 type storeResponseType = {
   data: storeFormData[];
   pagination: {
@@ -18,13 +22,18 @@ type storeResponseType = {
   };
 };
 
-export const useGetStores = (sortBy = "", sortOrder = "", page = 1 ,search="") => {
+export const useGetStores = (
+  sortBy = "id",
+  sortOrder = "asc",
+  page = 1,
+  search = "",
+) => {
   return useQuery<storeResponseType>({
-    queryKey: [...queryKey, sortBy, sortOrder, page ,search],
+    queryKey: [...queryKey, sortBy, sortOrder, page, search],
 
     queryFn: async () => {
       const res = await api.get(
-        `/api/stores?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&search=${search}`
+        `api/stores?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&search=${search}`,
       );
 
       return res.data;
@@ -32,14 +41,35 @@ export const useGetStores = (sortBy = "", sortOrder = "", page = 1 ,search="") =
     placeholderData: keepPreviousData,
   });
 };
-export const useGetStoresSearch = (search = "") => {
+export const useGetStoresSearch = (
+  search = "",
+  sortBy = "rating",
+  sortOrder = "desc",
+) => {
   return useQuery<storeResponseType>({
-    queryKey: [...queryKey, search],
+    queryKey: [...queryKey, search, sortBy, sortOrder],
 
     queryFn: async () => {
       const res = await api.get(
-        `/api/stores?search=${search}`
+        `api/stores?search=${search}&sortBy=${sortBy}&sortOrder=${sortOrder}`,
       );
+
+      return res.data;
+    },
+  });
+};
+export const useGetStoresByIdStore = (
+  // search = "",
+  // sortBy = "rating",
+  // sortOrder = "desc",
+  storeId = 6,
+  // "storeId": 6
+) => {
+  return useQuery<storeResponseType>({
+    queryKey: [...queryKey, storeId],
+
+    queryFn: async () => {
+      const res = await api.get(`api/stores?storeId=${storeId}`);
 
       return res.data;
     },
@@ -47,25 +77,25 @@ export const useGetStoresSearch = (search = "") => {
 };
 
 export const useAddStores = () => {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: async (data: storeFormData) => {
-            const res = await api.post("/api/stores", data)
-            return res.data.data;
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey,
-            });
-        },
-    })
-}
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: storeFormData) => {
+      const res = await api.post("api/stores", data);
+      return res.data.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey,
+      });
+    },
+  });
+};
 
 export const useGetStore = (id?: number) => {
   return useQuery({
     queryKey: [queryKey, id],
     queryFn: async () => {
-      const res = await api.get<storeFormData>(`/api/stores/${id}`);
+      const res = await api.get<storeFormData>(`api/stores/${id}`);
       return res.data;
     },
     enabled: !!id,
@@ -73,26 +103,26 @@ export const useGetStore = (id?: number) => {
 };
 
 export const useUpdateStore = () => {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: ({ id, data }: { id: number; data: storeFormData }) => {
-            return api.put(`/api/stores/${id}`, data);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey });
-        },
-    });
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: number; data: storeFormData }) => {
+      return api.put(`api/stores/${id}`, data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey });
+    },
+  });
 };
 
 export const useDeleteStore = () => {
-    const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
-    return useMutation({
-        mutationFn: ({ id }: { id: number }) => {
-            return api.delete(`/api/stores/${id}`);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey });
-        },
-    });
+  return useMutation({
+    mutationFn: ({ id }: { id: number }) => {
+      return api.delete(`api/stores/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey });
+    },
+  });
 };

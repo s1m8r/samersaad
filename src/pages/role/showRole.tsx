@@ -8,6 +8,9 @@ import { useGetRoles } from "@/API/role";
 import DeleteRole from "./DeleteRolw";
 import { ArrowDownUp } from "lucide-react";
 import Button from "@/components/layout/button";
+import { usepermissions } from "@/stores/usePermissions";
+import { Can } from "@/components/functions/can";
+import Padding from "@/components/layout/padding";
 
 type roleFormData = z.infer<typeof roleScema>;
 
@@ -35,14 +38,13 @@ const ShowRole = () => {
     navigate({
       to: "/roles/addrole",
       search: {
-        from:"/roles"
-      }
-    })
-    
-  }
-  const [search,setSearch]=useState("")
+        from: "/roles",
+      },
+    });
+  };
+  const [search, setSearch] = useState("");
 
-  const { data } = useGetRoles(sortBy, sortOrder, page ,search);
+  const { data } = useGetRoles(sortBy, sortOrder, page, search);
 
   const roles = data?.data ?? [];
   const pagination = data?.pagination;
@@ -50,11 +52,12 @@ const ShowRole = () => {
   const columns: ColumnDef<roleFormData>[] = [
     {
       accessorKey: "id",
-      size:5,
+      size: 5,
       header: () => (
         <span
           className="group flex items-center gap-1 cursor-pointer"
-          onClick={() => order("id")}>
+          onClick={() => order("id")}
+        >
           <ArrowDownUp
             size={12}
             className="opacity-0 transition-opacity duration-200 group-hover:opacity-100"
@@ -65,86 +68,88 @@ const ShowRole = () => {
     },
     {
       accessorKey: "name",
-      size:10,
-      header: () => (
-        <span>
-          Name
-        </span>
-      ),
+      size: 10,
+      header: () => <span>Name</span>,
     },
     {
       accessorKey: "description",
-      size:10,
+      size: 10,
       header: () => (
-        <span onClick={() => order("description")}>
-          Description
-        </span>
+        <span onClick={() => order("description")}>Description</span>
       ),
     },
     {
       accessorKey: "isActive",
-      minSize:2,
-      header: () => (
-        <span onClick={() => order("isActive")}>
-          Active
-        </span>
-      ),
+      minSize: 2,
+      header: () => <span onClick={() => order("isActive")}>Active</span>,
     },
     {
       accessorKey: "edit",
-      size:2,
-      header: () => <span>Edit</span>,
+      size: 2,
+      header: () => (
+        <Can permission={usepermissions.updateRoles}>
+          <span>Edit</span>
+        </Can>
+      ),
       cell: ({ row }) => {
         const id = row.original.id;
 
         return (
-          <Button
-            variant="editTable"
-            type="table"
-            onClick={() =>
-              navigate({
-                to: "/roles/edit/$id",
-                params: {
-                  id,
-                },
-                search: {
-                  from:"/roles"
-                }
-              })
-            }
-          >
-            Edit
-          </Button>
+          <Can permission={usepermissions.updateRoles}>
+            <Button
+              variant="add"
+              type="table"
+              onClick={() =>
+                navigate({
+                  to: "/roles/edit/$id",
+                  params: {
+                    id,
+                  },
+                  search: {
+                    from: "/roles",
+                  },
+                })
+              }
+            >
+              Edit
+            </Button>
+          </Can>
         );
       },
     },
     {
       accessorKey: "delete",
-      size:5,
-      header: () => <span>Delete</span>,
+      size: 5,
+      header: () => (
+        <Can permission={usepermissions.deleteRoles}>
+          <span>Delete</span>
+        </Can>
+      ),
       cell: ({ row }) => {
         const id = row.original.id;
         const name = row.original.name;
 
         return (
-          <Button
-            variant="delete"
-            type="table"
-            onClick={() => {
-              setShowDel(true);
-              setRoleId(id);
-              setRoleName(name);
-            }}
-          >
-            Delete
-          </Button>
+          <Can permission={usepermissions.deleteRoles}>
+            <Button
+              variant="delete"
+              type="table"
+              onClick={() => {
+                setShowDel(true);
+                setRoleId(id);
+                setRoleName(name);
+              }}
+            >
+              Delete
+            </Button>
+          </Can>
         );
       },
     },
   ];
 
   return (
-    <div>
+    <Padding>
       {pagination && (
         <Table
           columns={columns}
@@ -156,6 +161,7 @@ const ShowRole = () => {
           textButton="add role"
           onClick={goToAdd}
           setSearch={setSearch}
+          permissionAdd={usepermissions.createRoles}
         />
       )}
 
@@ -166,7 +172,7 @@ const ShowRole = () => {
           setShowDel={setShowDel}
         />
       )}
-    </div>
+    </Padding>
   );
 };
 

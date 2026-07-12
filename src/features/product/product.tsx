@@ -23,9 +23,19 @@ import {
 import ErrorMessage from "@/components/forms/errors";
 import { Spinner } from "@/components/ui/spinner";
 import { useGetStoresSearch } from "@/API/store";
-import ButtonPending from "@/components/layout/buttonPending";
 import InputForm from "@/components/forms/input";
-import { Archive, CircleDollarSign, Image, ShelvingUnit, SquarePen } from "lucide-react";
+import {
+  Archive,
+  CircleDollarSign,
+  Image,
+  Package,
+  ShelvingUnit,
+  SquarePen,
+  Star,
+} from "lucide-react";
+import TitleContent from "@/components/layout/titleContent";
+import Container from "@/components/layout/container";
+import Button from "@/components/layout/button";
 
 type productFormData = z.infer<typeof ProdectScema>;
 
@@ -37,12 +47,12 @@ interface Props {
   errors: FieldErrors<productFormData>;
   register: UseFormRegister<productFormData>;
   setValue: UseFormSetValue<productFormData>;
-  control: Control<productFormData>; 
-  defaultStoreName?: string 
+  control: Control<productFormData>;
+  defaultStoreName?: string;
   isPending?: boolean;
   isLoading?: boolean;
   isDirty?: boolean;
-  typeForm?: "add" | "edit"
+  typeForm?: "add" | "edit";
 }
 
 export default function Product({
@@ -58,7 +68,7 @@ export default function Product({
   isPending,
   isLoading,
   isDirty,
-  typeForm="add"
+  typeForm = "add",
 }: Props) {
   const [search, Setsearch] = useState("");
   const [inputValue, setInputValue] = useState(defaultStoreName);
@@ -68,128 +78,169 @@ export default function Product({
   const nameStore = data?.data ?? [];
 
   return (
-    <div className="w-full max-w-xl mx-auto">
-      <div className="rounded-xl border bg-white dark:bg-gray-900 dark:border-gray-800 p-5 shadow-sm
-      animate__animated animate__fadeIn
-      animate-duration
-      ">
+    <Container>
+      <TitleContent title={title} />
+      {isLoading && (
+        <div className="flex justify-center py-6">
+          <Spinner />
+        </div>
+      )}
 
-        <h1 className="text-lg font-semibold mb-4">{title}</h1>
+      {!isLoading && (
+        <form onSubmit={handleSubmit(onsubmit)} className="space-y-4">
+          <div className="space-y-1">
+            <label className="text-sm">Store Name</label>
 
-        {isLoading && (
-          <div className="flex justify-center py-6">
-            <Spinner />
-          </div>
-        )}
+            <Controller
+              control={control}
+              name="storeId"
+              render={({ field }) => (
+                <Combobox
+                  items={nameStore}
+                  onValueChange={(value) => {
+                    const selected = nameStore.find(
+                      (item) => item.id === Number(value),
+                    );
 
-        {!isLoading && (
-          <form onSubmit={handleSubmit(onsubmit)} className="space-y-4">
-
-            <div className="space-y-1">
-              <label className="text-sm">Store Name</label>
-
-              <Controller
-                control={control}
-                name="storeId"
-                render={({ field }) => (
-                  <Combobox
-                    items={nameStore}
-                    onValueChange={(value) => {
-                      const selected = nameStore.find(
-                        (item) => item.id === Number(value)
-                      );
-
-                      if (selected) {
-                        setInputValue(selected.name);
-                        field.onChange(Number(value));
-                        setValue("storeName", selected.name);
-                      }
+                    if (selected) {
+                      setInputValue(selected.name);
+                      field.onChange(Number(value));
+                      setValue("storeName", selected.name);
+                    }
+                  }}
+                >
+                  <ComboboxInput
+                    placeholder="Select store"
+                    value={inputValue}
+                    onChange={(e) => {
+                      setInputValue(e.target.value);
+                      Setsearch(e.target.value);
                     }}
-                  >
-                    <ComboboxInput
-                      placeholder="Select store"
-                      value={inputValue}
-                      onChange={(e) => {
-                        setInputValue(e.target.value);
-                        Setsearch(e.target.value);
-                      }}
-                    />
-
-                    <ComboboxContent>
-                      <ComboboxEmpty>No items found.</ComboboxEmpty>
-
-                      <ComboboxList>
-                        {(item) => (
-                          <ComboboxItem key={item.id} value={item.id}>
-                            {item.name}
-                          </ComboboxItem>
-                        )}
-                      </ComboboxList>
-                    </ComboboxContent>
-                  </Combobox>
-                )}
-              />
-
-              {errors.storeName && (
-                <ErrorMessage>{errors.storeName.message}</ErrorMessage>
-              )}
-            </div>
-
-            <div className="space-y-1">
-              <InputForm
-                    register={register}
-                    name="name"
-                    placeholder="Name"
-                    label="Name"
-                ariaInvalid={!!errors.name}
-                icon={<Archive size={22} />}
                   />
-              {errors.name && (
-                <ErrorMessage>{errors.name.message}</ErrorMessage>
-              )}
-            </div>
 
-            <div className="space-y-1">
-               <InputForm register={register}
-                icon={<SquarePen size={22} />}
-                name="description" placeholder="Description" label="Description" ariaInvalid={!!errors.description?.message} />
-              {errors.description && (
-                <ErrorMessage>{errors.description.message}</ErrorMessage>
-              )}
-            </div>
+                  <ComboboxContent>
+                    <ComboboxEmpty>No items found.</ComboboxEmpty>
 
-            <div className="space-y-1">
-              <InputForm register={register}  
-              type="number"  
-                icon={<CircleDollarSign size={22} />}                
-                name="price" placeholder="Price" label="Price" ariaInvalid={!!errors.price?.message} options={{valueAsNumber:true}} />
-              {errors.price && (
-                <ErrorMessage>{errors.price.message}</ErrorMessage>
+                    <ComboboxList>
+                      {(item) => (
+                        <ComboboxItem key={item.id} value={item.id}>
+                          {item.name}
+                        </ComboboxItem>
+                      )}
+                    </ComboboxList>
+                  </ComboboxContent>
+                </Combobox>
               )}
-            </div>
-
-            <div className="space-y-1">
-               <InputForm register={register}                
-                icon={<ShelvingUnit size={22} />}                
-                name="type" placeholder="Type" label="Type" ariaInvalid={!!errors.type?.message} />
-              {errors.type && (
-                <ErrorMessage>{errors.type.message}</ErrorMessage>
-              )}
-            </div>
-
-            <div className="space-y-1">
-                <InputForm register={register}                
-                icon={<Image size={22} />}                
-                name="image" placeholder="Image" label="Image" ariaInvalid={!!errors.image?.message} />           
-            </div>
-            <ButtonPending variant="primary" disabled={isPending || (typeForm==="edit" &&!isDirty)}
-              children={chlidtenButton}
-              isPending={isPending}
             />
-            
-          </form>
-        )}
-      </div>
-    </div>
+
+            {errors.storeName && (
+              <ErrorMessage>{errors.storeName.message}</ErrorMessage>
+            )}
+          </div>
+
+          <div className="space-y-1">
+            <InputForm
+              register={register}
+              name="name"
+              placeholder="Name"
+              label="Name"
+              ariaInvalid={!!errors.name}
+              icon={<Archive size={22} />}
+            />
+            {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
+          </div>
+
+          <div className="space-y-1">
+            <InputForm
+              register={register}
+              icon={<SquarePen size={22} />}
+              name="description"
+              placeholder="Description"
+              label="Description"
+              ariaInvalid={!!errors.description?.message}
+            />
+            {errors.description && (
+              <ErrorMessage>{errors.description.message}</ErrorMessage>
+            )}
+          </div>
+
+          <div className="space-y-1">
+            <InputForm
+              register={register}
+              type="number"
+              icon={<CircleDollarSign size={22} />}
+              name="price"
+              placeholder="Price"
+              label="Price"
+              ariaInvalid={!!errors.price?.message}
+              options={{ valueAsNumber: true }}
+            />
+            {errors.price && (
+              <ErrorMessage>{errors.price.message}</ErrorMessage>
+            )}
+          </div>
+
+          <div className="space-y-1">
+            <InputForm
+              register={register}
+              icon={<ShelvingUnit size={22} />}
+              name="type"
+              placeholder="Type"
+              label="Type"
+              ariaInvalid={!!errors.type?.message}
+            />
+            {errors.type && <ErrorMessage>{errors.type.message}</ErrorMessage>}
+          </div>
+
+          <div className="space-y-1">
+            <InputForm
+              register={register}
+              icon={<Image size={22} />}
+              name="image"
+              placeholder="Image"
+              label="Image"
+              ariaInvalid={!!errors.image?.message}
+            />
+          </div>
+          <div className="space-y-1">
+            <InputForm
+              register={register}
+              type="number"
+              icon={<Star />}
+              name="rating"
+              placeholder="Rating"
+              label="Rating"
+              ariaInvalid={!!errors.rating?.message}
+              options={{ valueAsNumber: true }}
+            />
+            {errors.rating && (
+              <ErrorMessage>{errors.rating.message}</ErrorMessage>
+            )}
+          </div>
+          <div className="space-y-1">
+            <InputForm
+              register={register}
+              type="number"
+              icon={<Package size={22} />}
+              name="badge"
+              placeholder="Badge"
+              label="Badge"
+              ariaInvalid={!!errors.rating?.message}
+              options={{ valueAsNumber: true }}
+            />
+            {errors.badge && (
+              <ErrorMessage>{errors.badge.message}</ErrorMessage>
+            )}
+          </div>
+          <Button
+            variant="add"
+            disabled={isPending || (typeForm === "edit" && !isDirty)}
+            width="w-full"
+          >
+            {chlidtenButton}
+          </Button>
+        </form>
+      )}
+    </Container>
   );
 }

@@ -17,10 +17,12 @@ export default function ButtonPending({
   isPending,
 }: Props) {
   return (
-    <Button onClick={onClick} variant={variant} disabled={disabled}  >
-      {isPending ? (<>
+    <Button onClick={onClick} variant={variant} disabled={disabled}>
+      {isPending ? (
+        <>
           <Spinner data-icon="inline-start" />
-          {children}</>
+          {children}
+        </>
       ) : (
         children
       )}
