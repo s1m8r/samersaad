@@ -1,5 +1,5 @@
 import { useDeleteStore } from "@/API/store";
-import ContainerDel from "@/components/layout/ContainerDel";
+import ContainerDel from "@/components/layout/containerDel";
 import ConfirmDeleteModal from "@/components/layout/delete";
 import { toast } from "sonner";
 
