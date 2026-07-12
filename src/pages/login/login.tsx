@@ -4,10 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useLogin } from "@/API/user";
 import { userScema } from "@/schemas/user";
 import ErrorMessage from "@/components/forms/errors";
-import ButtonPending from "@/components/layout/buttonPending";
 import { Link } from "@tanstack/react-router";
 import { KeySquareIcon, MailIcon } from "lucide-react";
 import InputForm from "@/components/forms/input";
+import Button from "@/components/layout/button";
 
 const Login = () => {
   type loginSchemaType = z.infer<typeof userScema>;
@@ -64,12 +64,9 @@ const Login = () => {
                 isPassword={true}
               />
             </div>
-            <ButtonPending
-              variant="primary"
-              disabled={isPending}
-              children="Login"
-              isPending={isPending}
-            />
+            <Button variant="add" isPending={isPending} width="w-full">
+              Login
+            </Button>
           </form>
           {isError && <ErrorMessage>{error.message}</ErrorMessage>}
           <Link
