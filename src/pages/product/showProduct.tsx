@@ -96,6 +96,7 @@ const ShowProduct = () => {
         return (
           <Can permission={usepermissions.updateProducts}>
             <Button
+              width="w-fit"
               onClick={() =>
                 navigate({
                   to: "/products/edit/$id",
@@ -127,6 +128,7 @@ const ShowProduct = () => {
         return (
           <Can permission={usepermissions.deleteProducts}>
             <Button
+              width="w-fit"
               onClick={() => {
                 setShowDel(true);
                 setProductId(id);

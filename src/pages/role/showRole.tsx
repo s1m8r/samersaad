@@ -97,6 +97,7 @@ const ShowRole = () => {
         return (
           <Can permission={usepermissions.updateRoles}>
             <Button
+              width="w-fit"
               variant="add"
               type="table"
               onClick={() =>
@@ -132,6 +133,7 @@ const ShowRole = () => {
         return (
           <Can permission={usepermissions.deleteRoles}>
             <Button
+              width="w-fit"
               variant="delete"
               type="table"
               onClick={() => {

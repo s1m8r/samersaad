@@ -131,6 +131,7 @@ const ShowUser = () => {
         return (
           <Can permission={usepermissions.updateUser}>
             <Button
+              width="w-fit"
               onClick={() =>
                 navigate({
                   to: "/users/edit/$id",
@@ -165,6 +166,7 @@ const ShowUser = () => {
         return (
           <Can permission={usepermissions.deleteUser}>
             <Button
+              width="w-fit"
               onClick={() => {
                 setShowDel(true);
                 setUserId(id);

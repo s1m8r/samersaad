@@ -131,6 +131,7 @@ const ShowStore = () => {
         return (
           <Can permission={usepermissions.updateStores}>
             <Button
+              width="w-fit"
               variant="add"
               type="table"
               onClick={() =>
@@ -166,6 +167,7 @@ const ShowStore = () => {
         return (
           <Can permission={usepermissions.deleteStores}>
             <Button
+              width="w-fit"
               variant="delete"
               type="table"
               onClick={() => {
