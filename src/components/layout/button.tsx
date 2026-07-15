@@ -1,7 +1,7 @@
 import React from "react";
 type Props = {
   children: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   variant: "add" | "delete" | "primary" | "editTable" | "outline";
   disabled?: boolean;
   type?: "normal" | "table";

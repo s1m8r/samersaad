@@ -26,7 +26,6 @@ import { Route as protecedUsersAdduserRouteImport } from './routes/(proteced)/us
 import { Route as protecedStoresAddstoreRouteImport } from './routes/(proteced)/stores/addstore'
 import { Route as protecedRolesAddroleRouteImport } from './routes/(proteced)/roles/addrole'
 import { Route as protecedProductsAddproductRouteImport } from './routes/(proteced)/products/addproduct'
-import { Route as protecedProductsActionRouteImport } from './routes/(proteced)/products/action'
 import { Route as protecedhomeStatisticsusersRouteImport } from './routes/(proteced)/(home)/statisticsusers'
 import { Route as protecedhomeStatisticsproductsRouteImport } from './routes/(proteced)/(home)/statisticsproducts'
 import { Route as protecedhomeStatisticsStoresRouteImport } from './routes/(proteced)/(home)/statisticsStores'
@@ -120,11 +119,6 @@ const protecedProductsAddproductRoute =
     path: '/products/addproduct',
     getParentRoute: () => protecedRouteRoute,
   } as any)
-const protecedProductsActionRoute = protecedProductsActionRouteImport.update({
-  id: '/products/action',
-  path: '/products/action',
-  getParentRoute: () => protecedRouteRoute,
-} as any)
 const protecedhomeStatisticsusersRoute =
   protecedhomeStatisticsusersRouteImport.update({
     id: '/statisticsusers',
@@ -177,7 +171,6 @@ export interface FileRoutesByFullPath {
   '/statisticsStores': typeof protecedhomeStatisticsStoresRoute
   '/statisticsproducts': typeof protecedhomeStatisticsproductsRoute
   '/statisticsusers': typeof protecedhomeStatisticsusersRoute
-  '/products/action': typeof protecedProductsActionRoute
   '/products/addproduct': typeof protecedProductsAddproductRoute
   '/roles/addrole': typeof protecedRolesAddroleRoute
   '/stores/addstore': typeof protecedStoresAddstoreRoute
@@ -203,7 +196,6 @@ export interface FileRoutesByTo {
   '/statisticsStores': typeof protecedhomeStatisticsStoresRoute
   '/statisticsproducts': typeof protecedhomeStatisticsproductsRoute
   '/statisticsusers': typeof protecedhomeStatisticsusersRoute
-  '/products/action': typeof protecedProductsActionRoute
   '/products/addproduct': typeof protecedProductsAddproductRoute
   '/roles/addrole': typeof protecedRolesAddroleRoute
   '/stores/addstore': typeof protecedStoresAddstoreRoute
@@ -232,7 +224,6 @@ export interface FileRoutesById {
   '/(proteced)/(home)/statisticsStores': typeof protecedhomeStatisticsStoresRoute
   '/(proteced)/(home)/statisticsproducts': typeof protecedhomeStatisticsproductsRoute
   '/(proteced)/(home)/statisticsusers': typeof protecedhomeStatisticsusersRoute
-  '/(proteced)/products/action': typeof protecedProductsActionRoute
   '/(proteced)/products/addproduct': typeof protecedProductsAddproductRoute
   '/(proteced)/roles/addrole': typeof protecedRolesAddroleRoute
   '/(proteced)/stores/addstore': typeof protecedStoresAddstoreRoute
@@ -260,7 +251,6 @@ export interface FileRouteTypes {
     | '/statisticsStores'
     | '/statisticsproducts'
     | '/statisticsusers'
-    | '/products/action'
     | '/products/addproduct'
     | '/roles/addrole'
     | '/stores/addstore'
@@ -286,7 +276,6 @@ export interface FileRouteTypes {
     | '/statisticsStores'
     | '/statisticsproducts'
     | '/statisticsusers'
-    | '/products/action'
     | '/products/addproduct'
     | '/roles/addrole'
     | '/stores/addstore'
@@ -314,7 +303,6 @@ export interface FileRouteTypes {
     | '/(proteced)/(home)/statisticsStores'
     | '/(proteced)/(home)/statisticsproducts'
     | '/(proteced)/(home)/statisticsusers'
-    | '/(proteced)/products/action'
     | '/(proteced)/products/addproduct'
     | '/(proteced)/roles/addrole'
     | '/(proteced)/stores/addstore'
@@ -462,13 +450,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof protecedProductsAddproductRouteImport
       parentRoute: typeof protecedRouteRoute
     }
-    '/(proteced)/products/action': {
-      id: '/(proteced)/products/action'
-      path: '/products/action'
-      fullPath: '/products/action'
-      preLoaderRoute: typeof protecedProductsActionRouteImport
-      parentRoute: typeof protecedRouteRoute
-    }
     '/(proteced)/(home)/statisticsusers': {
       id: '/(proteced)/(home)/statisticsusers'
       path: '/statisticsusers'
@@ -547,7 +528,6 @@ const protecedhomeRouteRouteWithChildren =
 
 interface protecedRouteRouteChildren {
   protecedhomeRouteRoute: typeof protecedhomeRouteRouteWithChildren
-  protecedProductsActionRoute: typeof protecedProductsActionRoute
   protecedProductsAddproductRoute: typeof protecedProductsAddproductRoute
   protecedRolesAddroleRoute: typeof protecedRolesAddroleRoute
   protecedStoresAddstoreRoute: typeof protecedStoresAddstoreRoute
@@ -567,7 +547,6 @@ interface protecedRouteRouteChildren {
 
 const protecedRouteRouteChildren: protecedRouteRouteChildren = {
   protecedhomeRouteRoute: protecedhomeRouteRouteWithChildren,
-  protecedProductsActionRoute: protecedProductsActionRoute,
   protecedProductsAddproductRoute: protecedProductsAddproductRoute,
   protecedRolesAddroleRoute: protecedRolesAddroleRoute,
   protecedStoresAddstoreRoute: protecedStoresAddstoreRoute,

@@ -1,5 +1,4 @@
 import { useDeleteRole } from "@/API/role";
-import ContainerDel from "@/components/layout/containerDel";
 import ConfirmDeleteModal from "@/components/layout/delete";
 import { toast } from "sonner";
 
@@ -30,16 +29,14 @@ const DeleteRole = ({ roleId, roleName, setShowDel }: Props) => {
   };
 
   return (
-    <ContainerDel>
-      <ConfirmDeleteModal
-        title="Delete Role"
-        message="Are you sure you want to delete:"
-        itemName={roleName}
-        isPending={isPending}
-        onCancel={() => setShowDel(false)}
-        onConfirm={del}
-      />
-    </ContainerDel>
+    <ConfirmDeleteModal
+      title="Delete Role"
+      message="Are you sure you want to delete:"
+      itemName={roleName}
+      isPending={isPending}
+      onCancel={() => setShowDel(false)}
+      onConfirm={del}
+    />
   );
 };
 

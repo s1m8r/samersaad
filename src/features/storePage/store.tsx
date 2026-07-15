@@ -69,7 +69,10 @@ export default function Store({
 
   const addCategory = () => {
     if (valueInput.trim()) {
-      setValue("categories", [...categories, valueInput]);
+      setValue("categories", [...categories, valueInput], {
+        shouldDirty: true,
+      });
+
       setValueInput("");
     }
   };
@@ -78,6 +81,9 @@ export default function Store({
     setValue(
       "categories",
       categories.filter((_, i) => i !== index),
+      {
+        shouldDirty: true,
+      },
     );
   };
 
@@ -169,8 +175,16 @@ export default function Store({
                 placeholder="Add category"
                 value={valueInput}
                 onChange={(e) => setValueInput(e.target.value)}
+                aria-invalid={!!errors.categories}
               />
-              <Button variant="add" onClick={addCategory} width="w-fit">
+              <Button
+                variant="add"
+                onClick={(e) => {
+                  addCategory();
+                  e.preventDefault();
+                }}
+                width="w-fit"
+              >
                 <PlusIcon /> Add
               </Button>
             </div>

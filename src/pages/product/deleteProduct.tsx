@@ -1,5 +1,4 @@
 import { useDeleteProduct } from "@/API/product";
-import ContainerDel from "@/components/layout/containerDel";
 import ConfirmDeleteModal from "@/components/layout/delete";
 import { toast } from "sonner";
 
@@ -28,16 +27,14 @@ const DeleteProduct = ({ productId, productName, setShowDel }: Props) => {
   };
 
   return (
-    <ContainerDel>
-      <ConfirmDeleteModal
-        title="Delete Product"
-        message="Are you sure you want to delete:"
-        itemName={productName}
-        isPending={isPending}
-        onCancel={() => setShowDel(false)}
-        onConfirm={del}
-      />
-    </ContainerDel>
+    <ConfirmDeleteModal
+      title="Delete Product"
+      message="Are you sure you want to delete:"
+      itemName={productName}
+      isPending={isPending}
+      onCancel={() => setShowDel(false)}
+      onConfirm={del}
+    />
   );
 };
 
