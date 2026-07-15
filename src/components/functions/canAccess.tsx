@@ -2,7 +2,7 @@ import { useAuthStore } from "@/stores/userStore";
 
 export const CanAccess = (permission: string | string[]) => {
   const user = useAuthStore.getState().user;
-  if (user?.role === "admin") {
+  if (user?.role === "admin" || permission === "any") {
     return true;
   }
 
