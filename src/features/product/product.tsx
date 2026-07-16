@@ -35,7 +35,7 @@ import {
 } from "lucide-react";
 import TitleContent from "@/components/layout/titleContent";
 import Container from "@/components/layout/container";
-import Button from "@/components/layout/button";
+import { Button } from "@/components/ui/button";
 
 type productFormData = z.infer<typeof ProdectScema>;
 
@@ -233,9 +233,9 @@ export default function Product({
             )}
           </div>
           <Button
-            variant="add"
+            variant="default"
             disabled={isPending || (typeForm === "edit" && !isDirty)}
-            width="w-full"
+            className="w-full"
           >
             {chlidtenButton}
           </Button>

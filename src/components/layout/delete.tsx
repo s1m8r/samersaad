@@ -1,5 +1,5 @@
 import { Spinner } from "@/components/ui/spinner";
-import Button from "./button";
+import { Button } from "../ui/button";
 
 type Props = {
   title: string;
@@ -28,16 +28,14 @@ export default function ConfirmDeleteModal({
         </p>
 
         <div className="flex justify-end gap-2">
-          <Button variant="outline" width="w-fit" onClick={onCancel}>
+          <Button variant="outline" className=" w-fit" onClick={onCancel}>
             Cancel
           </Button>
 
           <Button
-            variant="delete"
+            variant="destructive"
             onClick={onConfirm}
             disabled={isPending}
-            width="w-fit"
-            isPending={isPending}
           >
             {isPending ? <Spinner data-icon="inline-start" /> : "Delete"}
           </Button>

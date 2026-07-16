@@ -7,11 +7,12 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import DeleteUser from "./deleteUser";
-import Button from "@/components/layout/button";
 import { ArrowDownUp } from "lucide-react";
 import { Can } from "@/components/functions/can";
 import { usepermissions } from "@/stores/usePermissions";
 import Padding from "@/components/layout/padding";
+import { Button } from "@/components/ui/button";
+
 type registerFormData = z.infer<typeof registerSchema>;
 const ShowUser = () => {
   const navigate = useNavigate();
@@ -131,7 +132,6 @@ const ShowUser = () => {
         return (
           <Can permission={usepermissions.updateUser}>
             <Button
-              width="w-fit"
               onClick={() =>
                 navigate({
                   to: "/users/edit/$id",
@@ -143,8 +143,7 @@ const ShowUser = () => {
                   },
                 })
               }
-              variant="add"
-              type="table"
+              variant="default"
             >
               Edit
             </Button>
@@ -166,14 +165,12 @@ const ShowUser = () => {
         return (
           <Can permission={usepermissions.deleteUser}>
             <Button
-              width="w-fit"
               onClick={() => {
                 setShowDel(true);
                 setUserId(id);
                 setUserName(name);
               }}
-              variant="delete"
-              type="table"
+              variant="destructive"
             >
               Delete
             </Button>

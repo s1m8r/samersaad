@@ -6,10 +6,10 @@ import { useNavigate } from "@tanstack/react-router";
 import { ProdectScema } from "@/schemas/product";
 import { useGetProducts } from "@/API/product";
 import DeleteProduct from "./deleteProduct";
-import Button from "@/components/layout/button";
 import { usepermissions } from "@/stores/usePermissions";
 import { Can } from "@/components/functions/can";
 import Padding from "@/components/layout/padding";
+import { Button } from "@/components/ui/button";
 
 type productFormData = z.infer<typeof ProdectScema>;
 
@@ -96,7 +96,8 @@ const ShowProduct = () => {
         return (
           <Can permission={usepermissions.updateProducts}>
             <Button
-              width="w-fit"
+              variant="default"
+
               onClick={() =>
                 navigate({
                   to: "/products/edit/$id",
@@ -105,8 +106,6 @@ const ShowProduct = () => {
                   },
                 })
               }
-              variant="add"
-              type="table"
             >
               Edit
             </Button>
@@ -128,14 +127,12 @@ const ShowProduct = () => {
         return (
           <Can permission={usepermissions.deleteProducts}>
             <Button
-              width="w-fit"
+              variant="destructive"
               onClick={() => {
                 setShowDel(true);
                 setProductId(id);
                 setProductName(name);
               }}
-              variant="delete"
-              type="table"
             >
               Delete
             </Button>

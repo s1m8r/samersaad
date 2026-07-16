@@ -14,7 +14,7 @@ import { SquarePen, UserKey } from "lucide-react";
 import TitleContent from "@/components/layout/titleContent";
 import { usepermissions } from "@/stores/usePermissions";
 import Container from "@/components/layout/container";
-import Button from "@/components/layout/button";
+import { Button } from "@/components/ui/button";
 
 type roleFormData = z.infer<typeof roleScema>;
 
@@ -157,9 +157,9 @@ export default function Role({
             </div>
           </div>
           <Button
-            variant="add"
+            variant="default"
             disabled={isPending || (typeForm === "edit" && !isDirty)}
-            width="w-full"
+            className="w-full"
           >
             {chlidrenButton}
           </Button>

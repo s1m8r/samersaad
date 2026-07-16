@@ -23,7 +23,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { SearchIcon } from "lucide-react";
 import useDebounce from "../functions/searchDelay";
 import { Can } from "../functions/can";
-import Button from "./button";
+import { Button } from "../ui/button";
 
 type Props<T> = {
   data: T[];
@@ -73,7 +73,7 @@ export default function Table<T>({
         <div className=" flex justify-between">
           <h1 className="text-2xl font-bold capitalize">{title}</h1>
           <Can permission={permissionAdd}>
-            <Button onClick={onClick} variant="add" width="w-fit">
+            <Button onClick={onClick} variant="default">
               {textButton}
             </Button>
           </Can>

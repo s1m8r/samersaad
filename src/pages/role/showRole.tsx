@@ -7,10 +7,10 @@ import { roleScema } from "@/schemas/role";
 import { useGetRoles } from "@/API/role";
 import DeleteRole from "./DeleteRolw";
 import { ArrowDownUp } from "lucide-react";
-import Button from "@/components/layout/button";
 import { usepermissions } from "@/stores/usePermissions";
 import { Can } from "@/components/functions/can";
 import Padding from "@/components/layout/padding";
+import { Button } from "@/components/ui/button";
 
 type roleFormData = z.infer<typeof roleScema>;
 
@@ -97,9 +97,7 @@ const ShowRole = () => {
         return (
           <Can permission={usepermissions.updateRoles}>
             <Button
-              width="w-fit"
-              variant="add"
-              type="table"
+              variant="default"
               onClick={() =>
                 navigate({
                   to: "/roles/edit/$id",
@@ -133,9 +131,7 @@ const ShowRole = () => {
         return (
           <Can permission={usepermissions.deleteRoles}>
             <Button
-              width="w-fit"
-              variant="delete"
-              type="table"
+              variant="destructive"
               onClick={() => {
                 setShowDel(true);
                 setRoleId(id);

@@ -8,7 +8,7 @@ interface Props {
 export default function CardNew({ name, count, icon, itemSelect }: Props) {
   const style = "text-sm text-muted-foreground";
   return (
-    <div className="rounded-xl border bg-card p-4 shadow-sm w-60">
+    <div className="rounded-xl border bg-card p-4 shadow-sm">
       <div className="flex justify-between">
         <p className={`${style}`}>{name}</p>
         <span className={`${style}`}>{icon}</span>

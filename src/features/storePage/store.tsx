@@ -1,8 +1,8 @@
 import ErrorMessage from "@/components/forms/errors";
 import InputForm from "@/components/forms/input";
-import Button from "@/components/layout/button";
 import Container from "@/components/layout/container";
 import TitleContent from "@/components/layout/titleContent";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { storeScema } from "@/schemas/store";
@@ -178,12 +178,11 @@ export default function Store({
                 aria-invalid={!!errors.categories}
               />
               <Button
-                variant="add"
+                variant="default"
                 onClick={(e) => {
                   addCategory();
                   e.preventDefault();
                 }}
-                width="w-fit"
               >
                 <PlusIcon /> Add
               </Button>
@@ -358,9 +357,9 @@ export default function Store({
             />
           </div>
           <Button
-            variant="add"
+            variant="default"
             disabled={isPending || (typeForm === "edit" && !isDirty)}
-            width="w-full"
+            className="w-full"
           >
             {chlidrenButton}
           </Button>

@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import DeleteProduct from "@/pages/product/deleteProduct";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
@@ -38,7 +39,7 @@ export default function OnlyCard({
         </div>
         {type === "products" && (
           <div className="flex gap-2 p-3 pt-0">
-            <button
+            <Button
               onClick={() =>
                 navigate({
                   to: "/products/edit/$id",
@@ -47,19 +48,20 @@ export default function OnlyCard({
                   },
                 })
               }
-              className="flex-1 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 active:scale-95 transition-all duration-200"
+              variant="default"
+              className="flex-1"
             >
               Edit
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => {
                 setShowDel(true);
               }}
-              className="flex-1 py-2 rounded-lg bg-red-600 text-white text-sm font-medium hover:bg-red-700 active:scale-95 transition-all duration-200"
+              variant="destructive"
+              className="flex-1"
             >
               Delete
-              {productId}
-            </button>
+            </Button>
           </div>
         )}
       </div>

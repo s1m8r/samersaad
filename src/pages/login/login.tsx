@@ -7,7 +7,7 @@ import ErrorMessage from "@/components/forms/errors";
 import { Link } from "@tanstack/react-router";
 import { KeySquareIcon, MailIcon } from "lucide-react";
 import InputForm from "@/components/forms/input";
-import Button from "@/components/layout/button";
+import { Button } from "@/components/ui/button";
 
 const Login = () => {
   type loginSchemaType = z.infer<typeof userScema>;
@@ -64,7 +64,7 @@ const Login = () => {
                 isPassword={true}
               />
             </div>
-            <Button variant="add" isPending={isPending} width="w-full">
+            <Button variant="default" disabled={isPending} className="w-full">
               Login
             </Button>
           </form>

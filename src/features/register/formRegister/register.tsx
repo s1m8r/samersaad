@@ -14,7 +14,7 @@ import { Calendar, Lock, Mail, UserRound } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import TitleContent from "@/components/layout/titleContent";
 import Container from "@/components/layout/container";
-import Button from "@/components/layout/button";
+import { Button } from "@/components/ui/button";
 
 type registerFormData = z.infer<typeof registerSchema>;
 
@@ -154,10 +154,9 @@ export default function RegisterForm({
           )}
 
           <Button
-            variant="add"
-            width="w-full"
+            variant="default"
             disabled={isPending || (active === "edit" && !isDirty)}
-            isPending={isPending}
+            className="w-full"
           >
             {chlidrenButton}
           </Button>

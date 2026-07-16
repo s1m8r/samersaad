@@ -7,10 +7,10 @@ import { storeScema } from "@/schemas/store";
 import { useGetStores } from "@/API/store";
 import DeleteStore from "./deleteStore";
 import { ArrowDownUp } from "lucide-react";
-import Button from "@/components/layout/button";
 import { usepermissions } from "@/stores/usePermissions";
 import { Can } from "@/components/functions/can";
 import Padding from "@/components/layout/padding";
+import { Button } from "@/components/ui/button";
 
 type storeFormData = z.infer<typeof storeScema>;
 
@@ -131,9 +131,7 @@ const ShowStore = () => {
         return (
           <Can permission={usepermissions.updateStores}>
             <Button
-              width="w-fit"
-              variant="add"
-              type="table"
+              variant="default"
               onClick={() =>
                 navigate({
                   to: "/stores/edit/$id",
@@ -167,9 +165,7 @@ const ShowStore = () => {
         return (
           <Can permission={usepermissions.deleteStores}>
             <Button
-              width="w-fit"
-              variant="delete"
-              type="table"
+              variant="destructive"
               onClick={() => {
                 setShowDel(true);
                 setStoreId(id);

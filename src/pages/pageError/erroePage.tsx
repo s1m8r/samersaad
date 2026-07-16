@@ -1,4 +1,4 @@
-import Button from "@/components/layout/button";
+import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 
 const ErrorPage = () => {
@@ -10,9 +10,7 @@ const ErrorPage = () => {
           Page Not Found
         </h2>
         <Link to="/">
-          <Button variant="add" width="w-fit">
-            go to Home
-          </Button>
+          <Button variant="default">go to Home</Button>
         </Link>
       </div>
     </div>
