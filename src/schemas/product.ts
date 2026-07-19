@@ -11,5 +11,6 @@ export const ProdectScema = z.object({
   price: z.number().min(0, "Price must be greater than 0"),
   rating: z.number().min(0, "Rating must be greater than 0"),
   badge: z.number().min(0, "Badge must be greater than 0"),
+  images: z.array(z.string()).min(1, "Please select at least one images"),
   createdAt: z.string().optional(),
 });

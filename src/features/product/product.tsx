@@ -18,6 +18,7 @@ import {
   UseFormHandleSubmit,
   UseFormRegister,
   UseFormSetValue,
+  useWatch,
 } from "react-hook-form";
 
 import ErrorMessage from "@/components/forms/errors";
@@ -29,6 +30,7 @@ import {
   CircleDollarSign,
   Image,
   Package,
+  PlusIcon,
   ShelvingUnit,
   SquarePen,
   Star,
@@ -36,6 +38,8 @@ import {
 import TitleContent from "@/components/layout/titleContent";
 import Container from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import ShowImages from "./showimages";
 
 type productFormData = z.infer<typeof ProdectScema>;
 
@@ -76,6 +80,33 @@ export default function Product({
   const { data } = useGetStoresSearch(search);
 
   const nameStore = data?.data ?? [];
+  const [valueInput, setValueInput] = useState("");
+
+  const categories = useWatch({
+    control,
+    name: "images",
+    defaultValue: [],
+  });
+
+  const addCategory = () => {
+    if (valueInput.trim()) {
+      setValue("images", [...categories, valueInput], {
+        shouldDirty: true,
+      });
+
+      setValueInput("");
+    }
+  };
+
+  const removeCateory = (index: number) => {
+    setValue(
+      "images",
+      categories.filter((_, i) => i !== index),
+      {
+        shouldDirty: true,
+      },
+    );
+  };
 
   return (
     <Container>
@@ -179,7 +210,6 @@ export default function Product({
               <ErrorMessage>{errors.price.message}</ErrorMessage>
             )}
           </div>
-
           <div className="space-y-1">
             <InputForm
               register={register}
@@ -191,7 +221,6 @@ export default function Product({
             />
             {errors.type && <ErrorMessage>{errors.type.message}</ErrorMessage>}
           </div>
-
           <div className="space-y-1">
             <InputForm
               register={register}
@@ -202,6 +231,39 @@ export default function Product({
               ariaInvalid={!!errors.image?.message}
             />
           </div>
+          <>
+            <div>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                Images
+              </p>
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Images"
+                  value={valueInput}
+                  onChange={(e) => setValueInput(e.target.value)}
+                  aria-invalid={!!errors.images}
+                />
+                <Button
+                  variant="default"
+                  onClick={(e) => {
+                    addCategory();
+                    e.preventDefault();
+                  }}
+                >
+                  <PlusIcon /> Add
+                </Button>
+              </div>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {categories && (
+                  <ShowImages
+                    images={categories}
+                    removeCategory={removeCateory}
+                  />
+                )}
+              </div>
+            </div>
+          </>
+
           <div className="space-y-1">
             <InputForm
               register={register}
