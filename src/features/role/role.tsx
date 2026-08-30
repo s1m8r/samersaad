@@ -114,7 +114,7 @@ export default function Role({
               name="name"
               placeholder="Role name"
               label="Role name"
-              ariaInvalid={!!errors.name?.message}
+              errorMessage={errors.name?.message}
             />
             {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
           </div>
@@ -126,7 +126,7 @@ export default function Role({
               name="description"
               placeholder="Description"
               label="Description"
-              ariaInvalid={!!errors.description?.message}
+              errorMessage={errors.description?.message}
             />
             {errors.description && (
               <ErrorMessage>{errors.description.message}</ErrorMessage>

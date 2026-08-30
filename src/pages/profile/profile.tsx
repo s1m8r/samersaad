@@ -100,7 +100,6 @@ const Profile = () => {
                       isPassword={true}
                       icon={<KeyRoundIcon />}
                       label="Password"
-                      ariaInvalid={!!errors.password?.message}
                       errorMessage={errors.password?.message}
                       placeholder="password"
                     />
@@ -113,7 +112,6 @@ const Profile = () => {
                       isPassword={true}
                       icon={<KeyRoundIcon />}
                       label="newPassword"
-                      ariaInvalid={!!errors.newPassword?.message}
                       errorMessage={errors.newPassword?.message}
                       placeholder="newPassword"
                     />

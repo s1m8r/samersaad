@@ -9,49 +9,57 @@ import {
   ComboboxItem,
   ComboboxList,
 } from "@/components/ui/combobox";
-
 import { useState } from "react";
 import {
-  Controller,
   Control,
+  Controller,
   FieldErrors,
   UseFormHandleSubmit,
   UseFormRegister,
   UseFormSetValue,
   useWatch,
 } from "react-hook-form";
-
-import ErrorMessage from "@/components/forms/errors";
 import { Spinner } from "@/components/ui/spinner";
 import { useGetStoresSearch } from "@/API/store";
 import InputForm from "@/components/forms/input";
 import {
   Archive,
   CircleDollarSign,
-  Image,
+  Image as ImageIcon,
   Package,
   PlusIcon,
-  ShelvingUnit,
   SquarePen,
   Star,
+  Trash2,
 } from "lucide-react";
 import TitleContent from "@/components/layout/titleContent";
 import Container from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
+import { useGetTypes } from "@/API/types";
+import Selected from "@/components/layout/select";
 import { Input } from "@/components/ui/input";
-import ShowImages from "./showimages";
+import { useGetColors } from "@/API/colors";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-type productFormData = z.infer<typeof ProdectScema>;
+type ProductFormData = z.infer<typeof ProdectScema>;
 
 interface Props {
   title: string;
   chlidtenButton: string;
-  onsubmit: (data: productFormData) => void;
-  handleSubmit: UseFormHandleSubmit<productFormData>;
-  errors: FieldErrors<productFormData>;
-  register: UseFormRegister<productFormData>;
-  setValue: UseFormSetValue<productFormData>;
-  control: Control<productFormData>;
+  onsubmit: (data: ProductFormData) => void;
+  handleSubmit: UseFormHandleSubmit<ProductFormData>;
+  errors: FieldErrors<ProductFormData>;
+  register: UseFormRegister<ProductFormData>;
+  setValue: UseFormSetValue<ProductFormData>;
+  control: Control<ProductFormData>;
   defaultStoreName?: string;
   isPending?: boolean;
   isLoading?: boolean;
@@ -69,48 +77,74 @@ export default function Product({
   setValue,
   control,
   defaultStoreName = "",
-  isPending,
-  isLoading,
-  isDirty,
+  isPending = false,
+  isLoading = false,
+  isDirty = false,
   typeForm = "add",
 }: Props) {
-  const [search, Setsearch] = useState("");
+  const [search, setSearch] = useState("");
   const [inputValue, setInputValue] = useState(defaultStoreName);
 
   const { data } = useGetStoresSearch(search);
 
-  const nameStore = data?.data ?? [];
-  const [valueInput, setValueInput] = useState("");
+  const stores = data?.data ?? [];
 
-  const categories = useWatch({
+  const { data: types } = useGetTypes();
+
+  const items =
+    types?.data.map((item) => ({
+      label: item.name,
+      value: item.value,
+    })) ?? [];
+
+  const images = useWatch({
     control,
     name: "images",
     defaultValue: [],
   });
+  const [valuePath, setValuePath] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
+  const [errPath, setErrPath] = useState(false);
+  const [errColor, setErrColor] = useState(false);
+  const addImage = () => {
+    if (!valuePath) {
+      setErrPath(true);
+    }
+    if (!selectedColor) {
+      setErrColor(true);
+    }
+    if (valuePath && selectedColor) {
+      const newImage = {
+        path: valuePath,
+        color: selectedColor,
+      };
 
-  const addCategory = () => {
-    if (valueInput.trim()) {
-      setValue("images", [...categories, valueInput], {
+      setValue("images", [...images, newImage], {
         shouldDirty: true,
+        shouldValidate: true,
+        shouldTouch: true,
       });
-
-      setValueInput("");
+      setValuePath("");
+      setSelectedColor("");
     }
   };
-
-  const removeCateory = (index: number) => {
+  const removeImage = (index: number) => {
     setValue(
       "images",
-      categories.filter((_, i) => i !== index),
+      images.filter((_, i) => i !== index),
       {
         shouldDirty: true,
       },
     );
   };
+  const { data: colors } = useGetColors();
+  const colorSelect = images.map((item) => item.color);
+  const colorShow = colors?.data.filter((i) => !colorSelect.includes(i.color));
 
   return (
     <Container>
       <TitleContent title={title} />
+
       {isLoading && (
         <div className="flex justify-center py-6">
           <Spinner />
@@ -119,33 +153,36 @@ export default function Product({
 
       {!isLoading && (
         <form onSubmit={handleSubmit(onsubmit)} className="space-y-4">
-          <div className="space-y-1">
-            <label className="text-sm">Store Name</label>
-
+          <Field data-invalid={!!errors?.storeId?.message} className="w-full">
+            <FieldLabel>Store Name</FieldLabel>
             <Controller
               control={control}
               name="storeId"
               render={({ field }) => (
                 <Combobox
-                  items={nameStore}
+                  items={stores}
+                  value={field.value ? String(field.value) : ""}
                   onValueChange={(value) => {
-                    const selected = nameStore.find(
+                    const selectedStore = stores.find(
                       (item) => item.id === Number(value),
                     );
-
-                    if (selected) {
-                      setInputValue(selected.name);
-                      field.onChange(Number(value));
-                      setValue("storeName", selected.name);
-                    }
+                    if (!selectedStore) return;
+                    field.onChange(selectedStore.id);
+                    setInputValue(selectedStore.name);
+                    setValue("storeName", selectedStore.name, {
+                      shouldDirty: true,
+                    });
                   }}
                 >
                   <ComboboxInput
+                    aria-invalid={!!errors.storeId}
                     placeholder="Select store"
                     value={inputValue}
-                    onChange={(e) => {
-                      setInputValue(e.target.value);
-                      Setsearch(e.target.value);
+                    onChange={(event) => {
+                      const value = event.target.value;
+
+                      setInputValue(value);
+                      setSearch(value);
                     }}
                   />
 
@@ -154,7 +191,7 @@ export default function Product({
 
                     <ComboboxList>
                       {(item) => (
-                        <ComboboxItem key={item.id} value={item.id}>
+                        <ComboboxItem key={item.id} value={String(item.id)}>
                           {item.name}
                         </ComboboxItem>
                       )}
@@ -163,143 +200,186 @@ export default function Product({
                 </Combobox>
               )}
             />
-
-            {errors.storeName && (
-              <ErrorMessage>{errors.storeName.message}</ErrorMessage>
+            {errors.storeId?.message && (
+              <FieldError>{errors.storeId.message}</FieldError>
             )}
-          </div>
+          </Field>
 
-          <div className="space-y-1">
-            <InputForm
-              register={register}
-              name="name"
-              placeholder="Name"
-              label="Name"
-              ariaInvalid={!!errors.name}
-              icon={<Archive size={22} />}
-            />
-            {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
-          </div>
+          <InputForm
+            register={register}
+            name="name"
+            placeholder="Name"
+            label="Name"
+            icon={<Archive />}
+            errorMessage={errors.name?.message}
+          />
 
-          <div className="space-y-1">
-            <InputForm
-              register={register}
-              icon={<SquarePen size={22} />}
-              name="description"
-              placeholder="Description"
-              label="Description"
-              ariaInvalid={!!errors.description?.message}
-            />
-            {errors.description && (
-              <ErrorMessage>{errors.description.message}</ErrorMessage>
-            )}
-          </div>
+          <InputForm
+            register={register}
+            name="description"
+            placeholder="Description"
+            label="Description"
+            icon={<SquarePen />}
+            errorMessage={errors.description?.message}
+          />
 
-          <div className="space-y-1">
-            <InputForm
-              register={register}
-              type="number"
-              icon={<CircleDollarSign size={22} />}
-              name="price"
-              placeholder="Price"
-              label="Price"
-              ariaInvalid={!!errors.price?.message}
-              options={{ valueAsNumber: true }}
-            />
-            {errors.price && (
-              <ErrorMessage>{errors.price.message}</ErrorMessage>
-            )}
-          </div>
-          <div className="space-y-1">
-            <InputForm
-              register={register}
-              icon={<ShelvingUnit size={22} />}
-              name="type"
-              placeholder="Type"
-              label="Type"
-              ariaInvalid={!!errors.type?.message}
-            />
-            {errors.type && <ErrorMessage>{errors.type.message}</ErrorMessage>}
-          </div>
-          <div className="space-y-1">
-            <InputForm
-              register={register}
-              icon={<Image size={22} />}
-              name="image"
-              placeholder="Image"
-              label="Image"
-              ariaInvalid={!!errors.image?.message}
-            />
-          </div>
-          <>
-            <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                Images
-              </p>
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Images"
-                  value={valueInput}
-                  onChange={(e) => setValueInput(e.target.value)}
-                  aria-invalid={!!errors.images}
-                />
-                <Button
-                  variant="default"
-                  onClick={(e) => {
-                    addCategory();
-                    e.preventDefault();
-                  }}
-                >
-                  <PlusIcon /> Add
-                </Button>
-              </div>
-              <div className="flex flex-wrap gap-2 mt-2">
-                {categories && (
-                  <ShowImages
-                    images={categories}
-                    removeCategory={removeCateory}
-                  />
-                )}
-              </div>
-            </div>
-          </>
+          <InputForm
+            register={register}
+            type="number"
+            name="price"
+            placeholder="Price"
+            label="Price"
+            icon={<CircleDollarSign />}
+            errorMessage={errors.price?.message}
+            options={{
+              valueAsNumber: true,
+            }}
+          />
+          <InputForm
+            register={register}
+            type="number"
+            name="discountPercentage"
+            placeholder="discountPercentage (number %)"
+            label="discountPercentage"
+            icon={<CircleDollarSign />}
+            errorMessage={errors.price?.message}
+            options={{
+              valueAsNumber: true,
+            }}
+          />
 
-          <div className="space-y-1">
-            <InputForm
-              register={register}
-              type="number"
-              icon={<Star />}
-              name="rating"
-              placeholder="Rating"
-              label="Rating"
-              ariaInvalid={!!errors.rating?.message}
-              options={{ valueAsNumber: true }}
+          <Selected
+            control={control}
+            name="type"
+            errorMessage={errors.type?.message}
+            items={items}
+          />
+
+          <InputForm
+            register={register}
+            name="image"
+            placeholder="Image"
+            label="Image"
+            icon={<ImageIcon />}
+            errorMessage={errors.image?.message}
+          />
+
+          <Field
+            data-invalid={errPath || !!errors.images?.message}
+            className="w-full"
+          >
+            <FieldLabel>path</FieldLabel>
+            <Input
+              aria-invalid={!!errors.images || errPath}
+              value={valuePath}
+              onChange={(e) => {
+                setValuePath(e.target.value);
+                setErrPath(false);
+              }}
+              placeholder="parh"
             />
-            {errors.rating && (
-              <ErrorMessage>{errors.rating.message}</ErrorMessage>
-            )}
-          </div>
-          <div className="space-y-1">
-            <InputForm
-              register={register}
-              type="number"
-              icon={<Package size={22} />}
-              name="badge"
-              placeholder="Badge"
-              label="Badge"
-              ariaInvalid={!!errors.rating?.message}
-              options={{ valueAsNumber: true }}
-            />
-            {errors.badge && (
-              <ErrorMessage>{errors.badge.message}</ErrorMessage>
-            )}
-          </div>
+            {errPath && <FieldError>Enter path</FieldError>}
+          </Field>
+          <Field
+            data-invalid={errColor || !!errors.images?.message}
+            className="w-full"
+          >
+            <FieldLabel>colors</FieldLabel>
+            <Select
+              value={selectedColor}
+              onValueChange={(value) => {
+                setSelectedColor(value);
+                setErrColor(false);
+              }}
+            >
+              <SelectTrigger
+                aria-invalid={!!errors.images?.message || errColor}
+              >
+                <SelectValue placeholder={"colors"} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {colorShow?.map((item) => (
+                    <SelectItem key={item.color} value={item.color}>
+                      <span
+                        className="w-3 h-3 rounded-full"
+                        style={{ backgroundColor: item.color }}
+                      ></span>
+                      {item.path}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+                <SelectGroup>
+                  <SelectItem value="xcolor">No color</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+
+            {errColor && <FieldError>select color</FieldError>}
+            {errors.images && <FieldError>{errors.images.message}</FieldError>}
+          </Field>
+
           <Button
+            onClick={(e) => {
+              e.preventDefault();
+              addImage();
+            }}
+          >
+            add <PlusIcon />
+          </Button>
+          {images && images.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-2">
+              {images.map((item, index) => (
+                <span
+                  key={index}
+                  onClick={() => removeImage(index)}
+                  className="flex items-center gap-1 rounded-full border bg-muted px-3 py-1 text-sm cursor-pointer hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 transition-colors"
+                >
+                  <span
+                    className={` h-3 w-3`}
+                    style={{ backgroundColor: item.color }}
+                  ></span>
+                  <img src={item.path} className="h-6 w-6" />
+
+                  <Trash2 className="h-3 w-3" />
+                </span>
+              ))}
+            </div>
+          )}
+
+          <InputForm
+            register={register}
+            type="number"
+            name="rating"
+            placeholder="Rating"
+            label="Rating"
+            icon={<Star />}
+            errorMessage={errors.rating?.message}
+            options={{
+              valueAsNumber: true,
+            }}
+          />
+
+          <InputForm
+            register={register}
+            type="number"
+            name="badge"
+            placeholder="Badge"
+            label="Badge"
+            icon={<Package />}
+            errorMessage={errors.badge?.message}
+            options={{
+              valueAsNumber: true,
+            }}
+          />
+
+          <Button
+            type="submit"
             variant="default"
             disabled={isPending || (typeForm === "edit" && !isDirty)}
             className="w-full"
           >
-            {chlidtenButton}
+            {isPending ? <Spinner /> : chlidtenButton}
           </Button>
         </form>
       )}

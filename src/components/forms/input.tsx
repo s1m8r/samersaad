@@ -5,13 +5,12 @@ import {
   RegisterOptions,
 } from "react-hook-form";
 import { useState } from "react";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import ErrorMessage from "./errors";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 type Props<T extends FieldValues> = {
@@ -22,7 +21,6 @@ type Props<T extends FieldValues> = {
   label: string;
   options?: RegisterOptions<T, Path<T>>;
   type?: "number" | "text" | "password";
-  ariaInvalid?: boolean;
   errorMessage?: null | string;
   isPassword?: boolean;
 };
@@ -35,7 +33,6 @@ export default function InputForm<T extends FieldValues>({
   label,
   options,
   type = "text",
-  ariaInvalid,
   isPassword,
   errorMessage = null,
 }: Props<T>) {
@@ -49,14 +46,14 @@ export default function InputForm<T extends FieldValues>({
   };
   return (
     <div className="space-y-1">
-      <Field className="w-full">
+      <Field className="w-full" data-invalid={!!errorMessage}>
         <FieldLabel htmlFor="inline-start-input">{label}</FieldLabel>
         <InputGroup>
           <InputGroupInput
             type={typeshow}
             {...register(name, options)}
             placeholder={placeholder}
-            aria-invalid={ariaInvalid}
+            aria-invalid={!!errorMessage}
             id="inline-start-input"
             step="any"
           />
@@ -72,8 +69,8 @@ export default function InputForm<T extends FieldValues>({
           )}
           <InputGroupAddon align="inline-start">{icon}</InputGroupAddon>
         </InputGroup>
+        {errorMessage && <FieldError>{errorMessage}</FieldError>}
       </Field>
-      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </div>
   );
 }

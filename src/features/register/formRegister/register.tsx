@@ -75,7 +75,6 @@ export default function RegisterForm({
                 name="firstName"
                 placeholder="First Name"
                 label="First Name"
-                ariaInvalid={!!errors.firstName?.message}
                 errorMessage={errors.firstName?.message}
               />
             </div>
@@ -86,7 +85,6 @@ export default function RegisterForm({
                 name="lastName"
                 placeholder="Last Name"
                 label="Last Name"
-                ariaInvalid={!!errors.lastName?.message}
                 errorMessage={errors.lastName?.message}
               />
             </div>
@@ -99,7 +97,6 @@ export default function RegisterForm({
               name="email"
               placeholder="Email"
               label="Email"
-              ariaInvalid={!!errors.email?.message}
               errorMessage={errors.email?.message}
             />
           </div>
@@ -113,7 +110,6 @@ export default function RegisterForm({
                 placeholder="Password"
                 label="Password"
                 type="password"
-                ariaInvalid={!!errors.password?.message}
                 errorMessage={errors.password?.message}
                 isPassword={true}
               />
@@ -129,7 +125,6 @@ export default function RegisterForm({
               label="Age"
               type="number"
               options={{ valueAsNumber: true }}
-              ariaInvalid={!!errors.age?.message}
               errorMessage={errors.age?.message}
             />
           </div>

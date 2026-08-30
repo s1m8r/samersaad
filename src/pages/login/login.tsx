@@ -46,7 +46,6 @@ const Login = () => {
                 name="email"
                 placeholder="Email"
                 label="Email"
-                ariaInvalid={!!errors.email?.message}
                 errorMessage={errors.email?.message}
               />
             </div>
@@ -59,7 +58,6 @@ const Login = () => {
                 placeholder="Password"
                 label="Password"
                 type="password"
-                ariaInvalid={!!errors.password?.message}
                 errorMessage={errors.password?.message}
                 isPassword={true}
               />

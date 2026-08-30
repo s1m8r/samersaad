@@ -1,4 +1,3 @@
-import ErrorMessage from "@/components/forms/errors";
 import InputForm from "@/components/forms/input";
 import Container from "@/components/layout/container";
 import TitleContent from "@/components/layout/titleContent";
@@ -110,11 +109,8 @@ export default function Store({
                 name="name"
                 placeholder="Name Store"
                 label="Name Store"
-                ariaInvalid={!!errors.name?.message}
+                errorMessage={errors.name?.message}
               />
-              {errors.name && (
-                <ErrorMessage>{errors.name.message}</ErrorMessage>
-              )}
 
               <InputForm
                 register={register}
@@ -122,11 +118,8 @@ export default function Store({
                 name="email"
                 placeholder="Email"
                 label="Email"
-                ariaInvalid={!!errors.email?.message}
+                errorMessage={errors.email?.message}
               />
-              {errors.email && (
-                <ErrorMessage>{errors.email.message}</ErrorMessage>
-              )}
 
               <InputForm
                 register={register}
@@ -134,22 +127,16 @@ export default function Store({
                 name="phone"
                 placeholder="Phone"
                 label="Phone"
-                ariaInvalid={!!errors.phone?.message}
+                errorMessage={errors.phone?.message}
               />
-              {errors.phone && (
-                <ErrorMessage>{errors.phone.message}</ErrorMessage>
-              )}
               <InputForm
                 register={register}
                 icon={<Network size={22} />}
                 name="website"
                 placeholder="Website"
                 label="Website"
-                ariaInvalid={!!errors.website?.message}
+                errorMessage={errors.website?.message}
               />
-              {errors.website && (
-                <ErrorMessage>{errors.website.message}</ErrorMessage>
-              )}
 
               <InputForm
                 register={register}
@@ -157,11 +144,8 @@ export default function Store({
                 name="image"
                 placeholder="Image"
                 label="Image"
-                ariaInvalid={!!errors.image?.message}
+                errorMessage={errors.image?.message}
               />
-              {errors.image && (
-                <ErrorMessage>{errors.image.message}</ErrorMessage>
-              )}
             </div>
           </div>
 
@@ -212,7 +196,7 @@ export default function Store({
                 name="address.country"
                 placeholder="Country"
                 label="Country"
-                ariaInvalid={!!errors.address?.country}
+                errorMessage={errors.address?.country?.message}
               />
 
               <InputForm
@@ -220,7 +204,7 @@ export default function Store({
                 name="address.city"
                 placeholder="City"
                 label="City"
-                ariaInvalid={!!errors.address?.city}
+                errorMessage={errors.address?.city?.message}
               />
 
               <InputForm
@@ -228,7 +212,7 @@ export default function Store({
                 name="address.state"
                 placeholder="State"
                 label="State"
-                ariaInvalid={!!errors.address?.state}
+                errorMessage={errors.address?.state?.message}
               />
 
               <InputForm
@@ -236,7 +220,7 @@ export default function Store({
                 name="address.street"
                 placeholder="Street"
                 label="Street"
-                ariaInvalid={!!errors.address?.street}
+                errorMessage={errors.address?.street?.message}
               />
 
               <InputForm
@@ -244,7 +228,7 @@ export default function Store({
                 name="address.zipCode"
                 placeholder="Zip Code"
                 label="Zip Code"
-                ariaInvalid={!!errors.address?.zipCode}
+                errorMessage={errors.address?.zipCode?.message}
               />
             </div>
           </div>
@@ -256,7 +240,7 @@ export default function Store({
               name="owner"
               placeholder="Owner"
               label="Owner"
-              ariaInvalid={!!errors.owner}
+              errorMessage={errors.owner?.message}
             />
             <InputForm
               register={register}
@@ -266,7 +250,7 @@ export default function Store({
               label="Employees"
               type="number"
               options={{ valueAsNumber: true }}
-              ariaInvalid={!!errors.employees?.message}
+              errorMessage={errors.employees?.message}
             />
           </div>
 
@@ -281,7 +265,7 @@ export default function Store({
                 name="openingHours.sunday"
                 placeholder="Sunday"
                 label="Sunday"
-                ariaInvalid={!!errors.openingHours?.sunday}
+                errorMessage={errors.openingHours?.sunday?.message}
               />
 
               <InputForm
@@ -289,7 +273,7 @@ export default function Store({
                 name="openingHours.monday"
                 placeholder="Monday"
                 label="Monday"
-                ariaInvalid={!!errors.openingHours?.monday}
+                errorMessage={errors.openingHours?.monday?.message}
               />
 
               <InputForm
@@ -297,7 +281,7 @@ export default function Store({
                 name="openingHours.tuesday"
                 placeholder="Tuesday"
                 label="Tuesday"
-                ariaInvalid={!!errors.openingHours?.tuesday}
+                errorMessage={errors.openingHours?.tuesday?.message}
               />
 
               <InputForm
@@ -305,7 +289,7 @@ export default function Store({
                 name="openingHours.wednesday"
                 placeholder="Wednesday"
                 label="Wednesday"
-                ariaInvalid={!!errors.openingHours?.wednesday}
+                errorMessage={errors.openingHours?.wednesday?.message}
               />
 
               <InputForm
@@ -313,7 +297,7 @@ export default function Store({
                 name="openingHours.thursday"
                 placeholder="Thursday"
                 label="Thursday"
-                ariaInvalid={!!errors.openingHours?.thursday}
+                errorMessage={errors.openingHours?.thursday?.message}
               />
 
               <InputForm
@@ -321,7 +305,7 @@ export default function Store({
                 name="openingHours.friday"
                 placeholder="Friday"
                 label="Friday"
-                ariaInvalid={!!errors.openingHours?.friday}
+                errorMessage={errors.openingHours?.friday?.message}
               />
 
               <InputForm
@@ -329,7 +313,7 @@ export default function Store({
                 name="openingHours.saturday"
                 placeholder="Saturday"
                 label="Saturday"
-                ariaInvalid={!!errors.openingHours?.saturday}
+                errorMessage={errors.openingHours?.saturday?.message}
               />
             </div>
           </div>
@@ -343,7 +327,7 @@ export default function Store({
               label="Rating"
               type="number"
               options={{ valueAsNumber: true }}
-              ariaInvalid={!!errors.rating?.message}
+              errorMessage={errors.rating?.message}
             />
             <InputForm
               register={register}
@@ -353,7 +337,7 @@ export default function Store({
               label="Reviews"
               type="number"
               options={{ valueAsNumber: true }}
-              ariaInvalid={!!errors.reviews?.message}
+              errorMessage={errors.reviews?.message}
             />
           </div>
           <Button
