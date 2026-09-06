@@ -8,6 +8,7 @@ import { Link } from "@tanstack/react-router";
 import { KeySquareIcon, MailIcon } from "lucide-react";
 import InputForm from "@/components/forms/input";
 import { Button } from "@/components/ui/button";
+import AuthBrandPanel from "@/components/layout/authBrandPanel";
 
 const Login = () => {
   type loginSchemaType = z.infer<typeof userScema>;
@@ -28,35 +29,10 @@ const Login = () => {
 
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
-      <div className="relative hidden flex-col justify-between overflow-hidden bg-sidebar p-10 text-sidebar-foreground lg:flex">
-        <div
-          className="pointer-events-none absolute inset-0 opacity-70"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 15% 20%, color-mix(in oklch, var(--sidebar-primary) 35%, transparent), transparent 55%), radial-gradient(circle at 85% 85%, color-mix(in oklch, var(--sidebar-primary) 22%, transparent), transparent 50%)",
-          }}
-        />
-        <Link to="/" className="relative flex items-center gap-2.5">
-          <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-white p-1 shadow-sm">
-            <img src="/logo.png" alt="logo" className="size-full object-contain" />
-          </span>
-          <span className="font-heading text-sm font-semibold tracking-tight">
-            samer-web
-          </span>
-        </Link>
-        <div className="relative max-w-sm">
-          <p className="font-heading text-3xl leading-tight font-semibold">
-            Run every store from one dashboard.
-          </p>
-          <p className="mt-3 text-sm text-sidebar-foreground/70">
-            Manage stores, products, users and roles in one place, with
-            permissions that keep every team in its lane.
-          </p>
-        </div>
-        <p className="relative text-xs text-sidebar-foreground/50">
-          &copy; {new Date().getFullYear()} samer-web
-        </p>
-      </div>
+      <AuthBrandPanel
+        title="Run every store from one dashboard."
+        description="Manage stores, products, users and roles in one place, with permissions that keep every team in its lane."
+      />
 
       <div className="flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-sm animate-in fade-in-0 slide-in-from-bottom-3 duration-500 ease-out">
