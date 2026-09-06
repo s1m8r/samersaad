@@ -4,18 +4,10 @@ interface Props {
 
 export function Design({ children }: Props) {
   return (
-    <>
-      <div className="w-full max-w-xl mx-auto">
-        <div
-          className="rounded-xl border bg-white shadow-sm p-5
-        flex justify-center
-      animate__animated animate__fadeIn
-      animate-duration
-      "
-        >
-          {children}
-        </div>
+    <div className="mx-auto w-full max-w-xl">
+      <div className="animate-in fade-in-0 slide-in-from-bottom-3 flex justify-center rounded-xl border border-border bg-card p-5 shadow-sm duration-500 ease-out">
+        {children}
       </div>
-    </>
+    </div>
   );
 }

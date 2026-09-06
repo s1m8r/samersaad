@@ -34,22 +34,26 @@ const Home = () => {
           name="Users"
           count={users?.pagination.totalItems ?? 0}
           icon={<Users2Icon />}
+          accent="primary"
         />
         <CardNew
           name="Stores"
           count={stores?.pagination.totalItems ?? 0}
           icon={<StoreIcon />}
+          accent="emerald"
         />
         <CardNew
           name="Products"
           count={products?.pagination.totalItems ?? 0}
           icon={<Package />}
+          accent="violet"
         />
         <CardNew
           name="Top Store"
           count={stores?.data[0].rating ?? 0}
           icon={<Trophy />}
           itemSelect={`${stores?.data[0].name}`}
+          accent="rose"
         />
       </DesignCard>
       <div className="grid gap-6 xl:grid-cols-12">

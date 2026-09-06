@@ -23,8 +23,8 @@ interface Props {
 }
 export default function ChartPie({ chartData }: Props) {
   const chartConfig = {
-    visitors: {
-      label: "Visitors",
+    badge: {
+      label: "Products",
     },
   } satisfies ChartConfig;
   return (
@@ -32,8 +32,8 @@ export default function ChartPie({ chartData }: Props) {
       {" "}
       <Card className="flex flex-col">
         <CardHeader className="items-center pb-0">
-          <CardTitle>Pie Chart</CardTitle>
-          <CardDescription>January - June 2024</CardDescription>
+          <CardTitle>Product Badges</CardTitle>
+          <CardDescription>Top-rated products by badge</CardDescription>
         </CardHeader>
         <CardContent className="flex-1 pb-0">
           <ChartContainer
@@ -49,7 +49,7 @@ export default function ChartPie({ chartData }: Props) {
             </PieChart>
           </ChartContainer>
         </CardContent>
-        <FooterCard />
+        <FooterCard description="Grouped by product badge tier" />
       </Card>
     </>
   );

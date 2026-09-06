@@ -39,7 +39,7 @@ export function LineChartItems({ data, setTime }: Props) {
     },
     product: {
       label: "product",
-      color: "Black",
+      color: "var(--chart-1)",
     },
   } satisfies ChartConfig;
   const chartData = Object.values(

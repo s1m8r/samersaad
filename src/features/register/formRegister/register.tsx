@@ -130,14 +130,12 @@ export default function RegisterForm({
           </div>
 
           {active === "edit" && (
-            <div>
-              <label className="text-sm text-gray-600 dark:text-gray-300">
-                Role
-              </label>
+            <div className="space-y-1">
+              <label className="text-sm text-muted-foreground">Role</label>
 
               <select
                 {...register("roleId", { valueAsNumber: true })}
-                className="w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600"
+                className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring/50"
               >
                 {roles?.map((role: Role) => (
                   <option key={role.id} value={role.id}>
@@ -161,7 +159,7 @@ export default function RegisterForm({
       {hasLogin === "yes" && (
         <Link
           to="/login"
-          className="text-sm text-gray-500 hover:text-black transition underline underline-offset-4 flex justify-center mb-2 mt-2"
+          className="mt-2 mb-2 flex justify-center text-sm text-muted-foreground underline-offset-4 transition hover:text-foreground hover:underline"
         >
           I have account go to login
         </Link>

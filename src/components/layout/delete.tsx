@@ -19,12 +19,13 @@ export default function ConfirmDeleteModal({
   isPending,
 }: Props) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
-        <h1 className="mb-4 text-xl font-bold text-gray-800">{title}</h1>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+      <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-xl">
+        <h1 className="mb-4 text-xl font-bold text-foreground">{title}</h1>
 
-        <p className="mb-4 text-gray-600">
-          {message} {itemName && <b className="text-gray-900">{itemName}</b>}
+        <p className="mb-4 text-muted-foreground">
+          {message}{" "}
+          {itemName && <b className="text-foreground">{itemName}</b>}
         </p>
 
         <div className="flex justify-end gap-2">

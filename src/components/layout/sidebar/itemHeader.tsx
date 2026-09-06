@@ -10,7 +10,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { PlusCircleIcon } from "lucide-react";
 
 interface Props {
@@ -32,15 +32,24 @@ export default function ItemHeader({
   permission,
   permissionAdd,
 }: Props) {
+  const pathname = useRouterState({
+    select: (state) => state.location.pathname,
+  });
+  const isActive = path === "/" ? pathname === "/" : pathname.startsWith(path);
+
   return (
-    <SidebarGroup>
+    <SidebarGroup className="py-0.5">
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton asChild>
+          <SidebarMenuButton asChild isActive={isActive} className="group h-9">
             <div className="flex items-center justify-between">
               <Can permission={permission}>
-                <Link to={path} className="flex items-center gap-2 flex-1">
-                  <span className="[&>svg]:size-4">{icon}</span>
+                <Link to={path} className="flex flex-1 items-center gap-2.5">
+                  <span
+                    className={`[&>svg]:size-4 ${isActive ? "text-sidebar-primary" : ""}`}
+                  >
+                    {icon}
+                  </span>
                   <span>{chlidren}</span>
                 </Link>
               </Can>
@@ -50,7 +59,7 @@ export default function ItemHeader({
                     <Can permission={permissionAdd!}>
                       <Link
                         to={pathAdd}
-                        className="opacity-0 group-hover:opacity-100 rounded-full p-1 text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all"
+                        className="rounded-full p-1 text-sidebar-foreground/50 opacity-0 transition-all hover:bg-sidebar-primary/15 hover:text-sidebar-primary group-hover:opacity-100"
                       >
                         <PlusCircleIcon size={18} />
                       </Link>

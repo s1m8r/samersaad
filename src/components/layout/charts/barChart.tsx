@@ -26,7 +26,7 @@ interface Props {
 
 export default function ChartBar({
   chartData,
-  color = "blue",
+  color = "var(--chart-1)",
   title,
   descriptionTitle,
 }: Props) {
@@ -39,7 +39,7 @@ export default function ChartBar({
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Bar Chart - {title}</CardTitle>
+        <CardTitle>{title}</CardTitle>
         <CardDescription>{descriptionTitle}</CardDescription>
       </CardHeader>
       <CardContent>
@@ -55,11 +55,11 @@ export default function ChartBar({
             />
             <YAxis domain={[0, 6]} hide />
             <ChartTooltip cursor={true} content={<ChartTooltipContent />} />
-            <Bar dataKey="rating" fill={color} radius={3} barSize={60} />
+            <Bar dataKey="rating" fill={color} radius={6} barSize={60} />
           </BarChart>
         </ChartContainer>
       </CardContent>
-      <FooterCard />
+      <FooterCard description="Ranked by average customer rating" />
     </Card>
   );
 }

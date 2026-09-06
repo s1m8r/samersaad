@@ -217,7 +217,6 @@ export default function Product({
           <InputForm
             register={register}
             name="description"
-            placeholder="Description"
             label="Description"
             icon={<SquarePen />}
             errorMessage={errors.description?.message}

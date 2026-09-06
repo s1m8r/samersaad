@@ -104,16 +104,16 @@ export default function Table<T>({
           </InputGroup>
         </Field>
       </div>
-      <div className="w-full max-h-[500px] overflow-y-auto overflow-x-auto rounded-xl border border-gray-200  bg-white shadow-sm">
-        <table className="w-full text-sm overflow-auto animate__animated animate__fadeIn">
-          <thead className="bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-200 sticky top-0 z-10 ">
+      <div className="max-h-[500px] w-full overflow-x-auto overflow-y-auto rounded-xl border border-border bg-card shadow-sm">
+        <table className="w-full animate-in fade-in-0 overflow-auto text-sm duration-300">
+          <thead className="sticky top-0 z-10 bg-muted text-muted-foreground">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
                     style={{ width: header.getSize() }}
-                    className="px-4 py-3 text-left font-semibold uppercase tracking-wide text-xs"
+                    className="px-4 py-3 text-left text-xs font-semibold tracking-wide uppercase"
                   >
                     {flexRender(
                       header.column.columnDef.header,
@@ -125,17 +125,14 @@ export default function Table<T>({
             ))}
           </thead>
 
-          <tbody className="divide-y divide-gray-100 ">
+          <tbody className="divide-y divide-border">
             {table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
-                className="hover:bg-gray-50 dark:hover:bg-gray-800 transition"
+                className="transition-colors hover:bg-muted/40"
               >
                 {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className="px-4 py-3 text-gray-700 dark:text-gray-200"
-                  >
+                  <td key={cell.id} className="px-4 py-3 text-foreground">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
@@ -145,7 +142,7 @@ export default function Table<T>({
               <tr>
                 <td
                   colSpan={columns.length}
-                  className="px-4 py-3 text-center text-gray-700 dark:text-gray-200"
+                  className="px-4 py-8 text-center text-muted-foreground"
                 >
                   No search results found
                 </td>

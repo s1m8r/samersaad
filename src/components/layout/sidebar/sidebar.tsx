@@ -40,12 +40,17 @@ const SideBar = () => {
   };
   return (
     <Sidebar>
-      <SidebarHeader>
-        <Link to={"/"}>
-          <img src="/logo.png" alt="logo" className="w-30" />
+      <SidebarHeader className="px-3 pt-4 pb-2">
+        <Link to={"/"} className="flex items-center gap-2.5 px-1">
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-white p-1 shadow-sm">
+            <img src="/logo.png" alt="logo" className="size-full object-contain" />
+          </span>
+          <span className="font-heading text-sm font-semibold tracking-tight text-sidebar-foreground">
+            samer-web
+          </span>
         </Link>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="px-1 py-2">
         <ItemHeader
           path="/"
           icon={<Home />}
@@ -111,7 +116,7 @@ const SideBar = () => {
         />
       </SidebarContent>
 
-      <SidebarFooter>
+      <SidebarFooter className="border-t border-sidebar-border px-1 pt-2 pb-3">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton>
