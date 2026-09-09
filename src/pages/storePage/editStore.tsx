@@ -56,7 +56,7 @@ const EditStore = () => {
   return (
     <Store
       title="Edit Store"
-      chlidrenButton="Edit"
+      childrenButton="Edit"
       onsubmit={onsubmit}
       register={register}
       control={control}

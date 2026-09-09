@@ -30,7 +30,7 @@ type Props = {
   errors: FieldErrors<registerFormData>;
   register: UseFormRegister<registerFormData>;
   isPending?: boolean;
-  chlidrenButton: string;
+  childrenButton: string;
   hasPassword?: boolean;
   isLoading?: boolean;
   isDirty?: boolean;
@@ -46,7 +46,7 @@ export default function RegisterForm({
   errors,
   register,
   isPending,
-  chlidrenButton,
+  childrenButton,
   hasPassword = true,
   isLoading,
   isDirty,
@@ -151,7 +151,7 @@ export default function RegisterForm({
             disabled={isPending || (active === "edit" && !isDirty)}
             className="w-full"
           >
-            {chlidrenButton}
+            {childrenButton}
           </Button>
         </form>
       )}
@@ -161,7 +161,7 @@ export default function RegisterForm({
           to="/login"
           className="mt-2 mb-2 flex justify-center text-sm text-muted-foreground underline-offset-4 transition hover:text-foreground hover:underline"
         >
-          I have account go to login
+          Already have an account? Log in
         </Link>
       )}
     </Container>

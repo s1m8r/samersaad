@@ -44,8 +44,8 @@ const StatisticsStores = () => {
   return (
     <Padding>
       <Title
-        chlidren="Stores Analytics"
-        descripsion="View product ratings and badge distribution."
+        children="Stores Analytics"
+        description="View product ratings and badge distribution."
       />
       <ComboboxItems
         data={dataStores}
@@ -59,7 +59,7 @@ const StatisticsStores = () => {
           icon={<Store />}
         />
         <CardNew
-          name="Top Reting"
+          name="Top Rating"
           count={stores?.data[0].rating ?? 0}
           itemSelect={stores?.data[0].name ?? ""}
           icon={<TrendingUp />}
@@ -83,7 +83,7 @@ const StatisticsStores = () => {
           <ChartBar
             chartData={chartStores}
             title="Stores Rating"
-            descriptionTitle="aynthing"
+            descriptionTitle="Comparison of ratings across stores"
           />
         </div>
         <div className="xl:col-span-4">

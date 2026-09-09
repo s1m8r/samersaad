@@ -29,7 +29,7 @@ export default function Selected<T extends FieldValues>({
   errorMessage,
   items,
   label = "Type",
-  placeholder = "Theme",
+  placeholder = "Select type",
 }: Props<T>) {
   return (
     <Field data-invalid={!!errorMessage} className="w-full">

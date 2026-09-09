@@ -18,7 +18,7 @@ const StatisticsUser = () => {
   }));
   return (
     <Padding>
-      <Title chlidren="Users Analytics" descripsion="View User distribution." />
+      <Title children="Users Analytics" description="View User distribution." />
       <DesignCard>
         <CardNew
           name="Total Users"
@@ -31,10 +31,10 @@ const StatisticsUser = () => {
           icon={<UserPlus2 />}
         />
         <CardNew
-          name="New Users"
+          name="Admin Users"
           count={roleAdmin?.length ?? 0}
           icon={<UserCheck2 />}
-          itemSelect="Users has admin"
+          itemSelect="Users with admin role"
         />
       </DesignCard>
       <div className="grid gap-6 xl:grid-cols-12">

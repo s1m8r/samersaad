@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { roleScema } from "@/schemas/role";
 import { useGetRoles } from "@/API/role";
-import DeleteRole from "./DeleteRolw";
+import DeleteRole from "./DeleteRole";
 import { ArrowDownUp } from "lucide-react";
 import { usepermissions } from "@/stores/usePermissions";
 import { Can } from "@/components/functions/can";
@@ -62,7 +62,7 @@ const ShowRole = () => {
             size={12}
             className="opacity-0 transition-opacity duration-200 group-hover:opacity-100"
           />
-          <span>id</span>
+          <span>ID</span>
         </span>
       ),
     },
@@ -156,7 +156,7 @@ const ShowRole = () => {
           page={page}
           setPage={setPage}
           title="roles"
-          textButton="add role"
+          textButton="Add Role"
           onClick={goToAdd}
           setSearch={setSearch}
           permissionAdd={usepermissions.createRoles}

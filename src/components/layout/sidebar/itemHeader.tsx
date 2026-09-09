@@ -14,7 +14,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { PlusCircleIcon } from "lucide-react";
 
 interface Props {
-  chlidren: string;
+  children: string;
   path: string;
   icon: React.ReactNode;
   pathAdd?: string;
@@ -24,7 +24,7 @@ interface Props {
 }
 
 export default function ItemHeader({
-  chlidren,
+  children,
   path,
   icon,
   pathAdd,
@@ -50,7 +50,7 @@ export default function ItemHeader({
                   >
                     {icon}
                   </span>
-                  <span>{chlidren}</span>
+                  <span>{children}</span>
                 </Link>
               </Can>
               {pathAdd && (
@@ -59,6 +59,7 @@ export default function ItemHeader({
                     <Can permission={permissionAdd!}>
                       <Link
                         to={pathAdd}
+                        search={{ from: pathname }}
                         className="rounded-full p-1 text-sidebar-foreground/50 opacity-0 transition-all hover:bg-sidebar-primary/15 hover:text-sidebar-primary group-hover:opacity-100"
                       >
                         <PlusCircleIcon size={18} />

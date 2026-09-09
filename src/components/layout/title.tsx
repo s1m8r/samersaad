@@ -1,13 +1,13 @@
 interface Props {
-  chlidren: React.ReactNode;
-  descripsion?: string;
+  children: React.ReactNode;
+  description?: string;
 }
-export default function Title({ chlidren, descripsion }: Props) {
+export default function Title({ children, description }: Props) {
   return (
     <div>
-      <h1 className="text-2xl font-bold capitalize">{chlidren}</h1>
+      <h1 className="text-2xl font-bold capitalize">{children}</h1>
 
-      {descripsion && <p className="text-muted-foreground">{descripsion}</p>}
+      {description && <p className="text-muted-foreground">{description}</p>}
     </div>
   );
 }

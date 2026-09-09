@@ -73,15 +73,15 @@ export default function ContentStore({
           </TextContent>
           <TextContent header="Phone">{phone}</TextContent>
           <TextContent header="Categories">
-            {categories.map((categorie, index) => (
+            {categories.map((category, index) => (
               <span key={index}>
-                {categorie}
+                {category}
                 {index < categories.length - 1 && ", "}
               </span>
             ))}
           </TextContent>
           <TextContent header="Address">
-            {country} - {state} - {city} - {street} /zipCode: {zipCode}
+            {country} - {state} - {city} - {street} - Zip Code: {zipCode}
           </TextContent>
           <TextContent header="Rating">
             <span className="inline-flex items-center gap-1 rounded-md bg-amber-50 px-3 py-1 font-semibold text-amber-600">

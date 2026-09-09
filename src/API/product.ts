@@ -1,4 +1,4 @@
-import { ProdectScema } from "@/schemas/product";
+import { ProductScema } from "@/schemas/product";
 import {
   keepPreviousData,
   useMutation,
@@ -8,7 +8,7 @@ import {
 import z from "zod";
 import api from "./axios";
 
-type productFormData = z.infer<typeof ProdectScema>;
+type productFormData = z.infer<typeof ProductScema>;
 type storeResponseType = {
   data: productFormData[];
   pagination: {
@@ -33,7 +33,7 @@ export const useGetProducts = (
 
     queryFn: async () => {
       const res = await api.get(
-        `api/collection/product?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&search=${search}&limit=19000`,
+        `api/collection/product?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&search=${search}&limit=10`,
       );
 
       return res.data;

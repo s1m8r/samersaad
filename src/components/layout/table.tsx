@@ -82,7 +82,7 @@ export default function Table<T>({
           <InputGroup>
             <InputGroupInput
               id="inline-end-input"
-              placeholder="search"
+              placeholder="Search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />

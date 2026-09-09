@@ -57,7 +57,7 @@ const AddUser = () => {
       onsubmit={handleRegister}
       errors={errors}
       register={register}
-      chlidrenButton="Add User"
+      childrenButton="Add User"
       isPending={isPending}
     />
   );

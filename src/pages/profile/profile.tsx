@@ -101,7 +101,7 @@ const Profile = () => {
                       icon={<KeyRoundIcon />}
                       label="Password"
                       errorMessage={errors.password?.message}
-                      placeholder="password"
+                      placeholder="Password"
                     />
                   </Field>
                   <Field>
@@ -111,9 +111,9 @@ const Profile = () => {
                       type="password"
                       isPassword={true}
                       icon={<KeyRoundIcon />}
-                      label="newPassword"
+                      label="New Password"
                       errorMessage={errors.newPassword?.message}
-                      placeholder="newPassword"
+                      placeholder="New Password"
                     />
                   </Field>
                   <DialogFooter>
@@ -142,7 +142,7 @@ const Profile = () => {
             onClick={handleLogout}
             className=" text-red-700 font p-2 cursor-pointer"
           >
-            logout
+            Logout
           </button>
         </div>
       </div>

@@ -31,7 +31,7 @@ type storeFormData = z.infer<typeof storeScema>;
 
 interface Props {
   title: string;
-  chlidrenButton: string;
+  childrenButton: string;
   control: Control<storeFormData>;
   setValue: UseFormSetValue<storeFormData>;
   onsubmit: (data: storeFormData) => void;
@@ -48,7 +48,7 @@ export default function Store({
   title,
   control,
   setValue,
-  chlidrenButton,
+  childrenButton,
   onsubmit,
   handleSubmit,
   errors,
@@ -76,7 +76,7 @@ export default function Store({
     }
   };
 
-  const removeCateory = (index: number) => {
+  const removeCategory = (index: number) => {
     setValue(
       "categories",
       categories.filter((_, i) => i !== index),
@@ -107,8 +107,8 @@ export default function Store({
                 register={register}
                 icon={<StoreIcon size={22} />}
                 name="name"
-                placeholder="Name Store"
-                label="Name Store"
+                placeholder="Store Name"
+                label="Store Name"
                 errorMessage={errors.name?.message}
               />
 
@@ -176,7 +176,7 @@ export default function Store({
               {categories.map((c, index) => (
                 <span
                   key={index}
-                  onClick={() => removeCateory(index)}
+                  onClick={() => removeCategory(index)}
                   className="cursor-pointer px-3 py-1 text-sm rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"
                 >
                   {c} <span className=" text-red-900 font-bold"> X </span>
@@ -345,7 +345,7 @@ export default function Store({
             disabled={isPending || (typeForm === "edit" && !isDirty)}
             className="w-full"
           >
-            {chlidrenButton}
+            {childrenButton}
           </Button>
         </form>
       )}

@@ -56,7 +56,7 @@ const ShowUser = () => {
             size={12}
             className="opacity-0 transition-opacity duration-200 group-hover:opacity-100"
           />
-          <span>id</span>
+          <span>ID</span>
         </span>
       ),
     },

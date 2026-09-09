@@ -1,4 +1,4 @@
-import ErrorPage from "@/pages/pageError/erroePage";
+import ErrorPage from "@/pages/pageError/errorPage";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(public)/401")({

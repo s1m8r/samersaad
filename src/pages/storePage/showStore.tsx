@@ -62,7 +62,7 @@ const ShowStore = () => {
             size={12}
             className="opacity-0 transition-opacity duration-200 group-hover:opacity-100"
           />
-          <span>id</span>
+          <span>ID</span>
         </span>
       ),
     },
@@ -190,7 +190,7 @@ const ShowStore = () => {
           page={page}
           setPage={setPage}
           title="stores"
-          textButton="add store"
+          textButton="Add Store"
           onClick={goToAdd}
           setSearch={setSearch}
           permissionAdd={usepermissions.createStores}

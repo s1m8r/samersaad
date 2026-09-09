@@ -26,8 +26,8 @@ const Home = () => {
   return (
     <div className="w-full space-y-4 p-8">
       <Title
-        chlidren="Dashboard"
-        descripsion="Welcome to samer-web dashboard"
+        children="Dashboard"
+        description="Welcome to Dashboard Samer Store"
       />
       <DesignCard>
         <CardNew

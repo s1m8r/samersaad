@@ -1,7 +1,7 @@
 import { useAddProduct } from "@/API/product";
 import Product from "@/features/product/product";
 import { Route } from "@/routes/(proteced)/products/addproduct";
-import { ProdectScema } from "@/schemas/product";
+import { ProductScema } from "@/schemas/product";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import z from "zod";
 // import { useGetStore, useUpdateStore } from "@/API/store";
 // import { useEffect, useState } from "react";
-type productFormData = z.infer<typeof ProdectScema>;
+type productFormData = z.infer<typeof ProductScema>;
 const AddProduct = () => {
   // const [getStoreId, setGetStoreId] = useState<number>();
   // const { mutate: addItemStore } = useUpdateStore();
@@ -33,7 +33,7 @@ const AddProduct = () => {
     setValue,
     control,
   } = useForm({
-    resolver: zodResolver(ProdectScema),
+    resolver: zodResolver(ProductScema),
   });
   const { mutate, isPending } = useAddProduct();
   const onsubmit = (data: productFormData) => {
@@ -57,7 +57,7 @@ const AddProduct = () => {
   return (
     <Product
       title="Add Product"
-      chlidtenButton="Add Product"
+      childrenButton="Add Product"
       onsubmit={onsubmit}
       handleSubmit={handleSubmit}
       errors={errors}

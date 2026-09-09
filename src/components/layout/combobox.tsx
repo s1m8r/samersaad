@@ -43,7 +43,7 @@ export default function ComboboxItems({
       >
         <div className="flex items-center gap-2">
           <ComboboxInput
-            placeholder="Select a framework"
+            placeholder="Select a store"
             value={valueInput}
             onChange={(e) => {
               setInputValue(e.target.value);

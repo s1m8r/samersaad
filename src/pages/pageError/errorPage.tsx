@@ -10,7 +10,7 @@ const ErrorPage = () => {
           Page Not Found
         </h2>
         <Link to="/">
-          <Button variant="default">go to Home</Button>
+          <Button variant="default">Go to Home</Button>
         </Link>
       </div>
     </div>

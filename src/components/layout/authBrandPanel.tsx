@@ -20,7 +20,7 @@ export default function AuthBrandPanel({ title, description }: Props) {
           <img src="/logo.png" alt="logo" className="size-full object-contain" />
         </span>
         <span className="font-heading text-sm font-semibold tracking-tight">
-          samer-web
+          Dashboard Samer Store
         </span>
       </Link>
       <div className="relative max-w-sm">
@@ -32,7 +32,7 @@ export default function AuthBrandPanel({ title, description }: Props) {
         </p>
       </div>
       <p className="relative text-xs text-sidebar-foreground/50">
-        &copy; {new Date().getFullYear()} samer-web
+        &copy; {new Date().getFullYear()} Dashboard Samer Store
       </p>
     </div>
   );

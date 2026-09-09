@@ -21,7 +21,7 @@ type roleResponseType = {
   };
 };
 
-export const useGetRolesSerch = (search = "") => {
+export const useGetRolesSearch = (search = "") => {
   return useQuery<roleResponseType>({
     queryKey: [...queryKey, search],
 

@@ -60,10 +60,8 @@ const EditUser = () => {
             },
           });
         },
-        onError: () => {
-          toast.success(
-            `${formatData.firstName} has been created successfully`,
-          );
+        onError: (err) => {
+          toast.error(err.message);
         },
       },
     );
@@ -76,7 +74,7 @@ const EditUser = () => {
       errors={errors}
       register={register}
       isPending={isPending}
-      chlidrenButton="Edit"
+      childrenButton="Edit"
       isLoading={isLoading}
       hasPassword={false}
       active="edit"

@@ -26,7 +26,7 @@ interface Props {
   register: UseFormRegister<roleFormData>;
   isPending?: boolean;
   isDirty?: boolean;
-  chlidrenButton: string;
+  childrenButton: string;
   typeForm?: "add" | "edit";
 }
 
@@ -37,7 +37,7 @@ export default function Role({
   errors,
   register,
   isPending,
-  chlidrenButton,
+  childrenButton,
   isDirty,
   typeForm = "add",
 }: Props) {
@@ -112,8 +112,8 @@ export default function Role({
               register={register}
               icon={<UserKey size={22} />}
               name="name"
-              placeholder="Role name"
-              label="Role name"
+              placeholder="Role Name"
+              label="Role Name"
               errorMessage={errors.name?.message}
             />
             {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
@@ -161,7 +161,7 @@ export default function Role({
             disabled={isPending || (typeForm === "edit" && !isDirty)}
             className="w-full"
           >
-            {chlidrenButton}
+            {childrenButton}
           </Button>
         </form>
       )}

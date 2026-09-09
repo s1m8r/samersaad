@@ -46,7 +46,7 @@ const SideBar = () => {
             <img src="/logo.png" alt="logo" className="size-full object-contain" />
           </span>
           <span className="font-heading text-sm font-semibold tracking-tight text-sidebar-foreground">
-            samer-web
+            Dashboard Samer Store
           </span>
         </Link>
       </SidebarHeader>
@@ -54,13 +54,13 @@ const SideBar = () => {
         <ItemHeader
           path="/"
           icon={<Home />}
-          chlidren="Home"
+          children="Home"
           permission={"any"}
         />
         <ItemHeader
           path="/users"
           icon={<Users />}
-          chlidren="User"
+          children="User"
           pathAdd="/users/adduser"
           textAdd="Add User"
           permissionAdd={permissions.createUser}
@@ -74,7 +74,7 @@ const SideBar = () => {
         <ItemHeader
           path="/stores"
           icon={<Store />}
-          chlidren="Stores"
+          children="Stores"
           pathAdd="/stores/addstore"
           textAdd="Add Store"
           permissionAdd={permissions.createStores}
@@ -88,7 +88,7 @@ const SideBar = () => {
         <ItemHeader
           path="/products"
           icon={<ShoppingCart />}
-          chlidren="Products"
+          children="Products"
           pathAdd="/products/addproduct"
           textAdd="Add Product"
           permissionAdd={permissions.createProducts}
@@ -103,7 +103,7 @@ const SideBar = () => {
         <ItemHeader
           path="/roles"
           icon={<UserCog2Icon />}
-          chlidren="Roles"
+          children="Roles"
           pathAdd="/roles/addrole"
           textAdd="Add Role"
           permissionAdd={permissions.createRoles}

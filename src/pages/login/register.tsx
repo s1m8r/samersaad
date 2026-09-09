@@ -58,7 +58,7 @@ const Register = () => {
             onsubmit={handleRegister}
             errors={errors}
             register={register}
-            chlidrenButton="Register"
+            childrenButton="Register"
             isPending={isPending}
             hasLogin="yes"
             isRegister={true}

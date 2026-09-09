@@ -19,7 +19,7 @@ const DeleteRole = ({ roleId, roleName, setShowDel }: Props) => {
       {
         onSuccess: () => (
           setShowDel(false),
-          toast.success(`${roleName} updated successfully`)
+          toast.success(`${roleName} has been deleted successfully`)
         ),
         onError: (err) => {
           toast.error(err.message);

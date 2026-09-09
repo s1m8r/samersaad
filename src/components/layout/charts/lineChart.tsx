@@ -72,11 +72,11 @@ export function LineChartItems({ data, setTime }: Props) {
   );
   const items = [
     { label: "24 Hours", value: "1" },
-    { label: " 1 week", value: "7" },
+    { label: "1 Week", value: "7" },
     { label: "1 Month", value: "30" },
     { label: "3 Months", value: "90" },
     { label: "6 Months", value: "180" },
-    { label: "1 years", value: "365" },
+    { label: "1 Year", value: "365" },
     { label: "10 years", value: "3650" },
   ];
   const [value, Setvalue] = React.useState("90");

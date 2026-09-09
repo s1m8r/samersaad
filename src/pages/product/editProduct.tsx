@@ -1,7 +1,7 @@
 import { useGetProduct, useUpdateProduct } from "@/API/product";
 import Product from "@/features/product/product";
 import { Route } from "@/routes/(proteced)/products/edit/$id";
-import { ProdectScema } from "@/schemas/product";
+import { ProductScema } from "@/schemas/product";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 
-type productFormData = z.infer<typeof ProdectScema>;
+type productFormData = z.infer<typeof ProductScema>;
 
 const EditProduct = () => {
   const { id } = Route.useParams();
@@ -23,7 +23,7 @@ const EditProduct = () => {
     setValue,
     control,
   } = useForm({
-    resolver: zodResolver(ProdectScema),
+    resolver: zodResolver(ProductScema),
   });
   const { mutate, isPending } = useUpdateProduct();
   const { data: getStore, isLoading } = useGetProduct(id);
@@ -55,7 +55,7 @@ const EditProduct = () => {
       {getStore?.storeName && (
         <Product
           title="Edit Product"
-          chlidtenButton="Save Changes"
+          childrenButton="Save Changes"
           onsubmit={onsubmit}
           handleSubmit={handleSubmit}
           errors={errors}

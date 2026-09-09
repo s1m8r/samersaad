@@ -1,4 +1,4 @@
-import { ProdectScema } from "@/schemas/product";
+import { ProductScema } from "@/schemas/product";
 import z from "zod";
 
 import {
@@ -49,11 +49,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-type ProductFormData = z.infer<typeof ProdectScema>;
+type ProductFormData = z.infer<typeof ProductScema>;
 
 interface Props {
   title: string;
-  chlidtenButton: string;
+  childrenButton: string;
   onsubmit: (data: ProductFormData) => void;
   handleSubmit: UseFormHandleSubmit<ProductFormData>;
   errors: FieldErrors<ProductFormData>;
@@ -69,7 +69,7 @@ interface Props {
 
 export default function Product({
   title,
-  chlidtenButton,
+  childrenButton,
   onsubmit,
   handleSubmit,
   errors,
@@ -103,30 +103,18 @@ export default function Product({
     defaultValue: [],
   });
   const [valuePath, setValuePath] = useState("");
-  const [selectedColor, setSelectedColor] = useState("");
   const [errPath, setErrPath] = useState(false);
-  const [errColor, setErrColor] = useState(false);
   const addImage = () => {
     if (!valuePath) {
       setErrPath(true);
+      return;
     }
-    if (!selectedColor) {
-      setErrColor(true);
-    }
-    if (valuePath && selectedColor) {
-      const newImage = {
-        path: valuePath,
-        color: selectedColor,
-      };
-
-      setValue("images", [...images, newImage], {
-        shouldDirty: true,
-        shouldValidate: true,
-        shouldTouch: true,
-      });
-      setValuePath("");
-      setSelectedColor("");
-    }
+    setValue("images", [...images, valuePath], {
+      shouldDirty: true,
+      shouldValidate: true,
+      shouldTouch: true,
+    });
+    setValuePath("");
   };
   const removeImage = (index: number) => {
     setValue(
@@ -137,9 +125,39 @@ export default function Product({
       },
     );
   };
+
+  const productColors = useWatch({
+    control,
+    name: "colors",
+    defaultValue: [],
+  });
+  const [selectedColor, setSelectedColor] = useState("");
+  const [errColor, setErrColor] = useState(false);
+  const addColor = () => {
+    if (!selectedColor) {
+      setErrColor(true);
+      return;
+    }
+    setValue("colors", [...productColors, selectedColor], {
+      shouldDirty: true,
+      shouldValidate: true,
+      shouldTouch: true,
+    });
+    setSelectedColor("");
+  };
+  const removeColor = (index: number) => {
+    setValue(
+      "colors",
+      productColors.filter((_, i) => i !== index),
+      {
+        shouldDirty: true,
+      },
+    );
+  };
   const { data: colors } = useGetColors();
-  const colorSelect = images.map((item) => item.color);
-  const colorShow = colors?.data.filter((i) => !colorSelect.includes(i.color));
+  const colorShow = colors?.data.filter(
+    (i) => !productColors.includes(i.color),
+  );
 
   return (
     <Container>
@@ -220,6 +238,7 @@ export default function Product({
             label="Description"
             icon={<SquarePen />}
             errorMessage={errors.description?.message}
+            placeholder="Description"
           />
 
           <InputForm
@@ -238,10 +257,10 @@ export default function Product({
             register={register}
             type="number"
             name="discountPercentage"
-            placeholder="discountPercentage (number %)"
-            label="discountPercentage"
+            placeholder="Discount Percentage (%)"
+            label="Discount Percentage"
             icon={<CircleDollarSign />}
-            errorMessage={errors.price?.message}
+            errorMessage={errors.discountPercentage?.message}
             options={{
               valueAsNumber: true,
             }}
@@ -257,7 +276,7 @@ export default function Product({
           <InputForm
             register={register}
             name="image"
-            placeholder="Image"
+            placeholder="Image Poster"
             label="Image"
             icon={<ImageIcon />}
             errorMessage={errors.image?.message}
@@ -267,7 +286,7 @@ export default function Product({
             data-invalid={errPath || !!errors.images?.message}
             className="w-full"
           >
-            <FieldLabel>path</FieldLabel>
+            <FieldLabel>Image Add</FieldLabel>
             <Input
               aria-invalid={!!errors.images || errPath}
               value={valuePath}
@@ -275,15 +294,41 @@ export default function Product({
                 setValuePath(e.target.value);
                 setErrPath(false);
               }}
-              placeholder="parh"
+              placeholder="Image path"
             />
-            {errPath && <FieldError>Enter path</FieldError>}
+            {errPath && <FieldError>Enter an image path</FieldError>}
+            {errors.images && <FieldError>{errors.images.message}</FieldError>}
           </Field>
+
+          <Button
+            onClick={(e) => {
+              e.preventDefault();
+              addImage();
+            }}
+          >
+            Add <PlusIcon />
+          </Button>
+          {images && images.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-2">
+              {images.map((path, index) => (
+                <span
+                  key={index}
+                  onClick={() => removeImage(index)}
+                  className="flex items-center gap-1 rounded-full border bg-muted px-3 py-1 text-sm cursor-pointer hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 transition-colors"
+                >
+                  <img src={path} className="h-6 w-6" />
+
+                  <Trash2 className="h-3 w-3" />
+                </span>
+              ))}
+            </div>
+          )}
+
           <Field
-            data-invalid={errColor || !!errors.images?.message}
+            data-invalid={errColor || !!errors.colors?.message}
             className="w-full"
           >
-            <FieldLabel>colors</FieldLabel>
+            <FieldLabel>Color</FieldLabel>
             <Select
               value={selectedColor}
               onValueChange={(value) => {
@@ -292,9 +337,9 @@ export default function Product({
               }}
             >
               <SelectTrigger
-                aria-invalid={!!errors.images?.message || errColor}
+                aria-invalid={!!errors.colors?.message || errColor}
               >
-                <SelectValue placeholder={"colors"} />
+                <SelectValue placeholder="Select color" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
@@ -308,37 +353,33 @@ export default function Product({
                     </SelectItem>
                   ))}
                 </SelectGroup>
-                <SelectGroup>
-                  <SelectItem value="xcolor">No color</SelectItem>
-                </SelectGroup>
               </SelectContent>
             </Select>
 
-            {errColor && <FieldError>select color</FieldError>}
-            {errors.images && <FieldError>{errors.images.message}</FieldError>}
+            {errColor && <FieldError>Select a color</FieldError>}
+            {errors.colors && <FieldError>{errors.colors.message}</FieldError>}
           </Field>
 
           <Button
             onClick={(e) => {
               e.preventDefault();
-              addImage();
+              addColor();
             }}
           >
-            add <PlusIcon />
+            Add <PlusIcon />
           </Button>
-          {images && images.length > 0 && (
+          {productColors && productColors.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">
-              {images.map((item, index) => (
+              {productColors.map((color, index) => (
                 <span
                   key={index}
-                  onClick={() => removeImage(index)}
+                  onClick={() => removeColor(index)}
                   className="flex items-center gap-1 rounded-full border bg-muted px-3 py-1 text-sm cursor-pointer hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 transition-colors"
                 >
                   <span
-                    className={` h-3 w-3`}
-                    style={{ backgroundColor: item.color }}
+                    className="h-3 w-3 rounded-full"
+                    style={{ backgroundColor: color }}
                   ></span>
-                  <img src={item.path} className="h-6 w-6" />
 
                   <Trash2 className="h-3 w-3" />
                 </span>
@@ -378,7 +419,7 @@ export default function Product({
             disabled={isPending || (typeForm === "edit" && !isDirty)}
             className="w-full"
           >
-            {isPending ? <Spinner /> : chlidtenButton}
+            {isPending ? <Spinner /> : childrenButton}
           </Button>
         </form>
       )}

@@ -3,7 +3,7 @@ import z from "zod";
 import { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { ProdectScema } from "@/schemas/product";
+import { ProductScema } from "@/schemas/product";
 import { useGetProducts } from "@/API/product";
 import DeleteProduct from "./deleteProduct";
 import { usepermissions } from "@/stores/usePermissions";
@@ -11,7 +11,7 @@ import { Can } from "@/components/functions/can";
 import Padding from "@/components/layout/padding";
 import { Button } from "@/components/ui/button";
 
-type productFormData = z.infer<typeof ProdectScema>;
+type productFormData = z.infer<typeof ProductScema>;
 
 const ShowProduct = () => {
   const navigate = useNavigate();
@@ -153,7 +153,7 @@ const ShowProduct = () => {
           setPage={setPage}
           title="Product"
           onClick={goToAdd}
-          textButton="Add product"
+          textButton="Add Product"
           setSearch={setSearch}
           permissionAdd={usepermissions.createProducts}
         />

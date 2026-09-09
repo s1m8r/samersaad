@@ -45,8 +45,8 @@ const StatisticsProduct = () => {
   return (
     <Padding>
       <Title
-        chlidren="Products Analytics"
-        descripsion="View product ratings and badge distribution."
+        children="Products Analytics"
+        description="View product ratings and badge distribution."
       />
       <ComboboxItems
         data={DataStores}

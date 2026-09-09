@@ -65,7 +65,7 @@ const EditRole = () => {
       errors={errors}
       register={register}
       onsubmit={onsubmit}
-      chlidrenButton="Edit Role"
+      childrenButton="Edit Role"
       isPending={isPending}
       isDirty={isDirty}
       typeForm="edit"

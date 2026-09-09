@@ -32,7 +32,7 @@ const AddRole = () => {
           navigate({
             to: search.from || "/",
           });
-          toast.success(`${formatData.name} Add Role successfully`);
+          toast.success(`${formatData.name} added successfully`);
         }, 200);
       },
       onError: (err) => {
@@ -47,7 +47,7 @@ const AddRole = () => {
       errors={errors}
       register={register}
       onsubmit={onsubmit}
-      chlidrenButton="Add Role"
+      childrenButton="Add Role"
       isPending={isPending}
     />
   );

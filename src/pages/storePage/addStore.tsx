@@ -45,7 +45,7 @@ const AddStore = () => {
   return (
     <Store
       title="Add Store"
-      chlidrenButton="Add Store"
+      childrenButton="Add Store"
       onsubmit={onsubmit}
       register={register}
       control={control}
