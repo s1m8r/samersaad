@@ -108,30 +108,22 @@ export default function Role({
 
       {!isLoading && (
         <form onSubmit={handleSubmit(onsubmit)} className="space-y-4">
-          <div className="space-y-1">
-            <InputForm
-              register={register}
-              icon={<UserKey size={22} />}
-              name="name"
-              placeholder="Role Name"
-              label="Role Name"
-              errorMessage={errors.name?.message}
-            />
-            {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
-          </div>
+          <InputForm
+            register={register}
+            icon={<UserKey size={22} />}
+            name="name"
+            placeholder="Role Name"
+            label="Role Name"
+            errorMessage={errors.name?.message}
+          />
 
-          <div className="space-y-1">
-            <TextareaForm
-              register={register}
-              name="description"
-              placeholder="Description"
-              label="Description"
-              errorMessage={errors.description?.message}
-            />
-            {errors.description && (
-              <ErrorMessage>{errors.description.message}</ErrorMessage>
-            )}
-          </div>
+          <TextareaForm
+            register={register}
+            name="description"
+            placeholder="Description"
+            label="Description"
+            errorMessage={errors.description?.message}
+          />
 
           <div className="space-y-2">
             <p className="text-sm text-gray-600 dark:text-gray-300">
@@ -141,7 +133,11 @@ export default function Role({
               {permissions?.map((per) => (
                 <label
                   key={per.id}
-                  className="flex items-center gap-2 p-2 rounded-md border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
+                  className={`flex items-center gap-2 p-2 rounded-md border cursor-pointer ${
+                    errors.permissionIds
+                      ? "border-red-500 hover:bg-red-50 dark:hover:bg-red-950/30"
+                      : "border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800"
+                  }`}
                 >
                   <input
                     type="checkbox"
@@ -149,12 +145,21 @@ export default function Role({
                     {...register("permissionIds")}
                     className="accent-black dark:accent-white"
                   />
-                  <span className="text-sm text-gray-700 dark:text-gray-200">
+                  <span
+                    className={`text-sm ${
+                      errors.permissionIds
+                        ? "text-red-500"
+                        : "text-gray-700 dark:text-gray-200"
+                    }`}
+                  >
                     {translate[per.name]}
                   </span>
                 </label>
               ))}
             </div>
+            {errors.permissionIds && (
+              <ErrorMessage>{errors.permissionIds.message}</ErrorMessage>
+            )}
           </div>
           <Button
             variant="default"

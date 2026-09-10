@@ -22,8 +22,12 @@ export const storeScema = z.object({
   owner: z.string().min(1, "Owner name is required"),
   employees: z.number().min(1, "Number of employees must be at least 1"),
   openingHours: openingHoursSchema,
-  rating: z.number().min(1, "Rating must be at least 1"),
-  reviews: z.number().min(1, "Number of reviews must be at least 1"),
+  rating: z
+    .number("Rating must be a number")
+    .min(1, "Rating must be at least 1"),
+  reviews: z
+    .number("Number of reviews must be a number")
+    .min(1, "Number of reviews must be at least 1"),
   items: z.number().min(1, "Number of items must be at least 1").optional(),
   categories: z.array(z.string()).min(1, "Please select at least one category"),
 });
