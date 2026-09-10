@@ -5,11 +5,13 @@ import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { ProductScema } from "@/schemas/product";
 import { useGetProducts } from "@/API/product";
+import { useGetTypes } from "@/API/types";
 import DeleteProduct from "./deleteProduct";
 import { usepermissions } from "@/stores/usePermissions";
 import { Can } from "@/components/functions/can";
 import Padding from "@/components/layout/padding";
 import { Button } from "@/components/ui/button";
+import { ArrowDownUp, Pencil, Trash2 } from "lucide-react";
 
 type productFormData = z.infer<typeof ProductScema>;
 
@@ -48,10 +50,25 @@ const ShowProduct = () => {
   const products = data?.data ?? [];
   const pagination = data?.pagination;
 
+  const { data: types } = useGetTypes();
+  const typeName = (value: string) =>
+    types?.data.find((item) => item.value === value)?.name ?? value;
+
   const columns: ColumnDef<productFormData>[] = [
     {
       accessorKey: "id",
-      header: () => <span onClick={() => order("id")}>ID</span>,
+      header: () => (
+        <span
+          className="group flex items-center gap-1 cursor-pointer"
+          onClick={() => order("id")}
+        >
+          <ArrowDownUp
+            size={12}
+            className="opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+          />
+          <span>ID</span>
+        </span>
+      ),
     },
     {
       accessorKey: "name",
@@ -63,33 +80,36 @@ const ShowProduct = () => {
     },
     {
       accessorKey: "description",
-      header: () => (
-        <span onClick={() => order("description")}>Description</span>
+      header: () => <span>Description</span>,
+      cell: ({ row }) => (
+        <p
+          className="line-clamp-2 max-w-xs"
+          title={row.original.description}
+        >
+          {row.original.description}
+        </p>
       ),
     },
     {
       accessorKey: "type",
-      header: () => <span onClick={() => order("type")}>Type</span>,
+      header: () => <span>Type</span>,
+      cell: ({ row }) => <span>{typeName(row.original.type)}</span>,
     },
     {
       accessorKey: "price",
-      header: () => <span onClick={() => order("price")}>Price</span>,
+      header: () => <span>Price</span>,
     },
     {
       accessorKey: "rating",
-      header: () => <span onClick={() => order("rating")}>Rating</span>,
+      header: () => <span>Rating</span>,
     },
     {
       accessorKey: "badge",
-      header: () => <span onClick={() => order("badge")}>Badge</span>,
+      header: () => <span>Badge</span>,
     },
     {
       accessorKey: "edit",
-      header: () => (
-        <Can permission={usepermissions.updateProducts}>
-          <span>Edit</span>
-        </Can>
-      ),
+      header: () => null,
       cell: ({ row }) => {
         const id = row.original.id;
 
@@ -97,7 +117,8 @@ const ShowProduct = () => {
           <Can permission={usepermissions.updateProducts}>
             <Button
               variant="default"
-
+              size="icon"
+              aria-label="Edit"
               onClick={() =>
                 navigate({
                   to: "/products/edit/$id",
@@ -107,7 +128,7 @@ const ShowProduct = () => {
                 })
               }
             >
-              Edit
+              <Pencil />
             </Button>
           </Can>
         );
@@ -115,11 +136,7 @@ const ShowProduct = () => {
     },
     {
       accessorKey: "delete",
-      header: () => (
-        <Can permission={usepermissions.deleteProducts}>
-          <span>Delete</span>
-        </Can>
-      ),
+      header: () => null,
       cell: ({ row }) => {
         const id = row.original.id;
         const name = row.original.name;
@@ -128,13 +145,15 @@ const ShowProduct = () => {
           <Can permission={usepermissions.deleteProducts}>
             <Button
               variant="destructive"
+              size="icon"
+              aria-label="Delete"
               onClick={() => {
                 setShowDel(true);
                 setProductId(id);
                 setProductName(name);
               }}
             >
-              Delete
+              <Trash2 />
             </Button>
           </Can>
         );
@@ -151,7 +170,7 @@ const ShowProduct = () => {
           pagination={pagination}
           page={page}
           setPage={setPage}
-          title="Product"
+          title="Products"
           onClick={goToAdd}
           textButton="Add Product"
           setSearch={setSearch}

@@ -1,27 +1,95 @@
+import { useEffect } from "react";
 import { z } from "zod";
 import type {
+  Control,
+  ControllerRenderProps,
   FieldErrors,
   UseFormHandleSubmit,
   UseFormRegister,
 } from "react-hook-form";
+import { Controller } from "react-hook-form";
 
 import { registerSchema } from "@/schemas/user";
 import { Spinner } from "@/components/ui/spinner";
 
-import { useRoles } from "@/API/role";
+import { useGetRoles } from "@/API/role";
 import InputForm from "@/components/forms/input";
-import { Calendar, Lock, Mail, UserRound } from "lucide-react";
+import {
+  Building2,
+  Calendar,
+  Globe,
+  Hash,
+  Lock,
+  Mail,
+  MapPin,
+  Phone as PhoneIcon,
+  UserRound,
+} from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import TitleContent from "@/components/layout/titleContent";
 import Container from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type registerFormData = z.infer<typeof registerSchema>;
 
 type Role = {
-  id: number;
+  id?: number;
   name: string;
 };
+
+function RoleSelectField({
+  field,
+  roles,
+  currentRoleName,
+}: {
+  field: ControllerRenderProps<registerFormData, "roleId">;
+  roles?: Role[];
+  currentRoleName?: string;
+}) {
+  const matchedById = roles?.find(
+    (role) => String(role.id) === String(field.value),
+  );
+  const matchedByName = !matchedById
+    ? roles?.find((role) => role.name === currentRoleName)
+    : undefined;
+  const selectedRole = matchedById ?? matchedByName;
+
+  useEffect(() => {
+    if (!matchedById && matchedByName) {
+      field.onChange(matchedByName.id);
+    }
+  }, [matchedById, matchedByName, field]);
+
+  return (
+    <Select
+      value={selectedRole ? String(selectedRole.id) : ""}
+      onValueChange={(value) => field.onChange(Number(value))}
+    >
+      <SelectTrigger className="w-full">
+        <SelectValue placeholder="Select role">
+          {selectedRole?.name}
+        </SelectValue>
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          {roles?.map((role) => (
+            <SelectItem key={role.id} value={String(role.id)}>
+              {role.name}
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  );
+}
 
 type Props = {
   title: string;
@@ -29,6 +97,7 @@ type Props = {
   onsubmit: (data: registerFormData) => void;
   errors: FieldErrors<registerFormData>;
   register: UseFormRegister<registerFormData>;
+  control?: Control<registerFormData>;
   isPending?: boolean;
   childrenButton: string;
   hasPassword?: boolean;
@@ -37,6 +106,7 @@ type Props = {
   isRegister?: boolean;
   active?: "add" | "edit";
   hasLogin?: "yes" | "no";
+  currentRoleName?: string;
 };
 
 export default function RegisterForm({
@@ -45,6 +115,7 @@ export default function RegisterForm({
   onsubmit,
   errors,
   register,
+  control,
   isPending,
   childrenButton,
   hasPassword = true,
@@ -53,8 +124,15 @@ export default function RegisterForm({
   active = "add",
   hasLogin = "no",
   isRegister,
+  currentRoleName,
 }: Props) {
-  const { data: roles } = useRoles();
+  const { data: roles } = useGetRoles(
+    "id",
+    "asc",
+    1,
+    "",
+    active === "edit",
+  );
 
   return (
     <Container>
@@ -129,20 +207,88 @@ export default function RegisterForm({
             />
           </div>
 
-          {active === "edit" && (
+          <div>
+            <InputForm
+              register={register}
+              icon={<PhoneIcon size={22} />}
+              name="phone"
+              placeholder="Phone"
+              label="Phone"
+              errorMessage={errors.phone?.message}
+            />
+          </div>
+
+          <div className="grid grid-cols-12 gap-8">
+            <div className="col-span-6">
+              <InputForm
+                register={register}
+                icon={<MapPin size={22} />}
+                name="address.street"
+                placeholder="Street"
+                label="Street"
+                errorMessage={errors.address?.street?.message}
+              />
+            </div>
+            <div className="col-span-6">
+              <InputForm
+                register={register}
+                icon={<Building2 size={22} />}
+                name="address.city"
+                placeholder="City"
+                label="City"
+                errorMessage={errors.address?.city?.message}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-12 gap-8">
+            <div className="col-span-4">
+              <InputForm
+                register={register}
+                icon={<Building2 size={22} />}
+                name="address.state"
+                placeholder="State"
+                label="State"
+                errorMessage={errors.address?.state?.message}
+              />
+            </div>
+            <div className="col-span-4">
+              <InputForm
+                register={register}
+                icon={<Hash size={22} />}
+                name="address.zipCode"
+                placeholder="ZIP Code"
+                label="ZIP Code"
+                errorMessage={errors.address?.zipCode?.message}
+              />
+            </div>
+            <div className="col-span-4">
+              <InputForm
+                register={register}
+                icon={<Globe size={22} />}
+                name="address.country"
+                placeholder="Country"
+                label="Country"
+                errorMessage={errors.address?.country?.message}
+              />
+            </div>
+          </div>
+
+          {active === "edit" && control && (
             <div className="space-y-1">
               <label className="text-sm text-muted-foreground">Role</label>
 
-              <select
-                {...register("roleId", { valueAsNumber: true })}
-                className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-ring/50"
-              >
-                {roles?.map((role: Role) => (
-                  <option key={role.id} value={role.id}>
-                    {role.name}
-                  </option>
-                ))}
-              </select>
+              <Controller
+                control={control}
+                name="roleId"
+                render={({ field }) => (
+                  <RoleSelectField
+                    field={field}
+                    roles={roles?.data}
+                    currentRoleName={currentRoleName}
+                  />
+                )}
+              />
             </div>
           )}
 

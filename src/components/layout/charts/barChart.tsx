@@ -51,7 +51,9 @@ export default function ChartBar({
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value}
+              tickFormatter={(value: string) =>
+                value.length > 6 ? `${value.slice(0, 6)}...` : value
+              }
             />
             <YAxis domain={[0, 6]} hide />
             <ChartTooltip cursor={true} content={<ChartTooltipContent />} />

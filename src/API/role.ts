@@ -21,22 +21,12 @@ type roleResponseType = {
   };
 };
 
-export const useGetRolesSearch = (search = "") => {
-  return useQuery<roleResponseType>({
-    queryKey: [...queryKey, search],
-
-    queryFn: async () => {
-      const res = await api.get(`/api/roles?search=${search}`);
-
-      return res.data;
-    },
-  });
-};
 export const useGetRoles = (
   sortBy = "id",
   sortOrder = "asc",
   page = 1,
   search = "",
+  enabled = true,
 ) => {
   return useQuery<roleResponseType>({
     queryKey: [...queryKey, sortBy, sortOrder, page, search],
@@ -47,6 +37,7 @@ export const useGetRoles = (
       return res.data;
     },
     placeholderData: keepPreviousData,
+    enabled,
   });
 };
 
@@ -67,7 +58,7 @@ export const useAddRole = () => {
 
 export const useGetRole = (id?: number) => {
   return useQuery({
-    queryKey: [queryKey, id],
+    queryKey: [...queryKey, id],
     queryFn: async () => {
       const res = await api.get<roleType>(`/api/roles/${id}`);
       return res.data;
@@ -87,16 +78,6 @@ export const useUpdateRole = () => {
     },
   });
 };
-export const useRoles = () => {
-  return useQuery({
-    queryKey,
-    queryFn: async () => {
-      const res = await api.get("/api/roles");
-      return res.data.data;
-    },
-  });
-};
-
 export const useDeleteRole = () => {
   const queryClient = useQueryClient();
 

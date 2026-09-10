@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import DeleteProduct from "@/pages/product/deleteProduct";
 import { useNavigate } from "@tanstack/react-router";
+import { Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 interface Props {
@@ -22,16 +23,17 @@ export default function OnlyCard({
   const navigate = useNavigate();
   return (
     <>
-      <div className="cursor-pointer h-77 w-60 mx-1 my-4 rounded-2xl bg-white shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
-        <img
-          src={image}
-          alt={name}
-          className="w-full h-52 object-cover"
-          onClick={onClick}
-        />
-        <div className="p-4">
+      <div className="group/item overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+        <div className="cursor-pointer overflow-hidden" onClick={onClick}>
+          <img
+            src={image}
+            alt={name}
+            className="h-40 w-full object-cover transition-transform duration-300 group-hover/item:scale-105"
+          />
+        </div>
+        <div className="p-3">
           <h2
-            className="text-base font-semibold text-gray-800 cursor-pointer"
+            className="cursor-pointer truncate text-sm font-semibold text-foreground"
             onClick={onClick}
           >
             {name}
@@ -51,6 +53,7 @@ export default function OnlyCard({
               variant="default"
               className="flex-1"
             >
+              <Pencil />
               Edit
             </Button>
             <Button
@@ -60,6 +63,7 @@ export default function OnlyCard({
               variant="destructive"
               className="flex-1"
             >
+              <Trash2 />
               Delete
             </Button>
           </div>

@@ -5,7 +5,7 @@ export const ProductScema = z.object({
   discountPercentage: z
     .number()
     .min(0, "Discount must be at least 0%")
-    .max(100, "Discount cannot exceed 100%"),
+    .max(99, "Discount cannot exceed 99%"),
   storeName: z.string().min(1, "Store name is required"),
   name: z.string().min(1, "Product name is required"),
   description: z.string().min(1, "Description is required"),

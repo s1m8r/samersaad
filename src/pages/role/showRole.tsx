@@ -6,7 +6,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { roleScema } from "@/schemas/role";
 import { useGetRoles } from "@/API/role";
 import DeleteRole from "./DeleteRole";
-import { ArrowDownUp } from "lucide-react";
+import { ArrowDownUp, Pencil, Trash2 } from "lucide-react";
 import { usepermissions } from "@/stores/usePermissions";
 import { Can } from "@/components/functions/can";
 import Padding from "@/components/layout/padding";
@@ -74,23 +74,25 @@ const ShowRole = () => {
     {
       accessorKey: "description",
       size: 10,
-      header: () => (
-        <span onClick={() => order("description")}>Description</span>
+      header: () => <span>Description</span>,
+      cell: ({ row }) => (
+        <p
+          className="line-clamp-2 max-w-xs"
+          title={row.original.description}
+        >
+          {row.original.description}
+        </p>
       ),
     },
     {
       accessorKey: "isActive",
       minSize: 2,
-      header: () => <span onClick={() => order("isActive")}>Active</span>,
+      header: () => <span>Active</span>,
     },
     {
       accessorKey: "edit",
       size: 2,
-      header: () => (
-        <Can permission={usepermissions.updateRoles}>
-          <span>Edit</span>
-        </Can>
-      ),
+      header: () => null,
       cell: ({ row }) => {
         const id = row.original.id;
 
@@ -98,6 +100,8 @@ const ShowRole = () => {
           <Can permission={usepermissions.updateRoles}>
             <Button
               variant="default"
+              size="icon"
+              aria-label="Edit"
               onClick={() =>
                 navigate({
                   to: "/roles/edit/$id",
@@ -110,7 +114,7 @@ const ShowRole = () => {
                 })
               }
             >
-              Edit
+              <Pencil />
             </Button>
           </Can>
         );
@@ -119,11 +123,7 @@ const ShowRole = () => {
     {
       accessorKey: "delete",
       size: 5,
-      header: () => (
-        <Can permission={usepermissions.deleteRoles}>
-          <span>Delete</span>
-        </Can>
-      ),
+      header: () => null,
       cell: ({ row }) => {
         const id = row.original.id;
         const name = row.original.name;
@@ -132,13 +132,15 @@ const ShowRole = () => {
           <Can permission={usepermissions.deleteRoles}>
             <Button
               variant="destructive"
+              size="icon"
+              aria-label="Delete"
               onClick={() => {
                 setShowDel(true);
                 setRoleId(id);
                 setRoleName(name);
               }}
             >
-              Delete
+              <Trash2 />
             </Button>
           </Can>
         );

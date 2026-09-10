@@ -27,63 +27,22 @@ export const useGetProducts = (
   sortOrder = "asc",
   page = 1,
   search = "",
+  limit = 10,
+  fromDate?: string,
 ) => {
   return useQuery<storeResponseType>({
-    queryKey: [...queryKey, sortBy, sortOrder, page, search],
+    queryKey: [...queryKey, sortBy, sortOrder, page, search, limit, fromDate],
 
     queryFn: async () => {
       const res = await api.get(
-        `api/collection/product?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&search=${search}&limit=10`,
+        `api/collection/product?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&search=${search}&limit=${limit}${
+          fromDate ? `&fromDate=${fromDate}` : ""
+        }`,
       );
 
       return res.data;
     },
     placeholderData: keepPreviousData,
-  });
-};
-export const useGetProductsStatistics = (
-  sortBy = "id",
-  sortOrder = "asc",
-  search = "",
-  page = 1,
-) => {
-  return useQuery<storeResponseType>({
-    queryKey: [...queryKey, sortBy, sortOrder, search, page],
-
-    queryFn: async () => {
-      const res = await api.get(
-        `api/collection/product?sortBy=${sortBy}&sortOrder=${sortOrder}&search=${search}&page=${page}`,
-      );
-
-      return res.data;
-    },
-    placeholderData: keepPreviousData,
-  });
-};
-export const useGetProductsLimit = (search: string, fromDate: string) => {
-  return useQuery<storeResponseType>({
-    queryKey: [...queryKey, search, fromDate],
-
-    queryFn: async () => {
-      const res = await api.get(
-        `api/collection/product?limit=9999999&search=${search}&fromDate=${fromDate}`,
-      );
-
-      return res.data;
-    },
-    placeholderData: keepPreviousData,
-  });
-};
-
-export const useGetProductsSearch = (search = "") => {
-  return useQuery<storeResponseType>({
-    queryKey: [...queryKey, search],
-
-    queryFn: async () => {
-      const res = await api.get(`api/collection/product?search=${search}`);
-
-      return res.data;
-    },
   });
 };
 
@@ -104,7 +63,7 @@ export const useAddProduct = () => {
 
 export const useGetProduct = (id?: number) => {
   return useQuery({
-    queryKey: [queryKey, id],
+    queryKey: [...queryKey, id],
     queryFn: async () => {
       const res = await api.get<productFormData>(
         `/api/collection/product/${id}`,

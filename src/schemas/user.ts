@@ -24,7 +24,7 @@ export const registerSchema = z.object({
     .optional(),
   age: z.number(),
   address: addressSchema.optional(),
-  phone: z.string().optional(),
+  phone: z.string().min(1, "Phone is required").optional(),
   role: z.string().optional(),
   roleId: z.number().optional(),
   isActive: z.boolean().optional(),

@@ -39,13 +39,16 @@ const SideBar = () => {
     }, 200);
   };
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarHeader className="px-3 pt-4 pb-2">
-        <Link to={"/"} className="flex items-center gap-2.5 px-1">
+        <Link
+          to={"/"}
+          className="flex items-center gap-2.5 px-1 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+        >
           <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-white p-1 shadow-sm">
             <img src="/logo.png" alt="logo" className="size-full object-contain" />
           </span>
-          <span className="font-heading text-sm font-semibold tracking-tight text-sidebar-foreground">
+          <span className="font-heading text-sm font-semibold tracking-tight text-sidebar-foreground group-data-[collapsible=icon]:hidden">
             Dashboard Samer Store
           </span>
         </Link>
@@ -122,9 +125,11 @@ const SideBar = () => {
             <SidebarMenuButton>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <span className="flex items-center gap-2 w-full">
+                  <span className="flex w-full items-center gap-2 group-data-[collapsible=icon]:justify-center">
                     <Settings />
-                    <span>Settings</span>
+                    <span className="group-data-[collapsible=icon]:hidden">
+                      Settings
+                    </span>
                   </span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>

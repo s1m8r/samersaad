@@ -7,7 +7,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import DeleteUser from "./deleteUser";
-import { ArrowDownUp } from "lucide-react";
+import { ArrowDownUp, Pencil, Trash2 } from "lucide-react";
 import { Can } from "@/components/functions/can";
 import { usepermissions } from "@/stores/usePermissions";
 import Padding from "@/components/layout/padding";
@@ -83,15 +83,7 @@ const ShowUser = () => {
     {
       accessorKey: "email",
       size: 25,
-      header: () => (
-        <span
-          onClick={() => {
-            order("email");
-          }}
-        >
-          Email
-        </span>
-      ),
+      header: () => <span>Email</span>,
     },
     {
       accessorKey: "address",
@@ -122,11 +114,7 @@ const ShowUser = () => {
     {
       accessorKey: "x",
       size: 5,
-      header: () => (
-        <Can permission={usepermissions.updateUser}>
-          <span>Edit</span>
-        </Can>
-      ),
+      header: () => null,
       cell: ({ row }) => {
         const id = row.original.id;
         return (
@@ -144,8 +132,10 @@ const ShowUser = () => {
                 })
               }
               variant="default"
+              size="icon"
+              aria-label="Edit"
             >
-              Edit
+              <Pencil />
             </Button>
           </Can>
         );
@@ -154,11 +144,7 @@ const ShowUser = () => {
     {
       accessorKey: "y",
       size: 5,
-      header: () => (
-        <Can permission={usepermissions.deleteUser}>
-          <span>Delete</span>
-        </Can>
-      ),
+      header: () => null,
       cell: ({ row }) => {
         const id = row.original.id;
         const name = row.original.firstName;
@@ -171,8 +157,10 @@ const ShowUser = () => {
                 setUserName(name);
               }}
               variant="destructive"
+              size="icon"
+              aria-label="Delete"
             >
-              Delete
+              <Trash2 />
             </Button>
           </Can>
         );

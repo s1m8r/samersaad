@@ -41,41 +41,6 @@ export const useGetStores = (
     placeholderData: keepPreviousData,
   });
 };
-export const useGetStoresSearch = (
-  search = "",
-  sortBy = "rating",
-  sortOrder = "desc",
-) => {
-  return useQuery<storeResponseType>({
-    queryKey: [...queryKey, search, sortBy, sortOrder],
-
-    queryFn: async () => {
-      const res = await api.get(
-        `api/stores?search=${search}&sortBy=${sortBy}&sortOrder=${sortOrder}`,
-      );
-
-      return res.data;
-    },
-  });
-};
-export const useGetStoresByIdStore = (
-  // search = "",
-  // sortBy = "rating",
-  // sortOrder = "desc",
-  storeId = 6,
-  // "storeId": 6
-) => {
-  return useQuery<storeResponseType>({
-    queryKey: [...queryKey, storeId],
-
-    queryFn: async () => {
-      const res = await api.get(`api/stores?storeId=${storeId}`);
-
-      return res.data;
-    },
-  });
-};
-
 export const useAddStores = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -93,7 +58,7 @@ export const useAddStores = () => {
 
 export const useGetStore = (id?: number) => {
   return useQuery({
-    queryKey: [queryKey, id],
+    queryKey: [...queryKey, id],
     queryFn: async () => {
       const res = await api.get<storeFormData>(`api/stores/${id}`);
       return res.data;

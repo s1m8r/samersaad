@@ -24,14 +24,6 @@ const AddUser = () => {
     const dataFormat = {
       ...data,
       age: Number(data.age),
-      address: {
-        street: "Al-Sadr City",
-        city: "Baghdad",
-        state: "Baghdad",
-        zipCode: "10001",
-        country: "Iraq",
-      },
-      phone: "07722759695",
       role: "user",
       roleId: 3,
       isActive: true,

@@ -20,15 +20,15 @@ import {
   useWatch,
 } from "react-hook-form";
 import { Spinner } from "@/components/ui/spinner";
-import { useGetStoresSearch } from "@/API/store";
+import { useGetStores } from "@/API/store";
 import InputForm from "@/components/forms/input";
+import TextareaForm from "@/components/forms/textarea";
 import {
   Archive,
   CircleDollarSign,
   Image as ImageIcon,
   Package,
   PlusIcon,
-  SquarePen,
   Star,
   Trash2,
 } from "lucide-react";
@@ -85,7 +85,7 @@ export default function Product({
   const [search, setSearch] = useState("");
   const [inputValue, setInputValue] = useState(defaultStoreName);
 
-  const { data } = useGetStoresSearch(search);
+  const { data } = useGetStores("rating", "desc", 1, search);
 
   const stores = data?.data ?? [];
 
@@ -232,11 +232,10 @@ export default function Product({
             errorMessage={errors.name?.message}
           />
 
-          <InputForm
+          <TextareaForm
             register={register}
             name="description"
             label="Description"
-            icon={<SquarePen />}
             errorMessage={errors.description?.message}
             placeholder="Description"
           />

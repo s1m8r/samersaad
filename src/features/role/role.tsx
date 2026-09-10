@@ -10,7 +10,8 @@ import { usePermissions } from "@/API/permissions";
 import ErrorMessage from "@/components/forms/errors";
 import { Spinner } from "@/components/ui/spinner";
 import InputForm from "@/components/forms/input";
-import { SquarePen, UserKey } from "lucide-react";
+import TextareaForm from "@/components/forms/textarea";
+import { UserKey } from "lucide-react";
 import TitleContent from "@/components/layout/titleContent";
 import { usepermissions } from "@/stores/usePermissions";
 import Container from "@/components/layout/container";
@@ -120,9 +121,8 @@ export default function Role({
           </div>
 
           <div className="space-y-1">
-            <InputForm
+            <TextareaForm
               register={register}
-              icon={<SquarePen size={22} />}
               name="description"
               placeholder="Description"
               label="Description"

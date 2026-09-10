@@ -27,27 +27,17 @@ export const useGetUsers = (
   sortOrder = "asc",
   page = 1,
   search = "",
+  limit?: number,
+  fromDate?: string,
 ) => {
   return useQuery<GetUsersResponse>({
-    queryKey: [...queryKey, sortBy, sortOrder, page, search],
+    queryKey: [...queryKey, sortBy, sortOrder, page, search, limit, fromDate],
 
     queryFn: async () => {
       const res = await api.get(
-        `/api/users?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&search=${search}`,
-      );
-
-      return res.data;
-    },
-    placeholderData: keepPreviousData,
-  });
-};
-export const useGetUsersStatistics = (fromDate?: string) => {
-  return useQuery<GetUsersResponse>({
-    queryKey: [...queryKey, fromDate],
-
-    queryFn: async () => {
-      const res = await api.get(
-        `/api/users?&limit=1000000&fromDate=${fromDate}`,
+        `/api/users?sortBy=${sortBy}&sortOrder=${sortOrder}&page=${page}&search=${search}${
+          limit ? `&limit=${limit}` : ""
+        }${fromDate ? `&fromDate=${fromDate}` : ""}`,
       );
 
       return res.data;

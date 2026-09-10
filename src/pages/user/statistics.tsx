@@ -1,4 +1,4 @@
-import { useGetUsers, useGetUsersStatistics } from "@/API/user";
+import { useGetUsers } from "@/API/user";
 import CardNew from "@/components/layout/cardNew";
 import { LineChartItems } from "@/components/layout/charts/lineChart";
 import DesignCard from "@/components/layout/DesignCard";
@@ -8,11 +8,17 @@ import { UserCheck2, UserPlus2, Users2 } from "lucide-react";
 import { useState } from "react";
 
 const StatisticsUser = () => {
-  const { data: users } = useGetUsers();
-  const { data: usersRole } = useGetUsers("id", "asc", 1, "admin");
+  const { data: users } = useGetUsers("id", "asc", 1, "", 1000000);
   const [time, setTime] = useState("");
-  const { data: newUsers } = useGetUsersStatistics(time.toString());
-  const roleAdmin = usersRole?.data.filter((item) => item.roleId === 1);
+  const { data: newUsers } = useGetUsers(
+    "id",
+    "asc",
+    1,
+    "",
+    1000000,
+    time.toString(),
+  );
+  const roleAdmin = users?.data.filter((item) => item.roleId === 1);
   const limitUsers = newUsers?.data.map((item) => ({
     createdAt: item.createdAt!,
   }));

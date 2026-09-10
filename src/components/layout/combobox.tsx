@@ -6,6 +6,8 @@ import {
   ComboboxItem,
   ComboboxList,
 } from "@/components/ui/combobox";
+import { InputGroupAddon } from "@/components/ui/input-group";
+import { SearchIcon } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import type { UseFormSetValue } from "react-hook-form";
 interface items {
@@ -51,7 +53,11 @@ export default function ComboboxItems({
               setSelect("");
               setValue?.("id", 0);
             }}
-          />
+          >
+            <InputGroupAddon align="inline-start">
+              <SearchIcon />
+            </InputGroupAddon>
+          </ComboboxInput>
         </div>
         <ComboboxContent>
           <ComboboxEmpty>No items found.</ComboboxEmpty>

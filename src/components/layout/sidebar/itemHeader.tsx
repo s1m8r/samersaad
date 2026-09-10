@@ -42,15 +42,17 @@ export default function ItemHeader({
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton asChild isActive={isActive} className="group h-9">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between group-data-[collapsible=icon]:justify-center">
               <Can permission={permission}>
-                <Link to={path} className="flex flex-1 items-center gap-2.5">
+                <Link to={path} className="flex flex-1 items-center gap-2.5 group-data-[collapsible=icon]:flex-none">
                   <span
                     className={`[&>svg]:size-4 ${isActive ? "text-sidebar-primary" : ""}`}
                   >
                     {icon}
                   </span>
-                  <span>{children}</span>
+                  <span className="group-data-[collapsible=icon]:hidden">
+                    {children}
+                  </span>
                 </Link>
               </Can>
               {pathAdd && (
@@ -60,7 +62,7 @@ export default function ItemHeader({
                       <Link
                         to={pathAdd}
                         search={{ from: pathname }}
-                        className="rounded-full p-1 text-sidebar-foreground/50 opacity-0 transition-all hover:bg-sidebar-primary/15 hover:text-sidebar-primary group-hover:opacity-100"
+                        className="rounded-full p-1 text-sidebar-foreground/50 opacity-0 transition-all hover:bg-sidebar-primary/15 hover:text-sidebar-primary group-hover:opacity-100 group-data-[collapsible=icon]:hidden"
                       >
                         <PlusCircleIcon size={18} />
                       </Link>

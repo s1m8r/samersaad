@@ -20,7 +20,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { SearchIcon } from "lucide-react";
+import { Plus, SearchIcon } from "lucide-react";
 import useDebounce from "../functions/searchDelay";
 import { Can } from "../functions/can";
 import { Button } from "../ui/button";
@@ -74,6 +74,7 @@ export default function Table<T>({
           <h1 className="text-2xl font-bold capitalize">{title}</h1>
           <Can permission={permissionAdd}>
             <Button onClick={onClick} variant="default">
+              <Plus />
               {textButton}
             </Button>
           </Can>
@@ -105,7 +106,7 @@ export default function Table<T>({
         </Field>
       </div>
       <div className="max-h-[500px] w-full overflow-x-auto overflow-y-auto rounded-xl border border-border bg-card shadow-sm">
-        <table className="w-full animate-in fade-in-0 overflow-auto text-sm duration-300">
+        <table className="w-full animate-in fade-in-0 slide-in-from-bottom-2 overflow-auto text-sm duration-300">
           <thead className="sticky top-0 z-10 bg-muted text-muted-foreground">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
@@ -126,10 +127,11 @@ export default function Table<T>({
           </thead>
 
           <tbody className="divide-y divide-border">
-            {table.getRowModel().rows.map((row) => (
+            {table.getRowModel().rows.map((row, index) => (
               <tr
                 key={row.id}
-                className="transition-colors hover:bg-muted/40"
+                className="animate-in fade-in-0 slide-in-from-bottom-1 fill-mode-both transition-colors duration-300 hover:bg-muted/40"
+                style={{ animationDelay: `${Math.min(index, 10) * 40}ms` }}
               >
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id} className="px-4 py-3 text-foreground">

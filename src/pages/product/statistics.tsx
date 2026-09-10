@@ -1,4 +1,4 @@
-import { useGetProductsStatistics } from "@/API/product";
+import { useGetProducts } from "@/API/product";
 import { useGetStores } from "@/API/store";
 import CardNew from "@/components/layout/cardNew";
 
@@ -18,13 +18,15 @@ const StatisticsProduct = () => {
   const [search, setSearch] = useState("");
   const [select, setSelect] = useState("");
 
-  const { data } = useGetProductsStatistics(sortBy, sortOrder, select);
-  const { data: badge } = useGetProductsStatistics(
+  const { data } = useGetProducts(sortBy, sortOrder, 1, select, 1000000);
+  const { data: badge } = useGetProducts(
     sortByBadge,
     sortOrder,
+    1,
     select,
+    1000000,
   );
-  const { data: stores } = useGetStores(search);
+  const { data: stores } = useGetStores("id", "asc", 1, search);
   const chartData =
     data?.data.map((item) => ({
       name: item.name,

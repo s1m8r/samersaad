@@ -1,5 +1,5 @@
-import { useGetProducts, useGetProductsLimit } from "@/API/product";
-import { useGetStoresSearch } from "@/API/store";
+import { useGetProducts } from "@/API/product";
+import { useGetStores } from "@/API/store";
 import { Colors } from "@/components/constants/colors";
 import CardNew from "@/components/layout/cardNew";
 import ChartBar from "@/components/layout/charts/barChart";
@@ -16,10 +16,17 @@ const StatisticsStores = () => {
   const [search, setSearch] = useState("");
   const [select, setSelect] = useState("");
   const [time, setTime] = useState("");
-  const { data: stores } = useGetStoresSearch(search);
-  const { data: ratingStore } = useGetStoresSearch(select);
-  const { data: product } = useGetProducts("nameStore", "asc", 1, select);
-  const { data: limit } = useGetProductsLimit(select, time);
+  const { data: stores } = useGetStores("rating", "desc", 1, search);
+  const ratingStore = stores?.data.find((item) => item.name === select);
+  const { data: product } = useGetProducts("storeName", "asc", 1, select);
+  const { data: limit } = useGetProducts(
+    "id",
+    "asc",
+    1,
+    select,
+    9999999,
+    time,
+  );
   const dataStores =
     stores?.data.map((item) => ({
       id: item.id!,
@@ -67,8 +74,8 @@ const StatisticsStores = () => {
         {select && (
           <CardNew
             name={`Rating`}
-            count={ratingStore?.data[0].rating ?? 0}
-            itemSelect={ratingStore?.data[0].name ?? ""}
+            count={ratingStore?.rating ?? 0}
+            itemSelect={ratingStore?.name ?? ""}
             icon={<TrendingUp />}
           />
         )}

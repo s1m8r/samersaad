@@ -20,6 +20,7 @@ const EditUser = () => {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors, isDirty },
   } = useForm({
     resolver: zodResolver(registerSchema),
@@ -31,14 +32,6 @@ const EditUser = () => {
   const onsubmit = (data: registerFormData) => {
     const formatData = {
       ...data,
-      address: {
-        street: getUser?.address?.street,
-        city: getUser?.address?.city,
-        state: getUser?.address?.state,
-        zipCode: getUser?.address?.zipCode,
-        country: getUser?.address?.country,
-      },
-      phone: getUser?.phone,
       isActive: getUser?.isActive,
     };
     mutate(
@@ -73,12 +66,14 @@ const EditUser = () => {
       onsubmit={onsubmit}
       errors={errors}
       register={register}
+      control={control}
       isPending={isPending}
       childrenButton="Edit"
       isLoading={isLoading}
       hasPassword={false}
       active="edit"
       isDirty={isDirty}
+      currentRoleName={getUser?.role}
     />
   );
 };

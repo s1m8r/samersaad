@@ -6,7 +6,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { storeScema } from "@/schemas/store";
 import { useGetStores } from "@/API/store";
 import DeleteStore from "./deleteStore";
-import { ArrowDownUp } from "lucide-react";
+import { ArrowDownUp, Pencil, Trash2 } from "lucide-react";
 import { usepermissions } from "@/stores/usePermissions";
 import { Can } from "@/components/functions/can";
 import Padding from "@/components/layout/padding";
@@ -75,7 +75,7 @@ const ShowStore = () => {
         const name = row.original.name;
         return (
           <span
-            className=" cursor-pointer"
+            className="cursor-pointer font-semibold text-primary hover:underline"
             onClick={() =>
               navigate({
                 to: "/stores/store/$id",
@@ -121,17 +121,15 @@ const ShowStore = () => {
     {
       accessorKey: "edit",
       size: 5,
-      header: () => (
-        <Can permission={usepermissions.updateStores}>
-          <span>Edit</span>
-        </Can>
-      ),
+      header: () => null,
       cell: ({ row }) => {
         const id = row.original.id;
         return (
           <Can permission={usepermissions.updateStores}>
             <Button
               variant="default"
+              size="icon"
+              aria-label="Edit"
               onClick={() =>
                 navigate({
                   to: "/stores/edit/$id",
@@ -144,7 +142,7 @@ const ShowStore = () => {
                 })
               }
             >
-              Edit
+              <Pencil />
             </Button>
           </Can>
         );
@@ -153,11 +151,7 @@ const ShowStore = () => {
     {
       accessorKey: "delete",
       size: 5,
-      header: () => (
-        <Can permission={usepermissions.deleteStores}>
-          <span>Delete</span>
-        </Can>
-      ),
+      header: () => null,
       cell: ({ row }) => {
         const id = row.original.id;
         const name = row.original.name;
@@ -166,13 +160,15 @@ const ShowStore = () => {
           <Can permission={usepermissions.deleteStores}>
             <Button
               variant="destructive"
+              size="icon"
+              aria-label="Delete"
               onClick={() => {
                 setShowDel(true);
                 setStoreId(id);
                 setStoreName(name);
               }}
             >
-              Delete
+              <Trash2 />
             </Button>
           </Can>
         );
