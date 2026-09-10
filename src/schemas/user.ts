@@ -24,7 +24,10 @@ export const registerSchema = z.object({
     .optional(),
   age: z.number(),
   address: addressSchema.optional(),
-  phone: z.string().min(1, "Phone is required").optional(),
+  phone: z
+    .string()
+    .length(11, "Phone number must be 11 digits")
+    .optional(),
   role: z.string().optional(),
   roleId: z.number().optional(),
   isActive: z.boolean().optional(),

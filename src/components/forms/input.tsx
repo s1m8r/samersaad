@@ -47,14 +47,14 @@ export default function InputForm<T extends FieldValues>({
   return (
     <div className="space-y-1">
       <Field className="w-full" data-invalid={!!errorMessage}>
-        <FieldLabel htmlFor="inline-start-input">{label}</FieldLabel>
+        <FieldLabel htmlFor={name}>{label}</FieldLabel>
         <InputGroup>
           <InputGroupInput
             type={typeshow}
             {...register(name, options)}
             placeholder={placeholder}
             aria-invalid={!!errorMessage}
-            id="inline-start-input"
+            id={name}
             step="any"
           />
           {isPassword && (

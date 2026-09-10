@@ -3,11 +3,14 @@ import RegisterForm from "@/features/register/formRegister/register";
 import AuthBrandPanel from "@/components/layout/authBrandPanel";
 import { registerSchema } from "@/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { toast } from "sonner";
 type registerFormData = z.infer<typeof registerSchema>;
 
 const Register = () => {
+  const navigate = useNavigate();
   const { mutate, isPending } = useRegister();
   const {
     register,
@@ -24,7 +27,17 @@ const Register = () => {
       roleId: 3,
       isActive: true,
     };
-    mutate(dataFormat);
+    mutate(dataFormat, {
+      onSuccess: () => {
+        toast.success("Account created successfully. Please log in.");
+        setTimeout(() => {
+          navigate({ to: "/login" });
+        }, 200);
+      },
+      onError: (err) => {
+        toast.error(err?.message);
+      },
+    });
   };
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
