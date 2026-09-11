@@ -44,7 +44,7 @@ const ShowRole = () => {
   };
   const [search, setSearch] = useState("");
 
-  const { data } = useGetRoles(sortBy, sortOrder, page, search);
+  const { data, isFetching } = useGetRoles(sortBy, sortOrder, page, search);
 
   const roles = data?.data ?? [];
   const pagination = data?.pagination;
@@ -162,6 +162,7 @@ const ShowRole = () => {
           onClick={goToAdd}
           setSearch={setSearch}
           permissionAdd={usepermissions.createRoles}
+          isSearching={isFetching}
         />
       )}
 

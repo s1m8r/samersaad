@@ -24,6 +24,7 @@ import { Plus, SearchIcon } from "lucide-react";
 import useDebounce from "../functions/searchDelay";
 import { Can } from "../functions/can";
 import { Button } from "../ui/button";
+import { Spinner } from "../ui/spinner";
 
 type Props<T> = {
   data: T[];
@@ -42,6 +43,7 @@ type Props<T> = {
 
   page: number;
   setPage: (page: number) => void;
+  isSearching?: boolean;
 };
 
 export default function Table<T>({
@@ -55,6 +57,7 @@ export default function Table<T>({
   textButton,
   setSearch,
   permissionAdd,
+  isSearching = false,
 }: Props<T>) {
   const table = useReactTable({
     data,
@@ -88,7 +91,11 @@ export default function Table<T>({
               onChange={(e) => setQuery(e.target.value)}
             />
             <InputGroupAddon align="inline-start">
-              <SearchIcon />
+              {isSearching && query.length > 0 ? (
+                <Spinner />
+              ) : (
+                <SearchIcon />
+              )}
             </InputGroupAddon>
             {query.length > 0 && (
               <InputGroupAddon

@@ -44,7 +44,7 @@ const ShowStore = () => {
   };
   const [search, setSearch] = useState("");
 
-  const { data } = useGetStores(sortBy, sortOrder, page, search);
+  const { data, isFetching } = useGetStores(sortBy, sortOrder, page, search);
 
   const stores = data?.data ?? [];
   const pagination = data?.pagination;
@@ -190,6 +190,7 @@ const ShowStore = () => {
           onClick={goToAdd}
           setSearch={setSearch}
           permissionAdd={usepermissions.createStores}
+          isSearching={isFetching}
         />
       )}
 

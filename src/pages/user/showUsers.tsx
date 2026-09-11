@@ -32,7 +32,7 @@ const ShowUser = () => {
     }
   };
   const [search, setSearch] = useState("");
-  const { data } = useGetUsers(sortBy, sortOrder, page, search);
+  const { data, isFetching } = useGetUsers(sortBy, sortOrder, page, search);
   const users = data?.data ?? [];
   const pagination = data?.pagination;
   const goToAdd = () => {
@@ -181,6 +181,7 @@ const ShowUser = () => {
           onClick={goToAdd}
           setSearch={setSearch}
           permissionAdd={usepermissions.createUser}
+          isSearching={isFetching}
         />
       )}
 

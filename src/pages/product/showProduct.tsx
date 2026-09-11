@@ -45,7 +45,7 @@ const ShowProduct = () => {
   };
   const [search, setSearch] = useState("");
 
-  const { data } = useGetProducts(sortBy, sortOrder, page, search);
+  const { data, isFetching } = useGetProducts(sortBy, sortOrder, page, search);
 
   const products = data?.data ?? [];
   const pagination = data?.pagination;
@@ -174,6 +174,7 @@ const ShowProduct = () => {
           onClick={goToAdd}
           textButton="Add Product"
           setSearch={setSearch}
+          isSearching={isFetching}
           permissionAdd={usepermissions.createProducts}
         />
       )}
